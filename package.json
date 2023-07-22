@@ -1,5 +1,6 @@
 {
   "name": "team-saturday-cards",
+  "homepage": "https://team-saturday-cards.vercel.app",
   "private": true,
   "version": "0.0.0",
   "type": "module",
