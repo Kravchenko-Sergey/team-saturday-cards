@@ -1,0 +1,81 @@
+.label {
+  cursor: pointer;
+  display: flex;
+  gap: 2px;
+  align-items: center;
+
+  &.disabled {
+    cursor: default;
+    color: var(--color-dark-100);
+  }
+}
+
+.buttonWrapper {
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 36px;
+  height: 36px;
+
+  border-radius: 50%;
+
+  transition: 0.3s ease-out;
+
+  &:focus-within {
+    background-color: var(--color-dark-100);
+  }
+
+  &:hover:not(.disabled),
+  &:hover .root:not([data-state='checked']) {
+    background-color: var(--color-dark-500);
+  }
+
+  &.disabled {
+    cursor: initial;
+  }
+
+  &:active:not(.disabled) {
+    background-color: var(--color-dark-100);
+  }
+}
+
+.root {
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 18px;
+  height: 18px;
+
+  background-color: var(--color-dark-700);
+  border: 2px solid var(--color-light-900);
+  border-radius: 2px;
+  outline: none;
+
+  &:focus {
+    background-color: var(--color-dark-100);
+  }
+
+  &[data-state='checked'] {
+    background-color: var(--color-dark-900);
+  }
+
+  &.disabled {
+    cursor: initial;
+    border-color: var(--color-dark-100);
+  }
+
+  &[data-state='checked']:disabled {
+    background-color: var(--color-light-700);
+  }
+}
+
+//.indicator {
+//  width: 18px;
+//  height: 18px;
+//}
