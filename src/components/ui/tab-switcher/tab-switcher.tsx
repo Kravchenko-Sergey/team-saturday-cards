@@ -2,7 +2,7 @@ import { FC, ReactNode } from 'react'
 
 import * as Tabs from '@radix-ui/react-tabs'
 
-import s from './tabSwitcher.module.scss'
+import s from './tab-switcher.module.scss'
 
 import { Typography } from 'components/ui/typography'
 
