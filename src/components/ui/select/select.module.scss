@@ -39,6 +39,7 @@
   }
 
   &[data-disabled] {
+    cursor: initial;
     color: var(--color-dark-300);
     border-color: var(--color-dark-300);
   }
@@ -60,6 +61,7 @@
 .item {
   cursor: pointer;
   outline: none;
+  transition: 0.2s ease-out;
 
   &:hover {
     color: var(--color-accent-300);
