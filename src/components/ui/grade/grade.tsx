@@ -2,7 +2,7 @@ import { FC } from 'react'
 
 import s from '../grade/grade.module.scss'
 
-import { Star, StarOutlineOutline } from 'assets/icons'
+import { Star, StarOutline } from 'assets/icons'
 
 export type RatingValue = 0 | 1 | 2 | 3 | 4 | 5
 
@@ -39,7 +39,7 @@ const StarItem: FC<StarItemProps> = ({ value, selected, onClick }) => {
           }}
         />
       ) : (
-        <StarOutlineOutline
+        <StarOutline
           onClick={() => {
             onClick(value)
           }}
