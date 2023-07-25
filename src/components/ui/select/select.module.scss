@@ -13,15 +13,12 @@
   align-items: center;
   justify-content: space-between;
 
-  width: 210px;
+  width: 100%;
+  padding: 6px 12px;
 
   border: 1px solid var(--color-dark-300);
   border-radius: 2px;
   outline: none;
-
-  &[data-placeholder] {
-    padding: 6px 0 6px 12px;
-  }
 
   &:focus {
     border: 2px solid var(--color-info-700);
@@ -45,29 +42,20 @@
   }
 }
 
-.icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px 12px;
-}
-
 .content {
-  min-width: 210px;
+  width: var(--radix-select-trigger-width);
   border: 1px solid var(--color-dark-100);
   border-radius: 0 0 2px 2px;
 }
 
 .item {
-  outline: none;
-}
-
-.itemText {
   cursor: pointer;
   padding: 6px 12px;
+  outline: none;
   transition: 0.2s ease-out;
 
-  &:hover {
+  &:hover,
+  &[data-state='checked'] {
     color: var(--color-accent-300);
     background-color: var(--color-accent-900);
   }

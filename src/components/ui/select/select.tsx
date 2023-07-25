@@ -30,8 +30,10 @@ export const Select: FC<SelectProps> = ({
   label,
 }) => {
   return (
-    <Typography variant={'body2'} as={'label'}>
-      <span className={`${s.label} ${disabled && s.disabled}`}>{label}</span>
+    <Typography variant={'body1'} as={'label'}>
+      <Typography variant={'body2'} as={'span'} className={`${s.label} ${disabled && s.disabled}`}>
+        {label}
+      </Typography>
       <SelectRadix.Root
         defaultValue={defaultValue}
         value={value}
@@ -43,9 +45,7 @@ export const Select: FC<SelectProps> = ({
           <div>
             <SelectRadix.Value placeholder={placeholder} />
             <SelectRadix.Icon asChild>
-              <div className={s.icon}>
-                <Down />
-              </div>
+              <Down />
             </SelectRadix.Icon>
           </div>
         </SelectRadix.Trigger>
@@ -55,11 +55,7 @@ export const Select: FC<SelectProps> = ({
             <SelectRadix.Viewport>
               {options.map(el => (
                 <SelectRadix.Item key={el.value} value={el.value} className={s.item}>
-                  <SelectRadix.ItemText asChild>
-                    <Typography variant={'body1'} as={'div'} className={s.itemText}>
-                      {el.label}
-                    </Typography>
-                  </SelectRadix.ItemText>
+                  <SelectRadix.ItemText>{el.label}</SelectRadix.ItemText>
                 </SelectRadix.Item>
               ))}
             </SelectRadix.Viewport>
