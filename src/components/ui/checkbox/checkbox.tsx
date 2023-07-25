@@ -2,6 +2,8 @@ import { FC } from 'react'
 
 import * as CheckboxRadix from '@radix-ui/react-checkbox'
 
+import Check from '../../../assets/icons/check-box.tsx'
+
 import s from './checkbox.module.scss'
 
 import { Typography } from 'components/ui/typography'
@@ -24,7 +26,11 @@ export const Checkbox: FC<CheckboxProps> = ({ checked, disabled, required, label
           required={required}
           onCheckedChange={onChange}
         >
-          {checked && <CheckboxRadix.Indicator>a</CheckboxRadix.Indicator>}
+          {checked && (
+            <CheckboxRadix.Indicator>
+              <Check />
+            </CheckboxRadix.Indicator>
+          )}
         </CheckboxRadix.Root>
       </div>
       {label}
