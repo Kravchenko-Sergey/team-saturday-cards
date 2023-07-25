@@ -1,5 +1,7 @@
 import { FC } from 'react'
 
+import s from '../grade/grade.module.scss'
+
 import { Star, StarOutlineOutline } from 'assets/icons'
 
 type RatingValue = 0 | 1 | 2 | 3 | 4 | 5
@@ -11,7 +13,7 @@ type GradeProps = {
 
 export const Grade: FC<GradeProps> = ({ value, onClick }) => {
   return (
-    <div>
+    <div className={s.container}>
       <StarItem value={1} onClick={onClick} selected={value > 0} />
       <StarItem value={2} onClick={onClick} selected={value > 1} />
       <StarItem value={3} onClick={onClick} selected={value > 2} />
