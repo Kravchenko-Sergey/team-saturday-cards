@@ -59,16 +59,16 @@
 }
 
 .item {
-  cursor: pointer;
   outline: none;
+}
+
+.itemText {
+  cursor: pointer;
+  padding: 6px 12px;
   transition: 0.2s ease-out;
 
   &:hover {
     color: var(--color-accent-300);
     background-color: var(--color-accent-900);
   }
-}
-
-.itemText {
-  padding: 6px 12px;
 }
