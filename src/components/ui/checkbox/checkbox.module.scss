@@ -72,10 +72,13 @@
 
   &[data-state='checked']:disabled {
     background-color: var(--color-light-700);
+
+    & :global(#checkbox-background) {
+      fill: var(--color-dark-100) !important;
+    }
+
+    & :global(#checkbox-check) {
+      fill: var(--color-light-700) !important;
+    }
   }
 }
-
-//.indicator {
-//  width: 18px;
-//  height: 18px;
-//}
