@@ -51,7 +51,7 @@ export const Select: FC<SelectProps> = ({
         </SelectRadix.Trigger>
 
         <SelectRadix.Portal>
-          <SelectRadix.Content position={'popper'} className={s.content}>
+          <SelectRadix.Content position={'popper'} className={s.content} sideOffset={-1}>
             <SelectRadix.Viewport>
               {options.map(el => (
                 <SelectRadix.Item key={el.value} value={el.value} className={s.item}>
