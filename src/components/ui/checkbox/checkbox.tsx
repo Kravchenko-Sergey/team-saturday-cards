@@ -27,7 +27,7 @@ export const Checkbox: FC<CheckboxProps> = ({ checked, disabled, required, label
           onCheckedChange={onChange}
         >
           {checked && (
-            <CheckboxRadix.Indicator>
+            <CheckboxRadix.Indicator style={{ width: 24, height: 24 }}>
               <Check />
             </CheckboxRadix.Indicator>
           )}
