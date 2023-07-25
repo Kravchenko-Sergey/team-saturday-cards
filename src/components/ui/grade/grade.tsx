@@ -4,7 +4,7 @@ import s from '../grade/grade.module.scss'
 
 import { Star, StarOutlineOutline } from 'assets/icons'
 
-type RatingValue = 0 | 1 | 2 | 3 | 4 | 5
+export type RatingValue = 0 | 1 | 2 | 3 | 4 | 5
 
 type GradeProps = {
   value: RatingValue
