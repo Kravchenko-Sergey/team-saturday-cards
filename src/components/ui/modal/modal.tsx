@@ -2,10 +2,11 @@ import { FC, ReactNode } from 'react'
 
 import * as Dialog from '@radix-ui/react-dialog'
 
+import Button from '../button/button'
+
 import s from './modal.module.scss'
 
 import { Close } from 'assets/icons'
-import { Button } from 'components/ui/button'
 
 type ModalProps = {
   trigger: ReactNode
