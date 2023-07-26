@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import s from 'components/ui/tabSwitcher/tabSwitcher.module.scss'
+
+import s from './tab-switcher.module.scss'
 
 import { TabSwitcher, TabSwitcherItem } from './'
 
