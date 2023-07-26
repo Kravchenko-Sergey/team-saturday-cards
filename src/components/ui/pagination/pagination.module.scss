@@ -2,6 +2,7 @@
   display: flex;
   gap: 24px;
   align-items: center;
+  height: 24px;
 }
 
 .container {
@@ -20,6 +21,16 @@
 }
 
 .dots {
+  all: unset;
+
+  cursor: default;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 24px;
+  height: 24px;
 }
 
 .item {
@@ -43,7 +54,7 @@
     background-color: var(--color-light-100);
   }
 
-  &:focus {
+  &:focus-within {
     border: 2px solid var(--color-info-900);
     border-radius: 4px;
   }
