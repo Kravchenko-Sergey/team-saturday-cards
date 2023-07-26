@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
+import Button from '../button/button'
+
 import { Modal } from './'
 
-import { CheckEmail, Logo, NotFound } from 'assets/icons'
-import { Button } from 'components/ui/button'
+import { CheckEmail, EditOutline, Logo, NotFound, TrashOutline } from 'assets/icons'
 import { Typography } from 'components/ui/typography'
 
 const meta = {
@@ -38,7 +39,7 @@ export const AddNewPack: Story = {
 
 export const EditPack: Story = {
   args: {
-    trigger: <Button>Edit Pack</Button>,
+    trigger: <EditOutline />,
     title: <Typography variant="h1">Edit Pack</Typography>,
     footerBtn: <Button>Save Changes</Button>,
     children: (
@@ -53,7 +54,7 @@ export const EditPack: Story = {
 
 export const DeletePack: Story = {
   args: {
-    trigger: <Button>Delete Pack</Button>,
+    trigger: <TrashOutline />,
     title: <Typography variant="h1">Delete Pack</Typography>,
     footerBtn: <Button>Delete Pack</Button>,
     children: (
@@ -83,7 +84,7 @@ export const AddNewCard: Story = {
 
 export const EditCard: Story = {
   args: {
-    trigger: <Button>Edit Card</Button>,
+    trigger: <EditOutline />,
     title: <Typography variant="h1">Edit Card</Typography>,
     footerBtn: <Button>Save Changes</Button>,
     children: (
@@ -98,7 +99,7 @@ export const EditCard: Story = {
 
 export const DeleteCard: Story = {
   args: {
-    trigger: <Button>Edit Card</Button>,
+    trigger: <TrashOutline />,
     title: <Typography variant="h1">Edit Card</Typography>,
     footerBtn: <Button>Delete Card</Button>,
     children: (
