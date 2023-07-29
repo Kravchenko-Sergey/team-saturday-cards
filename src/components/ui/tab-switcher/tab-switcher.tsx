@@ -1,6 +1,7 @@
 import { FC, ReactNode } from 'react'
 
 import * as Tabs from '@radix-ui/react-tabs'
+import { TabsTriggerProps } from '@radix-ui/react-tabs'
 
 import s from './tab-switcher.module.scss'
 
@@ -24,22 +25,6 @@ export const TabSwitcher: FC<TabSwitcherProps> = ({ title, children }) => {
   )
 }
 
-type TabSwitcherItemProps = {
-  children: ReactNode
-  value: string
-  className: string
-  onClick?: () => void
-}
-
-export const TabSwitcherItem: FC<TabSwitcherItemProps> = ({
-  children,
-  value,
-  className,
-  onClick,
-}) => {
-  return (
-    <Tabs.Trigger value={value} className={className} onClick={onClick}>
-      {children}
-    </Tabs.Trigger>
-  )
+export const TabSwitcherItem: FC<TabsTriggerProps> = props => {
+  return <Tabs.Trigger {...props} />
 }

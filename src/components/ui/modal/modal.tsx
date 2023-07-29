@@ -26,25 +26,27 @@ export const Modal: FC<ModalProps> = ({
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
-      <Dialog.Content className={s.DialogContent}>
-        <header className={showCloseBtn ? s.header : s.headerWithoutCLose}>
-          <Dialog.Title>{title}</Dialog.Title>
-          {showCloseBtn && (
-            <Dialog.Close asChild>
-              <Close />
-            </Dialog.Close>
-          )}
-        </header>
-        <main className={s.main}>{children}</main>
-        <footer className={showCloseBtn ? s.footer : s.footerWithoutClose}>
-          {showCloseBtn && (
-            <Dialog.Close asChild>
-              <Button variant="secondary">Cancel</Button>
-            </Dialog.Close>
-          )}
-          <Dialog.Close asChild>{footerBtn}</Dialog.Close>
-        </footer>
-      </Dialog.Content>
+      <Dialog.Portal>
+        <Dialog.Content className={s.DialogContent}>
+          <header className={showCloseBtn ? s.header : s.headerWithoutCLose}>
+            <Dialog.Title>{title}</Dialog.Title>
+            {showCloseBtn && (
+              <Dialog.Close asChild>
+                <Close />
+              </Dialog.Close>
+            )}
+          </header>
+          <main className={s.main}>{children}</main>
+          <footer className={showCloseBtn ? s.footer : s.footerWithoutClose}>
+            {showCloseBtn && (
+              <Dialog.Close asChild>
+                <Button variant="secondary">Cancel</Button>
+              </Dialog.Close>
+            )}
+            <Dialog.Close asChild>{footerBtn}</Dialog.Close>
+          </footer>
+        </Dialog.Content>
+      </Dialog.Portal>
     </Dialog.Root>
   )
 }

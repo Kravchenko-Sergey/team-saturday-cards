@@ -24,8 +24,9 @@ export const TextField = (
   const [showPassword, setShowPassword] = useState<boolean>(false)
 
   const isShowPasswordButton = type === 'password' && !search
-  // @ts-ignore
-  const isShowClearButton = onClearClick && rest?.value?.length! > 0 && search
+
+  const isShowClearButton =
+    onClearClick && typeof rest?.value === 'string' && rest?.value?.length > 0 && search
 
   const finalType = getFinalType(search, type, showPassword)
 

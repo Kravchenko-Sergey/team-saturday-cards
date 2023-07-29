@@ -6,15 +6,9 @@ import s from './slider.module.scss'
 
 import { Typography } from 'components/ui/typography'
 
-type SliderProps = {
-  value: number[]
-  onValueChange: (value: number[]) => void
-  onValueCommit: (value: number[]) => void
+type SliderProps = SliderRadix.SliderProps & {
   multiple?: boolean
-  disabled?: boolean
-  min: number
-  max: number
-  step: number
+  value: number[]
 }
 
 export const Slider: FC<SliderProps> = ({
