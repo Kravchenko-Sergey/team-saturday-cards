@@ -1,4 +1,3 @@
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import type { Meta, StoryObj } from '@storybook/react'
 
 import { Dropdown, DropdownItem, DropdownItemWithIcon } from './'
@@ -28,30 +27,22 @@ export const Default: Story = {
   args: {
     trigger: (
       <>
-        <Typography variant={'subtitle1'} className={s.name}>
-          Sergey
-        </Typography>
+        <Typography variant={'subtitle1'}>Sergey</Typography>
         <Avatar src={src} name={'avatar'} size={36} />
       </>
     ),
     children: (
       <>
         <DropdownItem disabled>
-          <div className={`${s.item} ${s.head}`}>
+          <div className={s.item}>
             <Avatar src={src} name={'avatar'} size={36} />
-            <div className={s.info}>
-              <Typography variant={'subtitle2'} className={s.name}>
-                Sergey
-              </Typography>
-              <Typography variant={'caption'} className={s.email}>
-                sergey.ose.pyatigorsk@gmail.com
-              </Typography>
+            <div>
+              <Typography variant={'subtitle2'}>Sergey</Typography>
+              <Typography variant={'caption'}>sergey.ose.pyatigorsk@gmail.com</Typography>
             </div>
           </div>
         </DropdownItem>
-        <DropdownMenu.Separator className={s.separator} />
         <DropdownItemWithIcon icon={<PersonOutline />} text={'Profile'} />
-        <DropdownMenu.Separator className={s.separator} />
         <DropdownItemWithIcon icon={<LogOutOutline />} text={'Logout'} />
       </>
     ),

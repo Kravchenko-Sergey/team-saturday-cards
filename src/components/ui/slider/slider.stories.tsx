@@ -1,30 +1,19 @@
 import { useState } from 'react'
 
-import * as SliderRadix from '@radix-ui/react-slider'
 import type { Meta } from '@storybook/react'
 
 import { Slider } from './index'
-
-import s from 'components/ui/slider/slider.module.scss'
 
 const meta = {
   title: 'Components/UI/Slider',
   component: Slider,
   tags: ['autodocs'],
-  argTypes: {
-    value: [],
-    onValueChange: {},
-    onValueCommit: {},
-    min: {},
-    max: {},
-    step: {},
-  },
 } satisfies Meta<typeof Slider>
 
 export default meta
 
 export const Default = () => {
-  const [values, setValues] = useState<number[]>([25, 75])
+  const [values, setValues] = useState<number[]>([50])
 
   const handleSliderValueChange = (e: any) => {
     setValues(e)
@@ -35,24 +24,62 @@ export const Default = () => {
   }
 
   return (
-    <div className={s.container}>
-      <span className={s.value}>{values[0]}</span>
-      <SliderRadix.Root
-        className={s.root}
-        value={values}
-        onValueChange={handleSliderValueChange}
-        onValueCommit={handleSliderValueCommitChange}
-        min={0}
-        max={100}
-        step={1}
-      >
-        <SliderRadix.Track className={s.track}>
-          <SliderRadix.Range className={s.range} />
-        </SliderRadix.Track>
-        <SliderRadix.Thumb className={s.thumb} />
-        <SliderRadix.Thumb className={s.thumb} />
-      </SliderRadix.Root>
-      <span className={s.value}>{values[1]}</span>
-    </div>
+    <Slider
+      value={values}
+      onValueChange={handleSliderValueChange}
+      onValueCommit={handleSliderValueCommitChange}
+      min={0}
+      max={100}
+      step={1}
+    />
+  )
+}
+
+export const Multiple = () => {
+  const [values, setValues] = useState<number[]>([25, 100])
+
+  const handleSliderValueChange = (e: any) => {
+    setValues(e)
+  }
+
+  const handleSliderValueCommitChange = (e: any) => {
+    setValues(e)
+  }
+
+  return (
+    <Slider
+      value={values}
+      onValueChange={handleSliderValueChange}
+      onValueCommit={handleSliderValueCommitChange}
+      multiple
+      min={0}
+      max={100}
+      step={1}
+    />
+  )
+}
+
+export const Disabled = () => {
+  const [values, setValues] = useState<number[]>([25, 100])
+
+  const handleSliderValueChange = (values: number[]) => {
+    setValues(values)
+  }
+
+  const handleSliderValueCommitChange = (values: number[]) => {
+    setValues(values)
+  }
+
+  return (
+    <Slider
+      value={values}
+      onValueChange={handleSliderValueChange}
+      onValueCommit={handleSliderValueCommitChange}
+      multiple
+      disabled
+      min={0}
+      max={100}
+      step={1}
+    />
   )
 }
