@@ -18,7 +18,7 @@
   padding: 12px;
 
   background-color: var(--color-dark-700);
-  border: 1px solid var(--color-dark-100);
+  border: 1px solid var(--color-dark-300);
   border-radius: 4px;
 }
 
@@ -26,7 +26,10 @@
   display: flex;
   gap: 6px;
   align-items: center;
+
   padding: 12px 0;
+
+  border-bottom: 1px solid var(--color-dark-500);
 
   &:hover {
     cursor: pointer;
@@ -39,6 +42,7 @@
 
   &:last-child {
     padding: 12px 0 0;
+    border-bottom: none;
   }
 }
 
@@ -61,9 +65,4 @@
   border: 1px solid var(--color-dark-100);
   border-top: none;
   border-left: none;
-}
-
-.separator {
-  height: 1px;
-  background-color: var(--color-dark-100);
 }

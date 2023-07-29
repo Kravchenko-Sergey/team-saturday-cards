@@ -34,7 +34,7 @@ export type DropdownItemProps = {
 
 export const DropdownItem: FC<DropdownItemProps> = ({ children, disabled, onSelect }) => {
   return (
-    <DropdownMenu.Item className={s.item} disabled={disabled} onSelect={onSelect} asChild>
+    <DropdownMenu.Item className={s.item} disabled={disabled} onSelect={onSelect}>
       {children}
     </DropdownMenu.Item>
   )
