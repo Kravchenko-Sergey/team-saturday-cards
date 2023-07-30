@@ -10,12 +10,18 @@ import { Typography } from 'components/ui/typography'
 
 export type CheckboxProps = {
   checked: boolean
-  onChange: (checked: boolean) => void
+  onValueChange: (checked: boolean) => void
   label?: string
   disabled?: boolean
   required?: boolean
 }
-export const Checkbox: FC<CheckboxProps> = ({ checked, disabled, required, label, onChange }) => {
+export const Checkbox: FC<CheckboxProps> = ({
+  checked,
+  disabled,
+  required,
+  label,
+  onValueChange,
+}) => {
   return (
     <Typography variant={'body2'} as={'label'} className={`${s.label} ${disabled && s.disabled}`}>
       <div className={`${s.buttonWrapper} ${disabled && s.disabled}`}>
@@ -24,7 +30,7 @@ export const Checkbox: FC<CheckboxProps> = ({ checked, disabled, required, label
           checked={checked}
           disabled={disabled}
           required={required}
-          onCheckedChange={onChange}
+          onCheckedChange={onValueChange}
         >
           {checked && (
             <CheckboxRadix.Indicator style={{ width: 24, height: 24 }}>
