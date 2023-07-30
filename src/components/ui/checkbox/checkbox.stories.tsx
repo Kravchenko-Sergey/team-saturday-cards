@@ -30,7 +30,7 @@ export const WithoutLabel: Story = {
 const CheckboxWithHook = () => {
   const [checked, setChecked] = useState(false)
 
-  return <Checkbox checked={checked} onChange={setChecked} label={'Click here'} />
+  return <Checkbox checked={checked} onValueChange={setChecked} label={'Click here'} />
 }
 
 export const Controlled = {
