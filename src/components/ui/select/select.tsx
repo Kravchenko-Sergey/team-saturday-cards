@@ -41,7 +41,7 @@ export const Select: FC<SelectProps> = ({
         disabled={disabled}
         required={required}
       >
-        <SelectRadix.Trigger asChild className={s.trigger} tabIndex={1}>
+        <SelectRadix.Trigger asChild className={s.trigger} tabIndex={0}>
           <div>
             <SelectRadix.Value placeholder={placeholder} />
             <SelectRadix.Icon asChild className={s.icon}>
