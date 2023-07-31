@@ -9,19 +9,13 @@ import s from './checkbox.module.scss'
 import { Typography } from 'components/ui/typography'
 
 export type CheckboxProps = {
-  checked: boolean
-  onValueChange: (checked: boolean) => void
+  checked?: boolean
+  onChange?: (checked: boolean) => void
   label?: string
   disabled?: boolean
   required?: boolean
 }
-export const Checkbox: FC<CheckboxProps> = ({
-  checked,
-  disabled,
-  required,
-  label,
-  onValueChange,
-}) => {
+export const Checkbox: FC<CheckboxProps> = ({ checked, disabled, required, label, onChange }) => {
   return (
     <Typography variant={'body2'} as={'label'} className={`${s.label} ${disabled && s.disabled}`}>
       <div className={`${s.buttonWrapper} ${disabled && s.disabled}`}>
@@ -30,7 +24,7 @@ export const Checkbox: FC<CheckboxProps> = ({
           checked={checked}
           disabled={disabled}
           required={required}
-          onCheckedChange={onValueChange}
+          onCheckedChange={onChange}
         >
           {checked && (
             <CheckboxRadix.Indicator style={{ width: 24, height: 24 }}>
