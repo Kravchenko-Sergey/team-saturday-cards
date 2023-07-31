@@ -14,7 +14,7 @@ type DropdownProps = {
 export const Dropdown: FC<DropdownProps> = ({ trigger, children }) => {
   return (
     <DropdownMenu.Root>
-      <DropdownMenu.Trigger className={s.trigger}>{trigger}</DropdownMenu.Trigger>
+      <DropdownMenu.Trigger asChild>{trigger}</DropdownMenu.Trigger>
       <DropdownMenu.Content className={s.content} sideOffset={10} align={'end'}>
         <div className={s.itemsBlock}>{children}</div>
         <DropdownMenu.Arrow className={s.arrow_block} asChild>
