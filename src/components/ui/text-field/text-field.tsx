@@ -14,6 +14,7 @@ export type TextFieldProps = {
   search?: boolean
   className?: string
   onClearClick?: () => void
+  errorMessage?: string
 } & ComponentPropsWithoutRef<'input'>
 
 export const TextField = forwardRef<HTMLInputElement, TextFieldProps>((props, ref) => {
