@@ -1,4 +1,4 @@
-import { ComponentProps, ComponentPropsWithoutRef, useState } from 'react'
+import { ComponentProps, ComponentPropsWithoutRef, forwardRef, useState } from 'react'
 
 import s from './text-field.module.scss'
 
@@ -16,9 +16,7 @@ export type TextFieldProps = {
   onClearClick?: () => void
 } & ComponentPropsWithoutRef<'input'>
 
-export const TextField = (
-  props: TextFieldProps & Omit<ComponentPropsWithoutRef<'input'>, keyof TextFieldProps>
-) => {
+export const TextField = forwardRef<HTMLInputElement, TextFieldProps>((props, ref) => {
   const { search = false, label, disabled, type, error, onClearClick, ...rest } = props
 
   const [showPassword, setShowPassword] = useState<boolean>(false)
@@ -43,6 +41,7 @@ export const TextField = (
         )}
 
         <input
+          ref={ref}
           className={`${s.input} ${error ? s.error : ''}`}
           type={finalType}
           disabled={disabled}
@@ -69,7 +68,7 @@ export const TextField = (
       </Typography>
     </div>
   )
-}
+})
 
 function getFinalType(
   search: boolean | undefined,
