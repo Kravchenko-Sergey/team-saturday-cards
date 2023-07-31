@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { SignIn } from './'
+import { FormValues, SignIn } from './'
 
 const meta = {
   title: 'Components/AUTH/SignIn',
@@ -11,11 +11,6 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-type FormValues = {
-  email: string
-  password: string
-  rememberMe?: boolean
-}
 export const Default: Story = {
   args: {
     onSubmit: (data: FormValues) => console.log(data),

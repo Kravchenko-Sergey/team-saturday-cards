@@ -1,37 +1,41 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
-import { FormValues, signInSchema } from './'
+import { FormValues, signUpSchema } from './'
 
 import Button from 'components/ui/button/button.tsx'
 import { Card } from 'components/ui/card'
-import { ControlledTextField, ControlledCheckbox } from 'components/ui/controlled'
+import { ControlledTextField } from 'components/ui/controlled'
 import { Typography } from 'components/ui/typography'
 
 // eslint-disable-next-line
-import s from './sign-in.module.scss'
+import s from './sign-up.module.scss'
 
 type Props = {
-  onSubmit: (data: FormValues) => void
+  onSubmit: (data: Omit<FormValues, 'confirmPassword'>) => void
 }
 
-export const SignIn = (props: Props) => {
+export const SignUp = (props: Props) => {
   const { handleSubmit, control } = useForm<FormValues>({
     mode: 'onSubmit',
-    resolver: zodResolver(signInSchema),
+    resolver: zodResolver(signUpSchema),
     defaultValues: {
       email: '',
       password: '',
-      rememberMe: false,
+      confirmPassword: '',
     },
+  })
+
+  const handleFormSubmit = handleSubmit(({ email, password }) => {
+    props.onSubmit({ email, password })
   })
 
   return (
     <Card className={s.card}>
       <Typography variant={'large'} as={'h1'} className={s.title}>
-        Sign In
+        Sign Up
       </Typography>
-      <form onSubmit={handleSubmit(props.onSubmit)}>
+      <form onSubmit={handleFormSubmit}>
         <div className={s.fields}>
           <ControlledTextField name={'email'} control={control} label={'Email'} type={'email'} />
           <ControlledTextField
@@ -40,20 +44,22 @@ export const SignIn = (props: Props) => {
             label={'Password'}
             type={'password'}
           />
+          <ControlledTextField
+            name={'confirmPassword'}
+            control={control}
+            label={'Confirm password'}
+            type={'password'}
+          />
         </div>
-        <ControlledCheckbox name={'rememberMe'} control={control} label={'Remember me'} />
-        <Typography variant={'link1'} as={'a'} className={s.forgotPassLink}>
-          Forgot Password?
-        </Typography>
         <Button fullWidth type={'submit'}>
-          Sign In
+          Sign Up
         </Button>
       </form>
       <Typography variant={'body2'} as={'div'} className={s.caption}>
-        Don&#39;t have an account?
+        Already have an account?
       </Typography>
-      <Typography variant={'body2'} as={'a'} className={s.signUpLink}>
-        Sign Up
+      <Typography variant={'body2'} as={'a'} className={s.signInLink}>
+        Sign In
       </Typography>
     </Card>
   )
