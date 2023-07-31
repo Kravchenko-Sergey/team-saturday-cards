@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+
+import { FormValues, signInSchema } from './'
 
 import Button from 'components/ui/button/button.tsx'
 import { Card } from 'components/ui/card'
@@ -9,14 +10,6 @@ import { Typography } from 'components/ui/typography'
 
 // eslint-disable-next-line
 import s from './sign-in.module.scss'
-
-const signInSchema = z.object({
-  email: z.string().nonempty('Enter email').email('Invalid email address'),
-  password: z.string().min(3),
-  rememberMe: z.boolean().optional(),
-})
-
-type FormValues = z.infer<typeof signInSchema>
 
 type Props = {
   onSubmit: (data: FormValues) => void
