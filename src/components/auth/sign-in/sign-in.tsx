@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { Link } from 'react-router-dom'
 import { z } from 'zod'
 
 import Button from 'components/ui/button/button.tsx'
@@ -49,17 +50,17 @@ export const SignIn = (props: Props) => {
           />
         </div>
         <ControlledCheckbox name={'rememberMe'} control={control} label={'Remember me'} />
-        <Typography variant={'link1'} as={'a'} className={s.forgotPassLink}>
+        <Typography variant={'link1'} as={Link} to="/recover-password" className={s.forgotPassLink}>
           Forgot Password?
         </Typography>
         <Button fullWidth type={'submit'}>
-          Sign In
+          <Typography variant={'subtitle2'}>Sign In</Typography>
         </Button>
       </form>
       <Typography variant={'body2'} as={'div'} className={s.caption}>
         Don&#39;t have an account?
       </Typography>
-      <Typography variant={'body2'} as={'a'} className={s.signUpLink}>
+      <Typography variant={'body2'} as={Link} to="/sign-up" className={s.signUpLink}>
         Sign Up
       </Typography>
     </Card>
