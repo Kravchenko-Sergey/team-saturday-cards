@@ -1,0 +1,23 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  max-width: 420px;
+  padding: 37px 36px 44px;
+}
+
+.title {
+  padding-bottom: 27px;
+  text-align: center;
+}
+
+.emailImage {
+  margin-bottom: 19px;
+}
+
+.description {
+  padding-bottom: 65px;
+  text-align: center;
+  opacity: 0.5;
+}
