@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { BrowserRouter } from 'react-router-dom'
 
-import { FormValues, SignIn } from './'
+import { RecoverPassword } from './'
 
 const meta = {
-  title: 'Components/AUTH/SignIn',
-  component: SignIn,
+  title: 'Components/AUTH/RecoverPassword',
+  component: RecoverPassword,
   decorators: [
     Story => (
       <BrowserRouter>
@@ -14,13 +14,13 @@ const meta = {
     ),
   ],
   tags: ['autodocs'],
-} satisfies Meta<typeof SignIn>
+} satisfies Meta<typeof RecoverPassword>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    onSubmit: (data: FormValues) => console.log(data),
+    onSubmit: (data: any) => console.log(data),
   },
 }
