@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { BrowserRouter } from 'react-router-dom'
 
 import { CreateNewPassword } from './'
 
@@ -7,6 +8,13 @@ import { CreateNewPasswordSchemaType } from 'components/auth/create-new-password
 const meta = {
   title: 'Components/AUTH/CreateNewPassword',
   component: CreateNewPassword,
+  decorators: [
+    Story => (
+      <BrowserRouter>
+        <Story />
+      </BrowserRouter>
+    ),
+  ],
   tags: ['autodocs'],
 } satisfies Meta<typeof CreateNewPassword>
 
