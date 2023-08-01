@@ -1,5 +1,7 @@
 import { FC } from 'react'
 
+import { Link } from 'react-router-dom'
+
 import s from './create-new-password.module.scss'
 
 import {
@@ -33,7 +35,7 @@ export const CreateNewPassword: FC<CreateNewPasswordProps> = ({ onSubmit }) => {
         <Typography variant={'body2'} className={s.description}>
           Create new password and we will send you further instructions to email
         </Typography>
-        <Button fullWidth>
+        <Button as={Link} to={''} fullWidth>
           <Typography variant={'body2'}>Create New Password</Typography>
         </Button>
       </form>
