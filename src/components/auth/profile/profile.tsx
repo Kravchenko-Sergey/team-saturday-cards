@@ -66,7 +66,7 @@ export const Profile: FC<ProfileProps> = ({
         </>
       ) : (
         <form onSubmit={handleSubmit} className={s.form}>
-          <ControlledTextField label="nickName" name="nickName" control={control} />
+          <ControlledTextField label="Nickname" name="nickName" control={control} defaultValue="" />
           <Button className={s.submitBtn} fullWidth>
             Save Changes
           </Button>

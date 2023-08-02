@@ -4,7 +4,10 @@ import Button from '../button/button'
 
 import { Modal } from './'
 
-import { CheckEmail, EditOutline, Logo, NotFound, TrashOutline } from 'assets/icons'
+import { EditOutline, TrashOutline } from 'assets/icons'
+import { Checkbox } from 'components/ui/checkbox'
+import { Select } from 'components/ui/select'
+import { TextField } from 'components/ui/text-field'
 import { Typography } from 'components/ui/typography'
 
 const meta = {
@@ -29,9 +32,8 @@ export const AddNewPack: Story = {
     footerBtn: <Button>Add New Pack</Button>,
     children: (
       <>
-        <Logo />
-        <NotFound />
-        <CheckEmail />
+        <TextField label="Name Pask" />
+        <Checkbox label="Private pack" />
       </>
     ),
   },
@@ -44,9 +46,8 @@ export const EditPack: Story = {
     footerBtn: <Button>Save Changes</Button>,
     children: (
       <>
-        <Logo />
-        <NotFound />
-        <CheckEmail />
+        <TextField label="Name Pask" />
+        <Checkbox label="Private pack" />
       </>
     ),
   },
@@ -58,11 +59,11 @@ export const DeletePack: Story = {
     title: <Typography variant="h1">Delete Pack</Typography>,
     footerBtn: <Button>Delete Pack</Button>,
     children: (
-      <>
-        <Logo />
-        <NotFound />
-        <CheckEmail />
-      </>
+      <Typography style={{ whiteSpace: 'pre-line' }}>
+        Do you really want to remove Pack Name?
+        {'\n'}
+        All cards will be deleted.
+      </Typography>
     ),
   },
 }
@@ -74,9 +75,16 @@ export const AddNewCard: Story = {
     footerBtn: <Button>Add New Card</Button>,
     children: (
       <>
-        <Logo />
-        <NotFound />
-        <CheckEmail />
+        <Select
+          options={[
+            { label: 'Text', value: 'item-1' },
+            { label: 'Image', value: 'item-2' },
+          ]}
+          label="Choose a question format"
+          placeholder={'Text'}
+        />
+        <TextField label="Question" />
+        <TextField label="Answer" />
       </>
     ),
   },
@@ -89,9 +97,15 @@ export const EditCard: Story = {
     footerBtn: <Button>Save Changes</Button>,
     children: (
       <>
-        <Logo />
-        <NotFound />
-        <CheckEmail />
+        <Select
+          options={[
+            { label: 'Text', value: 'item-1' },
+            { label: 'Image', value: 'item-2' },
+          ]}
+          label="Choose a question format"
+        />
+        <TextField label="Question" />
+        <TextField label="Answer" />
       </>
     ),
   },
@@ -103,11 +117,12 @@ export const DeleteCard: Story = {
     title: <Typography variant="h1">Edit Card</Typography>,
     footerBtn: <Button>Delete Card</Button>,
     children: (
-      <>
-        <Logo />
-        <NotFound />
-        <CheckEmail />
-      </>
+      <Typography style={{ whiteSpace: 'pre-line' }}>
+        {' '}
+        Do you really want to remove Card Name?
+        {'\n'}
+        All cards will be deleted.
+      </Typography>
     ),
   },
 }
