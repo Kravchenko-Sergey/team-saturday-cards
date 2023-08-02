@@ -79,6 +79,17 @@
   width: 36px;
   height: 36px;
 
+  color: white;
+  text-align: center;
+
+  background-color: inherit;
   border: 1px solid var(--color-dark-300);
   border-radius: 2px;
+}
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  position: relative;
+  margin: 0;
+  appearance: none;
 }

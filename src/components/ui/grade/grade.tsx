@@ -31,20 +31,13 @@ type StarItemProps = {
 
 const StarItem: FC<StarItemProps> = ({ value, selected, onClick }) => {
   return (
-    <div>
-      {selected ? (
-        <Star
-          onClick={() => {
-            onClick(value)
-          }}
-        />
-      ) : (
-        <StarOutline
-          onClick={() => {
-            onClick(value)
-          }}
-        />
-      )}
-    </div>
+    <button
+      onClick={() => {
+        onClick(value)
+      }}
+      className={s.button}
+    >
+      {selected ? <Star /> : <StarOutline />}
+    </button>
   )
 }
