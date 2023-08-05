@@ -1,16 +1,12 @@
-import { BrowserRouter } from 'react-router-dom'
+import { Provider } from 'react-redux'
 
-import Button from './components/ui/button/button'
+import { Router } from '@/router'
+import { store } from '@/services/store.ts'
 
-export const App = () => {
+export function App() {
   return (
-    <BrowserRouter>
-      <div>
-        <Button variant="primary">Hello</Button>
-        <Button variant="primary" as="a" href={'./link'}>
-          Hello
-        </Button>
-      </div>
-    </BrowserRouter>
+    <Provider store={store}>
+      <Router />
+    </Provider>
   )
 }
