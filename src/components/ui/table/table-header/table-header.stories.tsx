@@ -2,7 +2,9 @@ import { useState } from 'react'
 
 import { Meta } from '@storybook/react'
 
+import s from '@/pages/decks/decks.module.scss'
 import { Decks } from '@/pages/decks/decks.tsx'
+import { Table, TableBody, TableCell, TableRow } from 'components/ui/table'
 import { Column, Sort, TableHeader } from 'components/ui/table/table-header'
 
 const meta = {
@@ -82,20 +84,20 @@ export const WithSort = {
     console.log(sort)
 
     return (
-      <table>
+      <Table className={s.table}>
         <TableHeader columns={columns} onSort={setSort} sort={sort} />
-        <tbody>
+        <TableBody>
           {data.map(item => (
-            <tr key={item.title}>
-              <td>{item.title}</td>
-              <td>{item.cardsCount}</td>
-              <td>{item.updated}</td>
-              <td>{item.createdBy}</td>
-              <td>icons...</td>
-            </tr>
+            <TableRow key={item.title}>
+              <TableCell className={s.tableCell}>{item.title}</TableCell>
+              <TableCell className={s.tableCell}>{item.cardsCount}</TableCell>
+              <TableCell className={s.tableCell}>{item.updated}</TableCell>
+              <TableCell className={s.tableCell}>{item.createdBy}</TableCell>
+              <TableCell className={s.tableCell}>icons...</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     )
   },
 }
