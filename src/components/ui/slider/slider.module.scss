@@ -2,7 +2,9 @@
   display: flex;
   gap: 12px;
   align-items: center;
+
   width: 100%;
+  max-width: 251px;
 }
 
 .container {
@@ -26,6 +28,10 @@
 
   width: 200px;
   height: 20px;
+}
+
+.label {
+  padding-bottom: 5px;
 }
 
 .track {

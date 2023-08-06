@@ -25,6 +25,7 @@ export const Default = () => {
 
   return (
     <Slider
+      label="Number of cards"
       value={values}
       onValueChange={handleSliderValueChange}
       onValueCommit={handleSliderValueCommitChange}
@@ -48,6 +49,7 @@ export const Multiple = () => {
 
   return (
     <Slider
+      label="Number of cards"
       value={values}
       onValueChange={handleSliderValueChange}
       onValueCommit={handleSliderValueCommitChange}
@@ -72,6 +74,7 @@ export const Disabled = () => {
 
   return (
     <Slider
+      label="Number of cards"
       value={values}
       onValueChange={handleSliderValueChange}
       onValueCommit={handleSliderValueCommitChange}
