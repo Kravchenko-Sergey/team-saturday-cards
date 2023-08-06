@@ -1,0 +1,24 @@
+.header {
+  margin-bottom: 96px;
+}
+
+.trigger {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.main {
+  display: flex;
+  justify-content: center;
+  margin-top: 96px;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+
+  width: 100%;
+  max-width: 1008px;
+  margin: 0 auto;
+}

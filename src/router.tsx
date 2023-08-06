@@ -6,26 +6,41 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 
-import { Decks } from '@/pages/decks/decks.tsx'
+import { Layout } from 'components/ui/layout'
+import { Decks } from 'pages/decks'
 
 const publicRoutes: RouteObject[] = [
   {
-    path: '/login',
+    path: 'sign-in',
     element: <div>login</div>,
+  },
+  {
+    path: 'sign-up',
+    element: <div>register</div>,
   },
 ]
 
 const privateRoutes: RouteObject[] = [
   {
-    path: '/',
+    path: '/decks',
     element: <Decks />,
+  },
+  {
+    path: '/cards',
+    element: <div>cards</div>,
   },
 ]
 
 const router = createBrowserRouter([
   {
-    element: <PrivateRoutes />,
-    children: privateRoutes,
+    path: '/',
+    element: <Layout />,
+    children: [
+      {
+        element: <PrivateRoutes />,
+        children: privateRoutes,
+      },
+    ],
   },
   ...publicRoutes,
 ])
