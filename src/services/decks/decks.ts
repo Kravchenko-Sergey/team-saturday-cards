@@ -1,5 +1,5 @@
 import { baseApi } from '@/services/base-api.ts'
-import { CreateDeckArgs, Deck, DecksResponse, GetDecksArgs } from '@/services/decks/types.ts'
+import { DecksResponse, GetDecksArgs } from '@/services/decks/types.ts'
 
 const decksApi = baseApi.injectEndpoints({
   endpoints: builder => {
@@ -12,20 +12,9 @@ const decksApi = baseApi.injectEndpoints({
             params: args,
           }
         },
-        providesTags: ['Decks'],
-      }),
-      createDeck: builder.mutation<Deck, CreateDeckArgs>({
-        query: ({ name }) => {
-          return {
-            url: 'v1/decks',
-            method: 'POST',
-            body: { name },
-          }
-        },
-        invalidatesTags: ['Decks'],
       }),
     }
   },
 })
 
-export const { useGetDecksQuery, useCreateDeckMutation } = decksApi
+export const { useGetDecksQuery } = decksApi
