@@ -8,15 +8,15 @@ import s from './tab-switcher.module.scss'
 import { Typography } from 'components/ui/typography'
 
 type TabSwitcherProps = {
-  title: string
+  label: string
   children: ReactNode
 }
 
-export const TabSwitcher: FC<TabSwitcherProps> = ({ title, children }) => {
+export const TabSwitcher: FC<TabSwitcherProps> = ({ label, children }) => {
   return (
     <div>
-      <Typography variant="body2" className={s.title}>
-        {title}
+      <Typography variant="body2" className={s.label}>
+        {label}
       </Typography>
       <Tabs.Root className={s.tabsRoot} defaultValue="tab1">
         <Tabs.List className={s.tabsList}>{children}</Tabs.List>
