@@ -2,12 +2,17 @@ import { useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
 import s from './decks.module.scss'
 
 import { useGetDecksQuery } from '@/services/base.api.ts'
-import { ArgDeleteDeck, useCreateDeckMutation, useDeleteDeckMutation } from '@/services/decks'
+import {
+  useCreateDeckMutation,
+  useDeleteDeckMutation,
+  useLazyGetCardsQuery,
+} from '@/services/decks'
 import { EditOutline, PlayCircleOutline, TrashOutline } from 'assets/icons'
 import Button from 'components/ui/button/button.tsx'
 import { ControlledCheckbox, ControlledTextField } from 'components/ui/controlled'
@@ -20,6 +25,7 @@ import { TextField } from 'components/ui/text-field'
 import { Typography } from 'components/ui/typography'
 
 export const Decks = () => {
+  const navigate = useNavigate()
   const [sort, setSort] = useState<Sort>(null)
 
   const columns: Column[] = [
@@ -79,6 +85,7 @@ export const Decks = () => {
   const { isLoading, data } = useGetDecksQuery()
   const [createDeck] = useCreateDeckMutation()
   const [deleteDeck] = useDeleteDeckMutation()
+  const [getCards] = useLazyGetCardsQuery()
 
   if (isLoading) return <div>Loading...</div>
 
@@ -92,11 +99,18 @@ export const Decks = () => {
     createDeck(newDeck)
   }
 
-  const handleDeleteDeck = (id: ArgDeleteDeck) => {
+  const handleDeleteDeck = (id: string) => {
     deleteDeck(id)
   }
 
-  console.log(data)
+  const handleGetCards = (id: string) => {
+    getCards(id)
+      .unwrap()
+      .then(() => {
+        navigate(`/${id}/cards`)
+      })
+      .catch(error => console.log(error))
+  }
 
   return (
     <div className={s.container}>
@@ -146,7 +160,14 @@ export const Decks = () => {
           {data?.items
             .map((deck: any) => (
               <TableRow key={deck.id}>
-                <TableCell className={s.tableCell}>{deck.name}</TableCell>
+                <TableCell
+                  className={s.tableCell}
+                  onClick={() => {
+                    handleGetCards(deck.id)
+                  }}
+                >
+                  {deck.name}
+                </TableCell>
                 <TableCell className={s.tableCell}>{deck.cardsCount}</TableCell>
                 <TableCell className={s.tableCell}>
                   {new Date(deck.updated).toLocaleString('en-GB')}

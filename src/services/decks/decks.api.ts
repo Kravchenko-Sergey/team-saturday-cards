@@ -1,4 +1,10 @@
 import { baseApi } from '@/services'
+import {
+  ArgCreateDeck,
+  CreateDeckResponse,
+  DeleteDeckResponse,
+  GetCardsResponse,
+} from '@/services/decks/types.ts'
 
 export const decksApi = baseApi.injectEndpoints({
   endpoints: builder => {
@@ -13,7 +19,7 @@ export const decksApi = baseApi.injectEndpoints({
         },
         invalidatesTags: ['Deck'],
       }),
-      deleteDeck: builder.mutation<DeleteDeckResponse, ArgDeleteDeck>({
+      deleteDeck: builder.mutation<DeleteDeckResponse, string>({
         query: id => {
           return {
             method: 'DELETE',
@@ -23,54 +29,22 @@ export const decksApi = baseApi.injectEndpoints({
         },
         invalidatesTags: ['Deck'],
       }),
+      getCards: builder.query<GetCardsResponse, string | undefined>({
+        query: id => {
+          console.log(id)
+
+          return {
+            url: `v1/decks/${id}/cards`,
+          }
+        },
+      }),
     }
   },
 })
 
-export const { useCreateDeckMutation, useDeleteDeckMutation } = decksApi
-
-export type Author = {
-  id: string
-  name: string
-}
-
-export type CreateDeckResponse = {
-  id: string
-  userId: string
-  name: string
-  isPrivate: boolean
-  shots: number
-  cover?: any
-  rating: number
-  isDeleted?: any
-  isBlocked?: any
-  created: string
-  updated: string
-  cardsCount: number
-  author: Author
-}
-
-export type ArgCreateDeck = {
-  cover: string
-  name: string
-  isPrivate: boolean
-}
-
-export type DeleteDeckResponse = {
-  id: string
-  userId: string
-  name: string
-  isPrivate: boolean
-  shots: number
-  cover?: any
-  rating: number
-  isDeleted?: any
-  isBlocked?: any
-  created: string
-  updated: string
-  cardsCount: number
-}
-
-export type ArgDeleteDeck = {
-  id: string
-}
+export const {
+  useCreateDeckMutation,
+  useDeleteDeckMutation,
+  useGetCardsQuery,
+  useLazyGetCardsQuery,
+} = decksApi
