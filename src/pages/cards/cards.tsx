@@ -1,10 +1,10 @@
 import { useState } from 'react'
 
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 import s from '@/pages/decks/decks.module.scss'
 import { useGetCardsQuery } from '@/services/decks'
-import { EditOutline, TrashOutline } from 'assets/icons'
+import { ArrowBackOutline, EditOutline, TrashOutline } from 'assets/icons'
 import Button from 'components/ui/button/button.tsx'
 import { Grade } from 'components/ui/grade'
 import { Table, TableBody, TableCell, TableRow } from 'components/ui/table'
@@ -47,35 +47,49 @@ export const Cards = () => {
 
   return (
     <div className={s.container}>
+      <Button variant={'link'} as={Link} to={'/decks'}>
+        <>
+          <ArrowBackOutline />
+          Back to Packs List
+        </>
+      </Button>
       <div className={s.titleBlock}>
         <Typography variant="large">My Pack</Typography>
-        <Button>Add New Card</Button>
+        {data?.items.length !== 0 && <Button>Add New Card</Button>}
       </div>
-      <TextField search placeholder="Input search" />
-      <Table className={s.table}>
-        <TableHeader columns={columns} onSort={setSort} sort={sort} />
-        <TableBody>
-          {data?.items.length === 0 && <div>empty</div>}
-          {data?.items.map((card: any) => (
-            <TableRow key={card.id}>
-              <TableCell className={s.tableCell}>{card.question}</TableCell>
-              <TableCell className={s.tableCell}>{card.answer}</TableCell>
-              <TableCell className={s.tableCell}>
-                {new Date(card.updated).toLocaleString('en-GB')}
-              </TableCell>
-              <TableCell className={s.tableCell}>
-                <Grade value={card.grade} onClick={() => {}} />
-              </TableCell>
-              <TableCell className={s.tableCell}>
-                <div className={s.iconsBlock}>
-                  <EditOutline />
-                  <TrashOutline />
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      {data?.items.length === 0 ? (
+        <div className={s.empty}>
+          <Typography>This pack is empty. Click add new card to fill this pack</Typography>
+          <Button>Add new card</Button>
+        </div>
+      ) : (
+        <>
+          <TextField search placeholder="Input search" />
+          <Table className={s.table}>
+            <TableHeader columns={columns} onSort={setSort} sort={sort} />
+            <TableBody>
+              {data?.items.map((card: any) => (
+                <TableRow key={card.id}>
+                  <TableCell className={s.tableCell}>{card.question}</TableCell>
+                  <TableCell className={s.tableCell}>{card.answer}</TableCell>
+                  <TableCell className={s.tableCell}>
+                    {new Date(card.updated).toLocaleString('en-GB')}
+                  </TableCell>
+                  <TableCell className={s.tableCell}>
+                    <Grade value={card.grade} onClick={() => {}} />
+                  </TableCell>
+                  <TableCell className={s.tableCell}>
+                    <div className={s.iconsBlock}>
+                      <EditOutline />
+                      <TrashOutline />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </>
+      )}
     </div>
   )
 }
