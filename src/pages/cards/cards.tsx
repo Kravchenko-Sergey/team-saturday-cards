@@ -55,33 +55,41 @@ export const Cards = () => {
       </Button>
       <div className={s.titleBlock}>
         <Typography variant="large">My Pack</Typography>
-        <Button>Add New Card</Button>
+        {data?.items.length !== 0 && <Button>Add New Card</Button>}
       </div>
-      <TextField search placeholder="Input search" />
-      <Table className={s.table}>
-        <TableHeader columns={columns} onSort={setSort} sort={sort} />
-        <TableBody>
-          {data?.items.length === 0 && <div>empty</div>}
-          {data?.items.map((card: any) => (
-            <TableRow key={card.id}>
-              <TableCell className={s.tableCell}>{card.question}</TableCell>
-              <TableCell className={s.tableCell}>{card.answer}</TableCell>
-              <TableCell className={s.tableCell}>
-                {new Date(card.updated).toLocaleString('en-GB')}
-              </TableCell>
-              <TableCell className={s.tableCell}>
-                <Grade value={card.grade} onClick={() => {}} />
-              </TableCell>
-              <TableCell className={s.tableCell}>
-                <div className={s.iconsBlock}>
-                  <EditOutline />
-                  <TrashOutline />
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      {data?.items.length === 0 ? (
+        <div className={s.empty}>
+          <Typography>This pack is empty. Click add new card to fill this pack</Typography>
+          <Button>Add new card</Button>
+        </div>
+      ) : (
+        <>
+          <TextField search placeholder="Input search" />
+          <Table className={s.table}>
+            <TableHeader columns={columns} onSort={setSort} sort={sort} />
+            <TableBody>
+              {data?.items.map((card: any) => (
+                <TableRow key={card.id}>
+                  <TableCell className={s.tableCell}>{card.question}</TableCell>
+                  <TableCell className={s.tableCell}>{card.answer}</TableCell>
+                  <TableCell className={s.tableCell}>
+                    {new Date(card.updated).toLocaleString('en-GB')}
+                  </TableCell>
+                  <TableCell className={s.tableCell}>
+                    <Grade value={card.grade} onClick={() => {}} />
+                  </TableCell>
+                  <TableCell className={s.tableCell}>
+                    <div className={s.iconsBlock}>
+                      <EditOutline />
+                      <TrashOutline />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </>
+      )}
     </div>
   )
 }
