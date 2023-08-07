@@ -1,10 +1,18 @@
 import { useState } from 'react'
 
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
+import { z } from 'zod'
+
 import s from './decks.module.scss'
 
 import { useGetDecksQuery } from '@/services/base.api.ts'
+import { useCreateDeckMutation } from '@/services/decks'
 import { EditOutline, PlayCircleOutline, TrashOutline } from 'assets/icons'
 import Button from 'components/ui/button/button.tsx'
+import { ControlledCheckbox, ControlledTextField } from 'components/ui/controlled'
+import { Modal } from 'components/ui/modal'
 import { Slider } from 'components/ui/slider'
 import { TabSwitcher, TabSwitcherItem } from 'components/ui/tab-switcher'
 import { Table, TableBody, TableCell, TableRow } from 'components/ui/table'
@@ -53,15 +61,53 @@ export const Decks = () => {
   }
   //
 
+  const newDeckSchema = z.object({
+    cover: z.instanceof(File).optional(),
+    name: z.string().min(3).max(30),
+    isPrivate: z.boolean(),
+  })
+
+  type NewDeck = z.infer<typeof newDeckSchema>
+
+  const { control, handleSubmit, getValues } = useForm<NewDeck>({
+    resolver: zodResolver(newDeckSchema),
+    defaultValues: {
+      name: '',
+      isPrivate: false,
+    },
+  })
+
   const { isLoading, data } = useGetDecksQuery()
+  const [createDeck] = useCreateDeckMutation()
 
   if (isLoading) return <div>Loading...</div>
+
+  const handleCreateDeck = () => {
+    const newDeck = {
+      cover: String(getValues().cover),
+      name: getValues().name,
+      isPrivate: getValues().isPrivate,
+    }
+
+    createDeck(newDeck)
+  }
+
+  console.log(data)
 
   return (
     <div className={s.container}>
       <div className={s.titleBlock}>
         <Typography variant="large">Decks list</Typography>
-        <Button>Add New Deck</Button>
+        <Modal
+          trigger={<Button>Add New Deck</Button>}
+          title="Add new deck "
+          footerBtn={<Button onClick={handleCreateDeck}>Add new deck</Button>}
+        >
+          <form onSubmit={handleSubmit(handleCreateDeck)}>
+            <ControlledTextField name="name" control={control} label="Name deck" />
+            <ControlledCheckbox name="isPrivate" control={control} label="Private deck" />
+          </form>
+        </Modal>
       </div>
       <div className={s.filtersBlock}>
         <TextField search placeholder="Input search" />
