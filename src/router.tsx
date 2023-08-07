@@ -7,15 +7,16 @@ import {
 } from 'react-router-dom'
 
 import { Layout } from 'components/ui/layout'
+import { Cards } from 'pages/cards'
 import { Decks } from 'pages/decks'
 
 const publicRoutes: RouteObject[] = [
   {
-    path: 'sign-in',
+    path: '/sign-in',
     element: <div>login</div>,
   },
   {
-    path: 'sign-up',
+    path: '/sign-up',
     element: <div>register</div>,
   },
 ]
@@ -26,8 +27,8 @@ const privateRoutes: RouteObject[] = [
     element: <Decks />,
   },
   {
-    path: '/cards',
-    element: <div>cards</div>,
+    path: '/:id/cards',
+    element: <Cards />,
   },
 ]
 
