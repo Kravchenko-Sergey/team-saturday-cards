@@ -13,11 +13,21 @@ export const decksApi = baseApi.injectEndpoints({
         },
         invalidatesTags: ['Deck'],
       }),
+      deleteDeck: builder.mutation<DeleteDeckResponse, ArgDeleteDeck>({
+        query: id => {
+          return {
+            method: 'DELETE',
+            url: `v1/decks/${id}`,
+            params: { id },
+          }
+        },
+        invalidatesTags: ['Deck'],
+      }),
     }
   },
 })
 
-export const { useCreateDeckMutation } = decksApi
+export const { useCreateDeckMutation, useDeleteDeckMutation } = decksApi
 
 export type Author = {
   id: string
@@ -40,8 +50,27 @@ export type CreateDeckResponse = {
   author: Author
 }
 
-type ArgCreateDeck = {
+export type ArgCreateDeck = {
   cover: string
   name: string
   isPrivate: boolean
+}
+
+export type DeleteDeckResponse = {
+  id: string
+  userId: string
+  name: string
+  isPrivate: boolean
+  shots: number
+  cover?: any
+  rating: number
+  isDeleted?: any
+  isBlocked?: any
+  created: string
+  updated: string
+  cardsCount: number
+}
+
+export type ArgDeleteDeck = {
+  id: string
 }
