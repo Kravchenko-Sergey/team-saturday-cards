@@ -2,7 +2,6 @@ import { useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { toast } from 'react-toastify'
 import { z } from 'zod'
 
 import s from './decks.module.scss'
@@ -91,8 +90,6 @@ export const Decks = () => {
 
     createDeck(newDeck)
   }
-
-  console.log(data)
 
   return (
     <div className={s.container}>
