@@ -7,7 +7,7 @@ import { z } from 'zod'
 import s from './decks.module.scss'
 
 import { useGetDecksQuery } from '@/services/base.api.ts'
-import { useCreateDeckMutation } from '@/services/decks'
+import { ArgDeleteDeck, useCreateDeckMutation, useDeleteDeckMutation } from '@/services/decks'
 import { EditOutline, PlayCircleOutline, TrashOutline } from 'assets/icons'
 import Button from 'components/ui/button/button.tsx'
 import { ControlledCheckbox, ControlledTextField } from 'components/ui/controlled'
@@ -78,6 +78,7 @@ export const Decks = () => {
 
   const { isLoading, data } = useGetDecksQuery()
   const [createDeck] = useCreateDeckMutation()
+  const [deleteDeck] = useDeleteDeckMutation()
 
   if (isLoading) return <div>Loading...</div>
 
@@ -91,6 +92,12 @@ export const Decks = () => {
     createDeck(newDeck)
   }
 
+  const handleDeleteDeck = (id: ArgDeleteDeck) => {
+    deleteDeck(id)
+  }
+
+  console.log(data)
+
   return (
     <div className={s.container}>
       <div className={s.titleBlock}>
@@ -98,7 +105,7 @@ export const Decks = () => {
         <Modal
           trigger={<Button>Add New Deck</Button>}
           title="Add new deck "
-          footerBtn={<Button onClick={handleCreateDeck}>Add new deck</Button>}
+          footerBtn={<Button onClick={handleSubmit(handleCreateDeck)}>Add new deck</Button>}
         >
           <form onSubmit={handleSubmit(handleCreateDeck)}>
             <ControlledTextField name="name" control={control} label="Name deck" />
@@ -136,23 +143,43 @@ export const Decks = () => {
         <TableHeader columns={columns} onSort={setSort} sort={sort} />
         <TableBody>
           {data?.items.length === 0 && <div>empty</div>}
-          {data?.items.map((deck: any) => (
-            <TableRow key={deck.id}>
-              <TableCell className={s.tableCell}>{deck.name}</TableCell>
-              <TableCell className={s.tableCell}>{deck.cardsCount}</TableCell>
-              <TableCell className={s.tableCell}>
-                {new Date(deck.updated).toLocaleString('en-GB')}
-              </TableCell>
-              <TableCell className={s.tableCell}>{deck.author.name}</TableCell>
-              <TableCell className={s.tableCell}>
-                <div className={s.iconsBlock}>
-                  <PlayCircleOutline />
-                  <EditOutline />
-                  <TrashOutline />
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
+          {data?.items
+            .map((deck: any) => (
+              <TableRow key={deck.id}>
+                <TableCell className={s.tableCell}>{deck.name}</TableCell>
+                <TableCell className={s.tableCell}>{deck.cardsCount}</TableCell>
+                <TableCell className={s.tableCell}>
+                  {new Date(deck.updated).toLocaleString('en-GB')}
+                </TableCell>
+                <TableCell className={s.tableCell}>{deck.author.name}</TableCell>
+                <TableCell className={s.tableCell}>
+                  <div className={s.iconsBlock}>
+                    <PlayCircleOutline />
+                    <EditOutline />
+                    <Modal
+                      trigger={<TrashOutline />}
+                      title="Delete deck"
+                      footerBtn={
+                        <Button
+                          onClick={() => {
+                            handleDeleteDeck(deck.id)
+                          }}
+                        >
+                          Delete deck
+                        </Button>
+                      }
+                    >
+                      <>
+                        <Typography>
+                          Do you really want to remove Pack Name? All cards will be deleted.
+                        </Typography>
+                      </>
+                    </Modal>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))
+            .reverse()}
         </TableBody>
       </Table>
     </div>
