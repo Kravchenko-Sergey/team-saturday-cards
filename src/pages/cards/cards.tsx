@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 import s from '@/pages/decks/decks.module.scss'
-import { useGetCardsQuery } from '@/services/decks'
+import { Card, useGetCardsQuery } from '@/services/cards'
 import { ArrowBackOutline, EditOutline, TrashOutline } from 'assets/icons'
 import Button from 'components/ui/button/button.tsx'
 import { Grade } from 'components/ui/grade'
@@ -15,7 +15,13 @@ import { Typography } from 'components/ui/typography'
 export const Cards = () => {
   const { id } = useParams()
 
-  const { data } = useGetCardsQuery(id)
+  const { cards } = useGetCardsQuery(id, {
+    selectFromResult: ({ data }) => {
+      return {
+        cards: data?.items,
+      }
+    },
+  })
 
   const [sort, setSort] = useState<Sort>(null)
 
@@ -55,9 +61,9 @@ export const Cards = () => {
       </Button>
       <div className={s.titleBlock}>
         <Typography variant="large">My Pack</Typography>
-        {data?.items.length !== 0 && <Button>Add New Card</Button>}
+        {cards?.length !== 0 && <Button>Add New Card</Button>}
       </div>
-      {data?.items.length === 0 ? (
+      {cards?.length === 0 ? (
         <div className={s.empty}>
           <Typography>This pack is empty. Click add new card to fill this pack</Typography>
           <Button>Add new card</Button>
@@ -68,7 +74,7 @@ export const Cards = () => {
           <Table className={s.table}>
             <TableHeader columns={columns} onSort={setSort} sort={sort} />
             <TableBody>
-              {data?.items.map((card: any) => (
+              {cards?.map((card: Card) => (
                 <TableRow key={card.id}>
                   <TableCell className={s.tableCell}>{card.question}</TableCell>
                   <TableCell className={s.tableCell}>{card.answer}</TableCell>
