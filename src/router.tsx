@@ -9,6 +9,7 @@ import {
 import { Layout } from 'components/ui/layout'
 import { Cards } from 'pages/cards'
 import { Decks } from 'pages/decks'
+import { ErrorPage } from 'pages/error-page'
 
 const publicRoutes: RouteObject[] = [
   {
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <Layout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         element: <PrivateRoutes />,
