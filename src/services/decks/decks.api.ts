@@ -1,10 +1,5 @@
 import { baseApi } from '@/services'
-import {
-  ArgCreateDeck,
-  CreateDeckResponse,
-  DeleteDeckResponse,
-  GetCardsResponse,
-} from '@/services/decks/types.ts'
+import { ArgCreateDeck, CreateDeckResponse, DeleteDeckResponse } from '@/services/decks/types.ts'
 
 export const decksApi = baseApi.injectEndpoints({
   endpoints: builder => {
@@ -29,22 +24,8 @@ export const decksApi = baseApi.injectEndpoints({
         },
         invalidatesTags: ['Deck'],
       }),
-      getCards: builder.query<GetCardsResponse, string | undefined>({
-        query: id => {
-          console.log(id)
-
-          return {
-            url: `v1/decks/${id}/cards`,
-          }
-        },
-      }),
     }
   },
 })
 
-export const {
-  useCreateDeckMutation,
-  useDeleteDeckMutation,
-  useGetCardsQuery,
-  useLazyGetCardsQuery,
-} = decksApi
+export const { useCreateDeckMutation, useDeleteDeckMutation } = decksApi

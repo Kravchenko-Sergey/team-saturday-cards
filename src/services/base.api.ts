@@ -14,10 +14,11 @@ export const baseApi = createApi({
   }),
   endpoints: builder => {
     return {
-      getDecks: builder.query<GetDecksResponse, void>({
-        query: () => {
+      getDecks: builder.query<GetDecksResponse, ArgGetDecks>({
+        query: params => {
           return {
             url: 'v1/decks',
+            params,
           }
         },
         providesTags: ['Deck'],
@@ -27,3 +28,13 @@ export const baseApi = createApi({
 })
 
 export const { useGetDecksQuery } = baseApi
+
+type ArgGetDecks = {
+  minCardsCount?: string
+  maxCardsCount?: string
+  name?: string
+  authorId?: string
+  orderBy?: string
+  currentPage?: string
+  itemsPerPage?: string
+}

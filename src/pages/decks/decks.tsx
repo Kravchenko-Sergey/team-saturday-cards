@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -7,12 +7,10 @@ import { z } from 'zod'
 
 import s from './decks.module.scss'
 
+import { useDebounce } from '@/common/hooks/use-debounse.ts'
 import { useGetDecksQuery } from '@/services/base.api.ts'
-import {
-  useCreateDeckMutation,
-  useDeleteDeckMutation,
-  useLazyGetCardsQuery,
-} from '@/services/decks'
+import { useLazyGetCardsQuery } from '@/services/cards'
+import { useCreateDeckMutation, useDeleteDeckMutation } from '@/services/decks'
 import { EditOutline, PlayCircleOutline, TrashOutline } from 'assets/icons'
 import Button from 'components/ui/button/button.tsx'
 import { ControlledCheckbox, ControlledTextField } from 'components/ui/controlled'
@@ -25,6 +23,26 @@ import { TextField } from 'components/ui/text-field'
 import { Typography } from 'components/ui/typography'
 
 export const Decks = () => {
+  //searchByName
+  const [searchValue, setSearchValue] = useState('')
+  const debouncedValue = useDebounce(searchValue, 500)
+  const handleSearchValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setSearchValue(e.currentTarget.value)
+  }
+  const { decks, maxCardsCount, isLoading } = useGetDecksQuery(
+    { name: debouncedValue },
+    {
+      selectFromResult: ({ data, isLoading }) => {
+        return {
+          decks: data?.items,
+          maxCardsCount: data?.maxCardsCount,
+          isLoading,
+        }
+      },
+    }
+  )
+  //
+
   const navigate = useNavigate()
   const [sort, setSort] = useState<Sort>(null)
 
@@ -54,8 +72,9 @@ export const Decks = () => {
       title: '',
     },
   ]
-  //
-  const [values, setValues] = useState<number[]>([25, 100])
+  //slider
+
+  const [values, setValues] = useState<number[]>([0, 11])
 
   const handleSliderValueChange = (e: any) => {
     setValues(e)
@@ -82,7 +101,6 @@ export const Decks = () => {
     },
   })
 
-  const { isLoading, data } = useGetDecksQuery()
   const [createDeck] = useCreateDeckMutation()
   const [deleteDeck] = useDeleteDeckMutation()
   const [getCards] = useLazyGetCardsQuery()
@@ -109,8 +127,10 @@ export const Decks = () => {
       .then(() => {
         navigate(`/${id}/cards`)
       })
-      .catch(error => console.log(error))
+      .catch(error => console.error(error))
   }
+
+  console.log(decks)
 
   return (
     <div className={s.container}>
@@ -128,7 +148,12 @@ export const Decks = () => {
         </Modal>
       </div>
       <div className={s.filtersBlock}>
-        <TextField search placeholder="Input search" />
+        <TextField
+          value={searchValue}
+          onChange={handleSearchValue}
+          search
+          placeholder="Input search"
+        />
         <TabSwitcher label="Show packs decks">
           <TabSwitcherItem value={'tab1'} className={s.tabsTrigger}>
             <Typography variant="body1">My Decks</Typography>
@@ -144,7 +169,7 @@ export const Decks = () => {
           onValueCommit={handleSliderValueCommitChange}
           multiple
           min={0}
-          max={100}
+          max={maxCardsCount}
           step={1}
         />
         <Button variant="secondary">
@@ -156,9 +181,8 @@ export const Decks = () => {
       <Table className={s.table}>
         <TableHeader columns={columns} onSort={setSort} sort={sort} />
         <TableBody>
-          {data?.items.length === 0 && <div>empty</div>}
-          {data?.items
-            .map((deck: any) => (
+          {decks
+            ?.map((deck: Deck) => (
               <TableRow key={deck.id}>
                 <TableCell
                   className={s.tableCell}
@@ -205,4 +229,25 @@ export const Decks = () => {
       </Table>
     </div>
   )
+}
+
+export type Author = {
+  id: string
+  name: string
+}
+
+export type Deck = {
+  id: string
+  userId: string
+  name: string
+  isPrivate: boolean
+  shots: number
+  cover?: any
+  rating: number
+  isDeleted?: any
+  isBlocked?: any
+  created: string
+  updated: string
+  cardsCount: number
+  author: Author
 }
