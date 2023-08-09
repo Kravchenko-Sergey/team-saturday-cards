@@ -10,7 +10,7 @@ export type ProfileSchemaType = z.infer<typeof ProfileSchema>
 
 type OnSubmitType = (data: ProfileSchemaType) => void
 
-export const useProfileForm = (onSubmit: OnSubmitType) => {
+export const useProfileInfoForm = (onSubmit: OnSubmitType) => {
   const { handleSubmit, ...rest } = useForm<ProfileSchemaType>({
     resolver: zodResolver(ProfileSchema),
     mode: 'onSubmit',
