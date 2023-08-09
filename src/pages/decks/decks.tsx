@@ -8,8 +8,11 @@ import { z } from 'zod'
 import s from './decks.module.scss'
 
 import { useDebounce } from '@/common/hooks/use-debounse.ts'
+import { useAppDispatch, useAppSelector } from '@/services'
 import { useLazyGetCardsQuery } from '@/services/cards'
 import { useCreateDeckMutation, useDeleteDeckMutation, useGetDecksQuery } from '@/services/decks'
+import { decksSelectors } from '@/services/decks/decks-selectors.ts'
+import { decksSlice } from '@/services/decks/decks.slice.ts'
 import { EditOutline, PlayCircleOutline, TrashOutline } from 'assets/icons'
 import Button from 'components/ui/button/button.tsx'
 import { ControlledCheckbox, ControlledTextField } from 'components/ui/controlled'
@@ -20,33 +23,35 @@ import { Table, TableBody, TableCell, TableRow } from 'components/ui/table'
 import { Column, Sort, TableHeader } from 'components/ui/table/table-header/table-header.tsx'
 import { TextField } from 'components/ui/text-field'
 import { Typography } from 'components/ui/typography'
-import { useAppDispatch, useAppSelector } from '@/services'
-import { decksSlice } from '@/services/decks/decks.slice.ts'
-import { decksSelectors } from '@/services/decks/decks-selectors.ts'
 
 export const Decks = () => {
   const dispatch = useAppDispatch()
   /*const itemsPerPage = useAppSelector(decksSelectors.selectItemsPerPage)*/
   const searchByName = useAppSelector(decksSelectors.selectSearchByName)
+  const maxCardsCount = useAppSelector(decksSelectors.selectMaxCardsCount)
+  const minCardsCount = useAppSelector(decksSelectors.selectMinCardsCount)
 
   /*const setItemPerPage = (itemsPerPage: number) =>
     dispatch(decksSlice.actions.setItemsPerPage(itemsPerPage))*/
   const setSearch = (search: string) => dispatch(decksSlice.actions.setSearchByName(search))
+  const setMaxCardsCount = (value: number) => dispatch(decksSlice.actions.setMaxCardsCount(value))
+  const setMinCardsCount = (value: number) => dispatch(decksSlice.actions.setMinCardsCount(value))
 
   //searchByName
   const [searchValue, setSearchValue] = useState('')
   const debouncedValue = useDebounce(searchValue, 500)
+
   setSearch(debouncedValue)
   const handleSearchValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setSearchValue(e.currentTarget.value)
   }
-  const { decks, maxCardsCount, isLoading } = useGetDecksQuery(
-    { name: searchByName },
+  const { decks, max, isLoading } = useGetDecksQuery(
+    { name: searchByName, maxCardsCount, minCardsCount },
     {
       selectFromResult: ({ data, isLoading }) => {
         return {
           decks: data?.items,
-          maxCardsCount: data?.maxCardsCount,
+          max: data?.maxCardsCount,
           isLoading,
         }
       },
@@ -85,7 +90,7 @@ export const Decks = () => {
   ]
   //slider
 
-  const [values, setValues] = useState<number[]>([0, 11])
+  const [values, setValues] = useState<number[]>([minCardsCount, maxCardsCount])
 
   const handleSliderValueChange = (e: any) => {
     setValues(e)
@@ -93,7 +98,10 @@ export const Decks = () => {
 
   const handleSliderValueCommitChange = (e: any) => {
     setValues(e)
+    setMaxCardsCount(e[1])
+    setMinCardsCount(e[0])
   }
+
   //
 
   const newDeckSchema = z.object({
@@ -144,10 +152,14 @@ export const Decks = () => {
   const handleClearFilter = () => {
     setSearchValue('')
     setSearch('')
+    setValues([0, 11])
+    setMaxCardsCount(11)
+    setMinCardsCount(0)
   }
   //
 
   console.log(decks)
+  console.log(max)
 
   return (
     <div className={s.container}>
@@ -186,7 +198,7 @@ export const Decks = () => {
           onValueCommit={handleSliderValueCommitChange}
           multiple
           min={0}
-          max={maxCardsCount}
+          max={max}
           step={1}
         />
         <Button variant="secondary" onClick={handleClearFilter}>

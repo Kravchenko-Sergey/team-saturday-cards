@@ -4,7 +4,7 @@ export const decksSlice = createSlice({
   name: 'decks',
   initialState: {
     minCardsCount: 0,
-    maxCardsCount: 0,
+    maxCardsCount: 11,
     searchByName: '',
     authorId: '',
     orderBy: '',
