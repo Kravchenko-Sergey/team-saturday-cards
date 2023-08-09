@@ -28,3 +28,13 @@ export type ArgCreateDeck = {
 }
 
 export type DeleteDeckResponse = Omit<CreateDeckResponse, 'author'>
+
+export type ArgGetDecks = {
+  minCardsCount?: string
+  maxCardsCount?: string
+  name?: string
+  authorId?: string
+  orderBy?: string
+  currentPage?: string
+  itemsPerPage?: string
+}
