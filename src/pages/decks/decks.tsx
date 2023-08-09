@@ -8,9 +8,8 @@ import { z } from 'zod'
 import s from './decks.module.scss'
 
 import { useDebounce } from '@/common/hooks/use-debounse.ts'
-import { useGetDecksQuery } from '@/services/base.api.ts'
 import { useLazyGetCardsQuery } from '@/services/cards'
-import { useCreateDeckMutation, useDeleteDeckMutation } from '@/services/decks'
+import { useCreateDeckMutation, useDeleteDeckMutation, useGetDecksQuery } from '@/services/decks'
 import { EditOutline, PlayCircleOutline, TrashOutline } from 'assets/icons'
 import Button from 'components/ui/button/button.tsx'
 import { ControlledCheckbox, ControlledTextField } from 'components/ui/controlled'
@@ -21,16 +20,28 @@ import { Table, TableBody, TableCell, TableRow } from 'components/ui/table'
 import { Column, Sort, TableHeader } from 'components/ui/table/table-header/table-header.tsx'
 import { TextField } from 'components/ui/text-field'
 import { Typography } from 'components/ui/typography'
+import { useAppDispatch, useAppSelector } from '@/services'
+import { decksSlice } from '@/services/decks/decks.slice.ts'
+import { decksSelectors } from '@/services/decks/decks-selectors.ts'
 
 export const Decks = () => {
+  const dispatch = useAppDispatch()
+  /*const itemsPerPage = useAppSelector(decksSelectors.selectItemsPerPage)*/
+  const searchByName = useAppSelector(decksSelectors.selectSearchByName)
+
+  /*const setItemPerPage = (itemsPerPage: number) =>
+    dispatch(decksSlice.actions.setItemsPerPage(itemsPerPage))*/
+  const setSearch = (search: string) => dispatch(decksSlice.actions.setSearchByName(search))
+
   //searchByName
   const [searchValue, setSearchValue] = useState('')
   const debouncedValue = useDebounce(searchValue, 500)
+  setSearch(debouncedValue)
   const handleSearchValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setSearchValue(e.currentTarget.value)
   }
   const { decks, maxCardsCount, isLoading } = useGetDecksQuery(
-    { name: debouncedValue },
+    { name: searchByName },
     {
       selectFromResult: ({ data, isLoading }) => {
         return {
@@ -125,10 +136,16 @@ export const Decks = () => {
     getCards(id)
       .unwrap()
       .then(() => {
-        navigate(`/${id}/cards`)
+        navigate(`/cards/${id}`)
       })
       .catch(error => console.error(error))
   }
+  //clear filter
+  const handleClearFilter = () => {
+    setSearchValue('')
+    setSearch('')
+  }
+  //
 
   console.log(decks)
 
@@ -172,61 +189,67 @@ export const Decks = () => {
           max={maxCardsCount}
           step={1}
         />
-        <Button variant="secondary">
+        <Button variant="secondary" onClick={handleClearFilter}>
           <>
             <TrashOutline /> Clear Filter
           </>
         </Button>
       </div>
-      <Table className={s.table}>
-        <TableHeader columns={columns} onSort={setSort} sort={sort} />
-        <TableBody>
-          {decks
-            ?.map((deck: Deck) => (
-              <TableRow key={deck.id}>
-                <TableCell
-                  className={s.tableCell}
-                  onClick={() => {
-                    handleGetCards(deck.id)
-                  }}
-                >
-                  {deck.name}
-                </TableCell>
-                <TableCell className={s.tableCell}>{deck.cardsCount}</TableCell>
-                <TableCell className={s.tableCell}>
-                  {new Date(deck.updated).toLocaleString('en-GB')}
-                </TableCell>
-                <TableCell className={s.tableCell}>{deck.author.name}</TableCell>
-                <TableCell className={s.tableCell}>
-                  <div className={s.iconsBlock}>
-                    <PlayCircleOutline />
-                    <EditOutline />
-                    <Modal
-                      trigger={<TrashOutline />}
-                      title="Delete deck"
-                      footerBtn={
-                        <Button
-                          onClick={() => {
-                            handleDeleteDeck(deck.id)
-                          }}
-                        >
-                          Delete deck
-                        </Button>
-                      }
-                    >
-                      <>
-                        <Typography>
-                          Do you really want to remove Pack Name? All cards will be deleted.
-                        </Typography>
-                      </>
-                    </Modal>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))
-            .reverse()}
-        </TableBody>
-      </Table>
+      {decks?.length === 0 ? (
+        <Typography variant={'h2'} className={s.empty}>
+          No decks with the entered name were found 😔. Change request parameters
+        </Typography>
+      ) : (
+        <Table className={s.table}>
+          <TableHeader columns={columns} onSort={setSort} sort={sort} />
+          <TableBody>
+            {decks
+              ?.map((deck: Deck) => (
+                <TableRow key={deck.id}>
+                  <TableCell
+                    className={s.tableCell}
+                    onClick={() => {
+                      handleGetCards(deck.id)
+                    }}
+                  >
+                    {deck.name}
+                  </TableCell>
+                  <TableCell className={s.tableCell}>{deck.cardsCount}</TableCell>
+                  <TableCell className={s.tableCell}>
+                    {new Date(deck.updated).toLocaleString('en-GB')}
+                  </TableCell>
+                  <TableCell className={s.tableCell}>{deck.author.name}</TableCell>
+                  <TableCell className={s.tableCell}>
+                    <div className={s.iconsBlock}>
+                      <PlayCircleOutline />
+                      <EditOutline />
+                      <Modal
+                        trigger={<TrashOutline />}
+                        title="Delete deck"
+                        footerBtn={
+                          <Button
+                            onClick={() => {
+                              handleDeleteDeck(deck.id)
+                            }}
+                          >
+                            Delete deck
+                          </Button>
+                        }
+                      >
+                        <>
+                          <Typography>
+                            Do you really want to remove Pack Name? All cards will be deleted.
+                          </Typography>
+                        </>
+                      </Modal>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+              .reverse()}
+          </TableBody>
+        </Table>
+      )}
     </div>
   )
 }

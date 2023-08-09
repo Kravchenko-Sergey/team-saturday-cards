@@ -24,11 +24,11 @@ const publicRoutes: RouteObject[] = [
 
 const privateRoutes: RouteObject[] = [
   {
-    path: '/decks',
+    path: '/',
     element: <Decks />,
   },
   {
-    path: '/:id/cards',
+    path: '/cards/:id',
     element: <Cards />,
   },
 ]
