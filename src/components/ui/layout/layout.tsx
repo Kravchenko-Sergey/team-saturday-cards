@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 
 import s from './layout.module.scss'
 
@@ -9,6 +9,8 @@ import { Header } from 'components/ui/layout/header'
 import { Typography } from 'components/ui/typography'
 
 export const Layout = () => {
+  const navigate = useNavigate()
+
   return (
     <div className={s.container}>
       <Header>
@@ -45,7 +47,11 @@ export const Layout = () => {
                     </div>
                   </>
                 </DropdownItem>
-                <DropdownItemWithIcon icon={<PersonOutline />} text={'Profile'} />
+                <DropdownItemWithIcon
+                  icon={<PersonOutline />}
+                  text={'Profile'}
+                  onSelect={() => navigate('/profile')}
+                />
                 <DropdownItemWithIcon icon={<LogOutOutline />} text={'Logout'} />
               </>
             }
