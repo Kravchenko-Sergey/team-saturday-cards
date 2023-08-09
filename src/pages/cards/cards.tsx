@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { Link, useParams } from 'react-router-dom'
 
-import s from '@/pages/decks/decks.module.scss'
+import s from './cards.module.scss'
 import { Card, useGetCardsQuery } from '@/services/cards'
 import { ArrowBackOutline, EditOutline, TrashOutline } from 'assets/icons'
 import Button from 'components/ui/button/button.tsx'
@@ -51,21 +51,23 @@ export const Cards = () => {
     },
   ]
 
+  console.log(cards)
+
   return (
     <div className={s.container}>
-      <Button variant={'link'} as={Link} to={'/decks'}>
+      <Button variant={'link'} as={Link} to={'/'}>
         <>
           <ArrowBackOutline />
-          Back to Packs List
+          Back to Decks List
         </>
       </Button>
       <div className={s.titleBlock}>
-        <Typography variant="large">My Pack</Typography>
+        <Typography variant="large">My deck</Typography>
         {cards?.length !== 0 && <Button>Add New Card</Button>}
       </div>
       {cards?.length === 0 ? (
         <div className={s.empty}>
-          <Typography>This pack is empty. Click add new card to fill this pack</Typography>
+          <Typography>This deck is empty. Click add new card to fill this deck</Typography>
           <Button>Add new card</Button>
         </div>
       ) : (
