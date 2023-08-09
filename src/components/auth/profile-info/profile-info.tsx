@@ -1,16 +1,18 @@
 import { ChangeEvent, FC } from 'react'
 
-import s from './profile.module.scss'
-
 import { EditOutline, LogOutOutline } from 'assets/icons'
-import { ProfileSchemaType, useProfileForm } from 'components/auth/profile/use-profile-form.ts'
+import s from 'components/auth/profile-info/profile-info.module.scss'
+import {
+  ProfileSchemaType,
+  useProfileInfoForm,
+} from 'components/auth/profile-info/use-profile-info-form.ts'
 import { Avatar } from 'components/ui/avatar/avatar.tsx'
 import Button from 'components/ui/button/button.tsx'
 import { Card } from 'components/ui/card'
 import { ControlledTextField } from 'components/ui/controlled'
 import { Typography } from 'components/ui/typography'
 
-type ProfileProps = {
+type ProfileInfoProps = {
   name: string
   email: string
   src: string
@@ -21,7 +23,7 @@ type ProfileProps = {
   onSubmit: (data: ProfileSchemaType) => void
 }
 
-export const Profile: FC<ProfileProps> = ({
+export const ProfileInfo: FC<ProfileInfoProps> = ({
   name,
   email,
   src,
@@ -31,7 +33,7 @@ export const Profile: FC<ProfileProps> = ({
   showTextField,
   onSubmit,
 }) => {
-  const { handleSubmit, control } = useProfileForm(onSubmit)
+  const { handleSubmit, control } = useProfileInfoForm(onSubmit)
 
   return (
     <Card className={s.card}>

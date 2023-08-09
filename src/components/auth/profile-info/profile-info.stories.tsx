@@ -3,11 +3,11 @@ import { useState } from 'react'
 import type { Meta } from '@storybook/react'
 import { BrowserRouter } from 'react-router-dom'
 
-import { Profile } from './'
+import { ProfileInfo } from './'
 
 const meta = {
   title: 'Components/Auth/Profile',
-  component: Profile,
+  component: ProfileInfo,
   decorators: [
     Story => (
       <BrowserRouter>
@@ -16,7 +16,7 @@ const meta = {
     ),
   ],
   tags: ['autodocs'],
-} satisfies Meta<typeof Profile>
+} satisfies Meta<typeof ProfileInfo>
 
 export default meta
 
@@ -47,7 +47,7 @@ export const Default = () => {
   }
 
   return (
-    <Profile
+    <ProfileInfo
       name={'Sergey'}
       email={'sergey.ose.pyatigorsk@gmail.com'}
       src={img}

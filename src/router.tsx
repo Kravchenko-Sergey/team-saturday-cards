@@ -10,6 +10,7 @@ import { Layout } from 'components/ui/layout'
 import { Cards } from 'pages/cards'
 import { Decks } from 'pages/decks'
 import { ErrorPage } from 'pages/error-page'
+import { Profile } from 'pages/profile/profile.tsx'
 
 const publicRoutes: RouteObject[] = [
   {
@@ -30,6 +31,10 @@ const privateRoutes: RouteObject[] = [
   {
     path: '/cards/:id',
     element: <Cards />,
+  },
+  {
+    path: '/profile',
+    element: <Profile />,
   },
 ]
 
