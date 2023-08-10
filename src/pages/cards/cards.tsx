@@ -7,7 +7,12 @@ import { z } from 'zod'
 
 import s from './cards.module.scss'
 
-import { Card, useCreateCardMutation, useGetCardsQuery } from '@/services/cards'
+import {
+  Card,
+  useCreateCardMutation,
+  useDeleteCardMutation,
+  useGetCardsQuery,
+} from '@/services/cards'
 import { ArrowBackOutline, EditOutline, TrashOutline } from 'assets/icons'
 import Button from 'components/ui/button/button.tsx'
 import { ControlledTextField } from 'components/ui/controlled'
@@ -74,6 +79,11 @@ export const Cards = () => {
   })
 
   const [createCard] = useCreateCardMutation()
+  const [deleteCard] = useDeleteCardMutation()
+
+  const handleDeleteCard = (id: string) => {
+    deleteCard(id)
+  }
 
   const handleCreateCard = () => {
     const newCard = {
@@ -156,7 +166,17 @@ export const Cards = () => {
                   <TableCell className={s.tableCell}>
                     <div className={s.iconsBlock}>
                       <EditOutline />
-                      <TrashOutline />
+                      <Modal
+                        trigger={<TrashOutline />}
+                        title="Delete Card"
+                        footerBtn={
+                          <Button onClick={() => handleDeleteCard(card.id)}>Delete Card</Button>
+                        }
+                      >
+                        <Typography>
+                          Do you really want to remove Card Name? All cards will be deleted.
+                        </Typography>
+                      </Modal>
                     </div>
                   </TableCell>
                 </TableRow>
