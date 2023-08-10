@@ -43,9 +43,4 @@ export const decksApi = baseApi.injectEndpoints({
   },
 })
 
-export const {
-  useGetDecksQuery,
-  useLazyGetDecksQuery,
-  useCreateDeckMutation,
-  useDeleteDeckMutation,
-} = decksApi
+export const { useGetDecksQuery, useCreateDeckMutation, useDeleteDeckMutation } = decksApi
