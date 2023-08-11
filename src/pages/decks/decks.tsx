@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 import { z } from 'zod'
 
 import s from './decks.module.scss'
@@ -7,6 +8,7 @@ import s from './decks.module.scss'
 import { useAppSelector } from '@/services'
 import { useCreateDeckMutation, useGetDecksQuery } from '@/services/decks'
 import { decksSelectors } from '@/services/decks/decks-selectors.ts'
+import { decksSlice } from '@/services/decks/decks.slice.ts'
 import Button from 'components/ui/button/button.tsx'
 import { ControlledCheckbox, ControlledTextField } from 'components/ui/controlled'
 import { Modal } from 'components/ui/modal'
@@ -16,16 +18,24 @@ import { DecksFilters } from 'pages/decks/decks-filters/decks-filters.tsx'
 import { DecksTable } from 'pages/decks/decks-table/decks-table.tsx'
 
 export const Decks = () => {
+  const currentPage = useAppSelector(decksSelectors.selectCurrentPage)
+  const itemsPerPage = useAppSelector(decksSelectors.selectItemsPerPage)
   const searchByName = useAppSelector(decksSelectors.selectSearchByName)
   const maxCardsCount = useAppSelector(decksSelectors.selectMaxCardsCount)
   const minCardsCount = useAppSelector(decksSelectors.selectMinCardsCount)
+  const dispatch = useDispatch()
 
-  const { decks, isLoading } = useGetDecksQuery(
-    { name: searchByName, maxCardsCount, minCardsCount },
+  const setCurrentPage = (page: number) => dispatch(decksSlice.actions.setCurrentPage(page))
+  const setItemsPerPage = (perPage: string) =>
+    dispatch(decksSlice.actions.setItemsPerPage(Number(perPage)))
+
+  const { decks, totalPages, isLoading } = useGetDecksQuery(
+    { name: searchByName, maxCardsCount, minCardsCount, currentPage, itemsPerPage },
     {
       selectFromResult: ({ data, isLoading }) => {
         return {
           decks: data?.items,
+          totalPages: data?.pagination.totalPages,
           max: data?.maxCardsCount,
           isLoading,
         }
@@ -62,6 +72,9 @@ export const Decks = () => {
 
     createDeck(newDeck)
   }
+  //pagination
+  const handleCurrentPage = (e: number) => setCurrentPage(e)
+  const handleItemsPerPage = (e: string) => setItemsPerPage(e)
 
   return (
     <div className={s.container}>
@@ -86,7 +99,14 @@ export const Decks = () => {
       ) : (
         <>
           <DecksTable data={decks} />
-          <Pagination count={10} page={1} onChange={() => {}} />
+          <Pagination
+            count={totalPages ? totalPages : 100}
+            page={currentPage}
+            onChange={e => handleCurrentPage(e)}
+            perPage={String(itemsPerPage)}
+            onPerPageChange={e => handleItemsPerPage(e)}
+            perPageOptions={[10, 20, 30]}
+          />
         </>
       )}
     </div>

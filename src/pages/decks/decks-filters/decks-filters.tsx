@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 
 import { useDebounce } from '@/common/hooks/use-debounse.ts'
 import { useAppDispatch, useAppSelector } from '@/services'
@@ -17,6 +17,7 @@ export const DecksFilters = () => {
   const minCardsCount = useAppSelector(decksSelectors.selectMinCardsCount)
   const dispatch = useAppDispatch()
 
+  const setCurrentPage = (page: number) => dispatch(decksSlice.actions.setCurrentPage(page))
   const setMaxCardsCount = (value: number) => dispatch(decksSlice.actions.setMaxCardsCount(value))
   const setMinCardsCount = (value: number) => dispatch(decksSlice.actions.setMinCardsCount(value))
   const setSearch = (search: string) => dispatch(decksSlice.actions.setSearchByName(search))
@@ -24,7 +25,11 @@ export const DecksFilters = () => {
   const [searchValue, setSearchValue] = useState('')
   const debouncedValue = useDebounce(searchValue, 500)
 
-  setSearch(debouncedValue)
+  useEffect(() => {
+    setSearch(debouncedValue)
+    setCurrentPage(1)
+  }, [debouncedValue])
+
   const handleSearchValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setSearchValue(e.currentTarget.value)
   }
@@ -39,6 +44,7 @@ export const DecksFilters = () => {
     setValues(e)
     setMaxCardsCount(e[1])
     setMinCardsCount(e[0])
+    setCurrentPage(1)
   }
   //clear filter
   const handleClearFilter = () => {
@@ -47,6 +53,7 @@ export const DecksFilters = () => {
     setValues([0, 11])
     setMaxCardsCount(11)
     setMinCardsCount(0)
+    setCurrentPage(1)
   }
 
   return (
