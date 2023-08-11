@@ -35,6 +35,6 @@ export type ArgGetDecks = {
   name?: string
   authorId?: string
   orderBy?: string
-  currentPage?: string
-  itemsPerPage?: string
+  currentPage?: number
+  itemsPerPage?: number
 }
