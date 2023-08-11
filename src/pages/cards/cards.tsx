@@ -1,3 +1,5 @@
+import { ChangeEvent, useEffect, useState } from 'react'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
@@ -6,6 +8,7 @@ import { z } from 'zod'
 
 import s from './cards.module.scss'
 
+import { useDebounce } from '@/common/hooks/use-debounse.ts'
 import { useAppSelector } from '@/services'
 import { useCreateCardMutation, useGetCardsQuery } from '@/services/cards'
 import { cardsSelectors } from '@/services/cards/cards-selectors.ts'
@@ -23,17 +26,18 @@ import { CardsTable } from 'pages/cards/cards-table/cards-table.tsx'
 export const Cards = () => {
   const currentPage = useAppSelector(cardsSelectors.selectCurrentPage)
   const itemsPerPage = useAppSelector(cardsSelectors.selectItemsPerPage)
-  /*const searchByQuestion = useAppSelector(cardsSelectors.selectSearchByQuestion)*/
+  const searchByQuestion = useAppSelector(cardsSelectors.selectSearchByQuestion)
   const dispatch = useDispatch()
 
   const setCurrentPage = (page: number) => dispatch(cardsSlice.actions.setCurrentPage(page))
   const setItemsPerPage = (perPage: string) =>
     dispatch(cardsSlice.actions.setItemsPerPage(Number(perPage)))
+  const setSearch = (search: string) => dispatch(cardsSlice.actions.setSearchByQuestion(search))
 
   const { id } = useParams()
 
   const { cards, totalPages } = useGetCardsQuery(
-    { id, currentPage, itemsPerPage },
+    { id, question: searchByQuestion, currentPage, itemsPerPage },
     {
       selectFromResult: ({ data, isLoading }) => {
         return {
@@ -69,6 +73,19 @@ export const Cards = () => {
     }
 
     createCard({ id, question: newCard.question, answer: newCard.answer })
+  }
+
+  //searchByQuestion
+  const [searchValue, setSearchValue] = useState('')
+  const debouncedValue = useDebounce(searchValue, 500)
+
+  useEffect(() => {
+    setSearch(debouncedValue)
+    setCurrentPage(1)
+  }, [debouncedValue])
+
+  const handleSearchValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setSearchValue(e.currentTarget.value)
   }
   //pagination
   const handleCurrentPage = (e: number) => setCurrentPage(e)
@@ -129,7 +146,12 @@ export const Cards = () => {
         </div>
       ) : (
         <>
-          <TextField search placeholder="Input search" />
+          <TextField
+            value={searchValue}
+            onChange={handleSearchValue}
+            search
+            placeholder="Input search"
+          />
           <CardsTable data={cards} />
           <Pagination
             count={totalPages ? totalPages : 100}
