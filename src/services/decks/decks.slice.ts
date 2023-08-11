@@ -9,7 +9,7 @@ export const decksSlice = createSlice({
     authorId: '',
     orderBy: '',
     currentPage: 1,
-    itemsPerPage: 20,
+    itemsPerPage: 10,
   },
   reducers: {
     setMinCardsCount: (state, action: PayloadAction<number>) => {
