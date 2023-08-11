@@ -1,9 +1,11 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { useLazyGetCardsQuery } from '@/services/cards'
 import { useDeleteDeckMutation } from '@/services/decks'
+import { decksSlice } from '@/services/decks/decks.slice.ts'
 import { Deck } from '@/services/types.ts'
 import { EditOutline, PlayCircleOutline, TrashOutline } from 'assets/icons'
 import Button from 'components/ui/button/button.tsx'
@@ -19,6 +21,9 @@ type DecksTableProps = {
 
 export const DecksTable: FC<DecksTableProps> = ({ data }) => {
   const navigate = useNavigate()
+
+  const setOrderBy = (value: string) => dispatch(decksSlice.actions.setOrderBy(value))
+  const dispatch = useDispatch()
 
   const [getCards] = useLazyGetCardsQuery()
   const [deleteDeck] = useDeleteDeckMutation()
@@ -55,7 +60,7 @@ export const DecksTable: FC<DecksTableProps> = ({ data }) => {
       isSortable: true,
     },
     {
-      key: 'createdBy',
+      key: 'created',
       title: 'Created by',
       isSortable: true,
     },
@@ -64,6 +69,11 @@ export const DecksTable: FC<DecksTableProps> = ({ data }) => {
       title: '',
     },
   ]
+
+  useEffect(() => {
+    if (!sort) return
+    setOrderBy(`${sort?.key}-${sort?.direction}`)
+  })
 
   return (
     <Table className={s.table}>

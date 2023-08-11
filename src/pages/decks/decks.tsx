@@ -23,6 +23,7 @@ export const Decks = () => {
   const searchByName = useAppSelector(decksSelectors.selectSearchByName)
   const maxCardsCount = useAppSelector(decksSelectors.selectMaxCardsCount)
   const minCardsCount = useAppSelector(decksSelectors.selectMinCardsCount)
+  const orderBy = useAppSelector(decksSelectors.selectOrderBy)
   const dispatch = useDispatch()
 
   const setCurrentPage = (page: number) => dispatch(decksSlice.actions.setCurrentPage(page))
@@ -30,7 +31,7 @@ export const Decks = () => {
     dispatch(decksSlice.actions.setItemsPerPage(Number(perPage)))
 
   const { decks, totalPages, isLoading } = useGetDecksQuery(
-    { name: searchByName, maxCardsCount, minCardsCount, currentPage, itemsPerPage },
+    { name: searchByName, maxCardsCount, minCardsCount, currentPage, itemsPerPage, orderBy },
     {
       selectFromResult: ({ data, isLoading }) => {
         return {
