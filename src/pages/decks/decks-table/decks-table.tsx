@@ -24,7 +24,7 @@ export const DecksTable: FC<DecksTableProps> = ({ data }) => {
   const [deleteDeck] = useDeleteDeckMutation()
 
   const handleGetCards = (id: string) => {
-    getCards(id)
+    getCards({ id })
       .unwrap()
       .then(() => {
         navigate(`/cards/${id}`)

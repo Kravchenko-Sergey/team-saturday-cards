@@ -75,13 +75,13 @@ export const Pagination: FC<PaginatonProps> = ({
       </div>
       {showPerPageSelect && (
         <div className={s.selectBox}>
-          показать
+          show
           <Select
             value={perPage}
             onValueChange={onPerPageChange}
             options={perPageOptions?.map(el => ({ label: `${el}`, value: `${el}` }))}
           />
-          на странице
+          per page
         </div>
       )}
     </div>

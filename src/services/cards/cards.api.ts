@@ -4,10 +4,11 @@ import { CreateCardResponse, GetCardsResponse } from '@/services/cards'
 export const cardsApi = baseApi.injectEndpoints({
   endpoints: builder => {
     return {
-      getCards: builder.query<GetCardsResponse, string | undefined>({
-        query: id => {
+      getCards: builder.query<GetCardsResponse, any>({
+        query: ({ id, currentPage, itemsPerPage }) => {
           return {
             url: `v1/decks/${id}/cards`,
+            params: { currentPage, itemsPerPage },
           }
         },
         providesTags: ['Card'],
@@ -53,4 +54,10 @@ export type ArgCreateCard = {
   answerImg?: string
   questionVideo?: string
   answerVideo?: string
+}
+
+export type ArgGetCards = {
+  id: string | undefined
+  currentPage?: number
+  itemsPerPage?: number
 }
