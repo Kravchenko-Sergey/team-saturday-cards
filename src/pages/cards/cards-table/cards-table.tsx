@@ -1,6 +1,9 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
+
+import { useDispatch } from 'react-redux'
 
 import { Card, useDeleteCardMutation } from '@/services/cards'
+import { cardsSlice } from '@/services/cards/cards.slice.ts'
 import { EditOutline, TrashOutline } from 'assets/icons'
 import Button from 'components/ui/button/button.tsx'
 import { Grade } from 'components/ui/grade'
@@ -15,6 +18,9 @@ type CardsTableProps = { data: any }
 export const CardsTable: FC<CardsTableProps> = ({ data }) => {
   const [sort, setSort] = useState<Sort>(null)
 
+  const setOrderBy = (value: string) => dispatch(cardsSlice.actions.setOrderBy(value))
+  const dispatch = useDispatch()
+
   const [deleteCard] = useDeleteCardMutation()
 
   const handleDeleteCard = (id: string) => {
@@ -23,22 +29,22 @@ export const CardsTable: FC<CardsTableProps> = ({ data }) => {
 
   const columns: Column[] = [
     {
-      key: 'Question',
+      key: 'question',
       title: 'Question',
       isSortable: true,
     },
     {
-      key: 'Answer',
+      key: 'answer',
       title: 'Answer',
       isSortable: true,
     },
     {
-      key: 'Last Updated',
+      key: 'updated',
       title: 'Last Updated',
       isSortable: true,
     },
     {
-      key: 'Grade',
+      key: 'grade',
       title: 'Grade',
     },
     {
@@ -46,6 +52,11 @@ export const CardsTable: FC<CardsTableProps> = ({ data }) => {
       title: '',
     },
   ]
+
+  useEffect(() => {
+    if (!sort) return
+    setOrderBy(`${sort?.key}-${sort?.direction}`)
+  })
 
   return (
     <Table className={s.table}>
