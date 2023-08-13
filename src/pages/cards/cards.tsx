@@ -13,9 +13,16 @@ import { useAppSelector } from '@/services'
 import { useCreateCardMutation, useGetCardsQuery } from '@/services/cards'
 import { cardsSelectors } from '@/services/cards/cards-selectors.ts'
 import { cardsSlice } from '@/services/cards/cards.slice.ts'
-import { ArrowBackOutline } from 'assets/icons'
+import {
+  ArrowBackOutline,
+  EditOutline,
+  MoreVerticalOutline,
+  PlayCircleOutline,
+  TrashOutline,
+} from 'assets/icons'
 import Button from 'components/ui/button/button.tsx'
 import { ControlledTextField } from 'components/ui/controlled'
+import { Dropdown, DropdownItemWithIcon } from 'components/ui/dropdown'
 import { Modal } from 'components/ui/modal'
 import { Pagination } from 'components/ui/pagination'
 import { Select } from 'components/ui/select'
@@ -101,7 +108,16 @@ export const Cards = () => {
         </>
       </Button>
       <div className={s.titleBlock}>
-        <Typography variant="large">My deck</Typography>
+        <div className={s.deckName}>
+          <Typography variant="large">My deck</Typography>
+          <Dropdown trigger={<MoreVerticalOutline />}>
+            <>
+              <DropdownItemWithIcon icon={<PlayCircleOutline />} text={'Learn'} />
+              <DropdownItemWithIcon icon={<EditOutline />} text={'Edit'} />
+              <DropdownItemWithIcon icon={<TrashOutline />} text={'Delete'} />
+            </>
+          </Dropdown>
+        </div>
         {cards?.length !== 0 && (
           <Modal
             trigger={<Button>Add new card</Button>}
