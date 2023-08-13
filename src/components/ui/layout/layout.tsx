@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Link, Outlet, useNavigate } from 'react-router-dom'
 
 import s from './layout.module.scss'
 
@@ -15,7 +15,9 @@ export const Layout = () => {
     <div className={s.container}>
       <Header>
         <div className={s.content}>
-          <Logo />
+          <Link to={'/'}>
+            <Logo />
+          </Link>
           <Dropdown
             trigger={
               <div className={s.trigger}>
