@@ -6,7 +6,7 @@ export const cardsSlice = createSlice({
     searchByQuestion: '',
     currentPage: 1,
     itemsPerPage: 10,
-    orderBy: '',
+    orderBy: 'created-desc',
   },
   reducers: {
     setSearchByQuestion: (state, action: PayloadAction<string>) => {

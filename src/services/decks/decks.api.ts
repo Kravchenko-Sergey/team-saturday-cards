@@ -1,4 +1,5 @@
 import { baseApi } from '@/services'
+import { ArgGetLearn, ArgSaveGrade, GetLearnResponse, SaveGradeResponse } from '@/services/cards'
 import {
   ArgCreateDeck,
   ArgGetDecks,
@@ -39,8 +40,34 @@ export const decksApi = baseApi.injectEndpoints({
         },
         invalidatesTags: ['Deck'],
       }),
+      getLearn: builder.query<GetLearnResponse, ArgGetLearn>({
+        query: ({ id }) => {
+          return {
+            url: `v1/decks/${id}/learn`,
+          }
+        },
+      }),
+      saveGrade: builder.mutation<SaveGradeResponse, ArgSaveGrade>({
+        query: ({ id, cardId, grade }) => {
+          return {
+            method: 'POST',
+            url: `v1/decks/${id}/learn`,
+            body: {
+              cardId,
+              grade,
+            },
+          }
+        },
+      }),
     }
   },
 })
 
-export const { useGetDecksQuery, useCreateDeckMutation, useDeleteDeckMutation } = decksApi
+export const {
+  useGetDecksQuery,
+  useCreateDeckMutation,
+  useDeleteDeckMutation,
+  useGetLearnQuery,
+  useLazyGetLearnQuery,
+  useSaveGradeMutation,
+} = decksApi

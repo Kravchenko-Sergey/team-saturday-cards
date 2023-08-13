@@ -7,7 +7,7 @@ export const decksSlice = createSlice({
     maxCardsCount: 11,
     searchByName: '',
     authorId: '',
-    orderBy: '',
+    orderBy: 'created-desc',
     currentPage: 1,
     itemsPerPage: 10,
   },
