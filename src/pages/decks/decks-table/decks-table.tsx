@@ -1,10 +1,10 @@
 import { FC, useEffect, useState } from 'react'
 
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { useLazyGetCardsQuery } from '@/services/cards'
-import { useDeleteDeckMutation } from '@/services/decks'
+import { useDeleteDeckMutation, useLazyGetLearnQuery } from '@/services/decks'
 import { decksSlice } from '@/services/decks/decks.slice.ts'
 import { Deck } from '@/services/types.ts'
 import { EditOutline, PlayCircleOutline, TrashOutline } from 'assets/icons'
@@ -27,12 +27,22 @@ export const DecksTable: FC<DecksTableProps> = ({ data }) => {
 
   const [getCards] = useLazyGetCardsQuery()
   const [deleteDeck] = useDeleteDeckMutation()
+  const [getLearn] = useLazyGetLearnQuery()
 
   const handleGetCards = (id: string) => {
     getCards({ id })
       .unwrap()
       .then(() => {
         navigate(`/cards/${id}`)
+      })
+      .catch(error => console.error(error))
+  }
+
+  const handleGetLearn = (id: string) => {
+    getLearn({ id })
+      .unwrap()
+      .then(() => {
+        navigate(`/learn/${id}`)
       })
       .catch(error => console.error(error))
   }
@@ -96,7 +106,16 @@ export const DecksTable: FC<DecksTableProps> = ({ data }) => {
             <TableCell className={s.tableCell}>{deck.author.name}</TableCell>
             <TableCell className={s.tableCell}>
               <div className={s.iconsBlock}>
-                <PlayCircleOutline />
+                {deck.cardsCount > 0 && (
+                  <Link
+                    to={''}
+                    onClick={() => {
+                      handleGetLearn(deck.id)
+                    }}
+                  >
+                    <PlayCircleOutline />
+                  </Link>
+                )}
                 <EditOutline />
                 <Modal
                   trigger={<TrashOutline />}

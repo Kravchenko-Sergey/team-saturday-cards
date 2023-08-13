@@ -26,7 +26,7 @@ export const Learn = () => {
 
   const handleNextQuestion = () => {
     setIsShowAnswer(false)
-    saveGrade({ id, cardId: data.id, grade: radioValue })
+    saveGrade({ id, cardId: data?.id, grade: radioValue })
     getLearn({ id })
   }
 
@@ -63,10 +63,10 @@ export const Learn = () => {
         Learn “Pack Name”
       </Typography>
       <Typography variant="h3" className={s.question}>
-        Question: {data.question}
+        Question: {data?.question}
       </Typography>
       <Typography variant="subtitle2" className={s.attempts}>
-        Количество попыток ответов на вопрос: {data.shots}
+        Количество попыток ответов на вопрос: {data?.shots}
       </Typography>
       {!isShowAnswer ? (
         <Button fullWidth onClick={handleShowAnswer}>
@@ -75,7 +75,7 @@ export const Learn = () => {
       ) : (
         <>
           <Typography variant="h3" className={s.answer}>
-            Answer: {data.answer}
+            Answer: {data?.answer}
           </Typography>
           <RadioGroup
             options={options}

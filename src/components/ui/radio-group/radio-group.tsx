@@ -14,7 +14,7 @@ type Option = {
 export type RadioGroupProps = {
   options?: Option[]
   value?: string | number
-  onChange?: () => void
+  onChange?: (e: any) => void
   disabled?: boolean
   name?: string
 } & ComponentPropsWithoutRef<'div'>
