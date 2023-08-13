@@ -5,10 +5,10 @@ export const cardsApi = baseApi.injectEndpoints({
   endpoints: builder => {
     return {
       getCards: builder.query<GetCardsResponse, any>({
-        query: ({ id, question, currentPage, itemsPerPage }) => {
+        query: ({ id, question, currentPage, itemsPerPage, orderBy }) => {
           return {
             url: `v1/decks/${id}/cards`,
-            params: { question, currentPage, itemsPerPage },
+            params: { question, currentPage, itemsPerPage, orderBy },
           }
         },
         providesTags: ['Card'],

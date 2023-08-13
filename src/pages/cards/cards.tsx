@@ -27,6 +27,7 @@ export const Cards = () => {
   const currentPage = useAppSelector(cardsSelectors.selectCurrentPage)
   const itemsPerPage = useAppSelector(cardsSelectors.selectItemsPerPage)
   const searchByQuestion = useAppSelector(cardsSelectors.selectSearchByQuestion)
+  const orderBy = useAppSelector(cardsSelectors.selectOrderBy)
   const dispatch = useDispatch()
 
   const setCurrentPage = (page: number) => dispatch(cardsSlice.actions.setCurrentPage(page))
@@ -37,7 +38,7 @@ export const Cards = () => {
   const { id } = useParams()
 
   const { cards, totalPages } = useGetCardsQuery(
-    { id, question: searchByQuestion, currentPage, itemsPerPage },
+    { id, question: searchByQuestion, currentPage, itemsPerPage, orderBy },
     {
       selectFromResult: ({ data, isLoading }) => {
         return {
