@@ -2,6 +2,7 @@ import { Link, Outlet, useNavigate } from 'react-router-dom'
 
 import s from './layout.module.scss'
 
+import { useLogoutMutation } from '@/services/auth/auth.api.ts'
 import { Logo, LogOutOutline, PersonOutline } from 'assets/icons'
 import { Avatar } from 'components/ui/avatar'
 import { Dropdown, DropdownItem, DropdownItemWithIcon } from 'components/ui/dropdown'
@@ -10,6 +11,8 @@ import { Typography } from 'components/ui/typography'
 
 export const Layout = () => {
   const navigate = useNavigate()
+
+  const [logout] = useLogoutMutation()
 
   return (
     <div className={s.container}>
@@ -54,7 +57,11 @@ export const Layout = () => {
                   text={'Profile'}
                   onSelect={() => navigate('/profile')}
                 />
-                <DropdownItemWithIcon icon={<LogOutOutline />} text={'Logout'} />
+                <DropdownItemWithIcon
+                  icon={<LogOutOutline />}
+                  text={'Logout'}
+                  onSelect={() => logout({})}
+                />
               </>
             }
           </Dropdown>
