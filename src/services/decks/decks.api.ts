@@ -1,4 +1,4 @@
-import { baseApi } from '@/services'
+import { baseApi, RootState } from '@/services'
 import { ArgGetLearn, ArgSaveGrade, GetLearnResponse, SaveGradeResponse } from '@/services/cards'
 import {
   ArgCreateDeck,
@@ -28,6 +28,48 @@ export const decksApi = baseApi.injectEndpoints({
             body: { cover, name, isPrivate },
           }
         },
+        async onQueryStarted(_, { dispatch, getState, queryFulfilled }) {
+          const state = getState() as RootState
+          const {
+            searchByName,
+            orderBy,
+            maxCardsCount,
+            minCardsCount,
+            authorId,
+            itemsPerPage,
+            currentPage,
+          } = state.decks
+
+          try {
+            const res = await queryFulfilled
+
+            dispatch(
+              decksApi.util.updateQueryData(
+                'getDecks',
+                {
+                  name: searchByName,
+                  orderBy,
+                  maxCardsCount,
+                  minCardsCount,
+                  authorId,
+                  itemsPerPage,
+                  currentPage,
+                },
+                draft => {
+                  draft.items.push()
+                  draft.items.unshift(res.data)
+                }
+              )
+            )
+          } catch {
+            // patchResult.undo()
+            /**
+             * Alternatively, on failure you can invalidate the corresponding cache tags
+             * to trigger a re-fetch:
+             * dispatch(api.util.invalidateTags(['Post']))
+             */
+          }
+        },
         invalidatesTags: ['Deck'],
       }),
       deleteDeck: builder.mutation<DeleteDeckResponse, string>({
@@ -36,6 +78,46 @@ export const decksApi = baseApi.injectEndpoints({
             method: 'DELETE',
             url: `v1/decks/${id}`,
             params: { id },
+          }
+        },
+        async onQueryStarted(id, { dispatch, getState, queryFulfilled }) {
+          const state = getState() as RootState
+          const {
+            searchByName,
+            orderBy,
+            maxCardsCount,
+            minCardsCount,
+            authorId,
+            itemsPerPage,
+            currentPage,
+          } = state.decks
+
+          dispatch(
+            decksApi.util.updateQueryData(
+              'getDecks',
+              {
+                name: searchByName,
+                orderBy,
+                maxCardsCount,
+                minCardsCount,
+                authorId,
+                itemsPerPage,
+                currentPage,
+              },
+              draft => {
+                draft.items = draft.items.filter(deck => deck.id !== id)
+              }
+            )
+          )
+          try {
+            await queryFulfilled
+          } catch {
+            // patchResult.undo()
+            /**
+             * Alternatively, on failure you can invalidate the corresponding cache tags
+             * to trigger a re-fetch:
+             * dispatch(api.util.invalidateTags(['Post']))
+             */
           }
         },
         invalidatesTags: ['Deck'],

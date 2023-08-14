@@ -33,7 +33,7 @@ export const Decks = () => {
   const { decks, totalPages, isLoading } = useGetDecksQuery(
     { name: searchByName, maxCardsCount, minCardsCount, currentPage, itemsPerPage, orderBy },
     {
-      selectFromResult: ({ data, isLoading }) => {
+      selectFromResult: ({ currentData: data, isLoading }) => {
         return {
           decks: data?.items,
           totalPages: data?.pagination.totalPages,

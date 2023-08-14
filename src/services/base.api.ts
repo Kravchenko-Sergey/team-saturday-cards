@@ -1,14 +1,10 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi } from '@reduxjs/toolkit/query/react'
+
+import { customFetchBase } from '@/services/decks/base-api-with-refetch.ts'
 
 export const baseApi = createApi({
   reducerPath: 'baseApi',
-  tagTypes: ['Deck', 'Card'],
-  baseQuery: fetchBaseQuery({
-    baseUrl: 'https://api.flashcards.andrii.es',
-    credentials: 'include',
-    prepareHeaders: headers => {
-      headers.append('x-auth-skip', 'true')
-    },
-  }),
+  tagTypes: ['Deck', 'Card', 'Me'],
+  baseQuery: customFetchBase,
   endpoints: () => ({}),
 })
