@@ -18,7 +18,7 @@ export const TabSwitcher: FC<TabSwitcherProps> = ({ label, children }) => {
       <Typography variant="body2" className={s.label}>
         {label}
       </Typography>
-      <Tabs.Root className={s.tabsRoot} defaultValue="tab1">
+      <Tabs.Root className={s.tabsRoot} defaultValue="tab2">
         <Tabs.List className={s.tabsList}>{children}</Tabs.List>
       </Tabs.Root>
     </div>
