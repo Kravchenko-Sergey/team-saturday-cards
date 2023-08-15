@@ -7,4 +7,5 @@ export const decksSelectors = {
   selectMaxCardsCount: (state: RootState) => state.decks.maxCardsCount,
   selectMinCardsCount: (state: RootState) => state.decks.minCardsCount,
   selectOrderBy: (state: RootState) => state.decks.orderBy,
+  selectAuthorId: (state: RootState) => state.decks.authorId,
 }
