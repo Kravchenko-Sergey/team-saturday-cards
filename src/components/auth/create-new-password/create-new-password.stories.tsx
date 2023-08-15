@@ -3,7 +3,7 @@ import { BrowserRouter } from 'react-router-dom'
 
 import { CreateNewPassword } from './'
 
-import { CreateNewPasswordSchemaType } from 'components/auth/create-new-password/use-create-new-password-form.ts'
+import { FormValues } from 'components/auth/create-new-password/create-new-password.schema.ts'
 
 const meta = {
   title: 'Components/AUTH/CreateNewPassword',
@@ -23,7 +23,7 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    onSubmit: (data: CreateNewPasswordSchemaType) => {
+    onSubmit: (data: FormValues) => {
       console.log(data)
     },
   },
