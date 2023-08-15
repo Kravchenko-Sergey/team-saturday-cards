@@ -22,7 +22,7 @@ export const CheckEmail: FC<CheckEmailProps> = ({ email }) => {
         variant="body2"
         className={s.description}
       >{`We’ve sent an Email with instructions to ${email}`}</Typography>
-      <Button as={Link} to={''} fullWidth>
+      <Button as={Link} to={'/sign-in'} fullWidth>
         <Typography variant="body2">Back to Sign in</Typography>
       </Button>
     </Card>

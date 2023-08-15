@@ -9,10 +9,13 @@ import {
 import { useMeQuery } from '@/services/auth/auth.api.ts'
 import { Layout } from 'components/ui/layout'
 import { Cards } from 'pages/cards'
+import { CheckEmailPage } from 'pages/check-email-page/check-email-page.tsx'
+import { CreateNewPasswordPage } from 'pages/create-new-password-page/create-new-password-page.tsx'
 import { Decks } from 'pages/decks'
 import { ErrorPage } from 'pages/error-page'
 import { Learn } from 'pages/learn/learn.tsx'
 import { Profile } from 'pages/profile/profile.tsx'
+import { RecoverPasswordPage } from 'pages/recover-password-page/recover-password-page.tsx'
 import { SignInPage } from 'pages/sign-in-page/sign-in-page.tsx'
 
 const publicRoutes: RouteObject[] = [
@@ -23,6 +26,18 @@ const publicRoutes: RouteObject[] = [
   {
     path: '/sign-up',
     element: <div>register</div>,
+  },
+  {
+    path: '/recover-password',
+    element: <RecoverPasswordPage />,
+  },
+  {
+    path: '/check-email',
+    element: <CheckEmailPage />,
+  },
+  {
+    path: 'set-new-password/:token',
+    element: <CreateNewPasswordPage />,
   },
 ]
 
