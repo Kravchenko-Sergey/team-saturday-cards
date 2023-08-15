@@ -2,6 +2,7 @@ import { ChangeEvent, useEffect, useState } from 'react'
 
 import { useDebounce } from '@/common/hooks/use-debounse.ts'
 import { useAppDispatch, useAppSelector } from '@/services'
+import { useMeQuery } from '@/services/auth/auth.api.ts'
 import { decksSelectors } from '@/services/decks/decks-selectors.ts'
 import { decksSlice } from '@/services/decks/decks.slice.ts'
 import { TrashOutline } from 'assets/icons'
@@ -21,6 +22,7 @@ export const DecksFilters = () => {
   const setMaxCardsCount = (value: number) => dispatch(decksSlice.actions.setMaxCardsCount(value))
   const setMinCardsCount = (value: number) => dispatch(decksSlice.actions.setMinCardsCount(value))
   const setSearch = (search: string) => dispatch(decksSlice.actions.setSearchByName(search))
+  const setAuthorId = (id: string) => dispatch(decksSlice.actions.setAuthorId(id))
   //searchByName
   const [searchValue, setSearchValue] = useState('')
   const debouncedValue = useDebounce(searchValue, 500)
@@ -32,6 +34,14 @@ export const DecksFilters = () => {
 
   const handleSearchValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setSearchValue(e.currentTarget.value)
+  }
+  //switchMyAll
+  const { data } = useMeQuery()
+  const getMyDecks = () => {
+    setAuthorId(data.id)
+  }
+  const getAllDecks = () => {
+    setAuthorId('')
   }
   //slider
   const [values, setValues] = useState<number[]>([minCardsCount, maxCardsCount])
@@ -65,10 +75,10 @@ export const DecksFilters = () => {
         placeholder="Input search"
       />
       <TabSwitcher label="Show packs decks">
-        <TabSwitcherItem value={'tab1'} className={s.tabsTrigger}>
+        <TabSwitcherItem value={'tab1'} onClick={getMyDecks} className={s.tabsTrigger}>
           <Typography variant="body1">My Decks</Typography>
         </TabSwitcherItem>
-        <TabSwitcherItem value={'tab2'} className={s.tabsTrigger}>
+        <TabSwitcherItem value={'tab2'} onClick={getAllDecks} className={s.tabsTrigger}>
           <Typography variant="body1">All Decks</Typography>
         </TabSwitcherItem>
       </TabSwitcher>
