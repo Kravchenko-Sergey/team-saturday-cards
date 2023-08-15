@@ -1,5 +1,7 @@
 import { Navigate, useNavigate } from 'react-router-dom'
 
+import s from './sign-in.module.scss'
+
 import { useLoginMutation, useMeQuery } from '@/services/auth/auth.api.ts'
 import { SignIn } from 'components/auth/sign-in'
 
@@ -19,5 +21,9 @@ export const SignInPage = () => {
       })
   }
 
-  return <SignIn onSubmit={handleSignIn} isSubmitting={isSigningIn} />
+  return (
+    <div className={s.container}>
+      <SignIn onSubmit={handleSignIn} isSubmitting={isSigningIn} />
+    </div>
+  )
 }
