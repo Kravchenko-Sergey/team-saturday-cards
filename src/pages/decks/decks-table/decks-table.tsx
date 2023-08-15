@@ -3,8 +3,10 @@ import { FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 
+import { useAppSelector } from '@/services'
 import { useLazyGetCardsQuery } from '@/services/cards'
 import { useDeleteDeckMutation, useLazyGetLearnQuery } from '@/services/decks'
+import { decksSelectors } from '@/services/decks/decks-selectors.ts'
 import { decksSlice } from '@/services/decks/decks.slice.ts'
 import { Deck } from '@/services/types.ts'
 import { EditOutline, PlayCircleOutline, TrashOutline } from 'assets/icons'
@@ -23,6 +25,7 @@ export const DecksTable: FC<DecksTableProps> = ({ data }) => {
   const navigate = useNavigate()
 
   const setOrderBy = (value: string) => dispatch(decksSlice.actions.setOrderBy(value))
+  const authorId = useAppSelector(decksSelectors.selectAuthorId)
   const dispatch = useDispatch()
 
   const [getCards] = useLazyGetCardsQuery()
@@ -116,26 +119,30 @@ export const DecksTable: FC<DecksTableProps> = ({ data }) => {
                     <PlayCircleOutline />
                   </Link>
                 )}
-                <EditOutline />
-                <Modal
-                  trigger={<TrashOutline />}
-                  title="Delete deck"
-                  footerBtn={
-                    <Button
-                      onClick={() => {
-                        handleDeleteDeck(deck.id)
-                      }}
-                    >
-                      Delete deck
-                    </Button>
-                  }
-                >
+                {deck.author.id === authorId && (
                   <>
-                    <Typography>
-                      Do you really want to remove Pack Name? All cards will be deleted.
-                    </Typography>
+                    <EditOutline />
+                    <Modal
+                      trigger={<TrashOutline />}
+                      title="Delete deck"
+                      footerBtn={
+                        <Button
+                          onClick={() => {
+                            handleDeleteDeck(deck.id)
+                          }}
+                        >
+                          Delete deck
+                        </Button>
+                      }
+                    >
+                      <>
+                        <Typography>
+                          Do you really want to remove Pack Name? All cards will be deleted.
+                        </Typography>
+                      </>
+                    </Modal>
                   </>
-                </Modal>
+                )}
               </div>
             </TableCell>
           </TableRow>
