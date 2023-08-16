@@ -1,11 +1,14 @@
-import { ChangeEvent, FC } from 'react'
+import { ChangeEvent, FC, useState } from 'react'
+
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
 
 import { EditOutline, LogOutOutline } from 'assets/icons'
-import s from 'components/auth/profile-info/profile-info.module.scss'
 import {
+  profileSchema,
   ProfileSchemaType,
-  useProfileInfoForm,
-} from 'components/auth/profile-info/use-profile-info-form.ts'
+} from 'components/auth/profile-info/profile-info-form.schema.ts'
+import s from 'components/auth/profile-info/profile-info.module.scss'
 import { Avatar } from 'components/ui/avatar/avatar.tsx'
 import Button from 'components/ui/button/button.tsx'
 import { Card } from 'components/ui/card'
@@ -18,8 +21,6 @@ type ProfileInfoProps = {
   src: string
   handleChangeAvatar: (event: ChangeEvent<HTMLInputElement>) => void
   handleLogout: () => void
-  showTextField: boolean
-  handleChangeName: () => void
   onSubmit: (data: ProfileSchemaType) => void
 }
 
@@ -29,11 +30,26 @@ export const ProfileInfo: FC<ProfileInfoProps> = ({
   src,
   handleChangeAvatar,
   handleLogout,
-  handleChangeName,
-  showTextField,
   onSubmit,
 }) => {
-  const { handleSubmit, control } = useProfileInfoForm(onSubmit)
+  const [showTextField, setShowTextField] = useState(false)
+
+  const handleChangeName = () => {
+    setShowTextField(true)
+  }
+
+  const { handleSubmit, control } = useForm<ProfileSchemaType>({
+    mode: 'onSubmit',
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      name: '',
+    },
+  })
+
+  const handleFormSubmit = handleSubmit(({ name }) => {
+    onSubmit({ name })
+    setShowTextField(false)
+  })
 
   return (
     <Card className={s.card}>
@@ -67,8 +83,8 @@ export const ProfileInfo: FC<ProfileInfoProps> = ({
           </Button>
         </>
       ) : (
-        <form onSubmit={handleSubmit} className={s.form}>
-          <ControlledTextField label="Nickname" name="nickName" control={control} defaultValue="" />
+        <form onSubmit={handleFormSubmit} className={s.form}>
+          <ControlledTextField label="Nickname" name="name" control={control} defaultValue="" />
           <Button className={s.submitBtn} fullWidth>
             Save Changes
           </Button>
