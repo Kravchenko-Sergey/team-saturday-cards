@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { FormValues, signUpSchema } from './'
 
@@ -13,10 +13,12 @@ import { Typography } from 'components/ui/typography'
 import s from './sign-up.module.scss'
 
 type Props = {
-  onSubmit: (data: Omit<FormValues, 'confirmPassword'>) => void
+  onSubmit: (data: Omit<FormValues, 'confirmPassword'>) => any
 }
 
 export const SignUp = (props: Props) => {
+  const navigate = useNavigate()
+
   const { handleSubmit, control } = useForm<FormValues>({
     mode: 'onSubmit',
     resolver: zodResolver(signUpSchema),
@@ -28,7 +30,10 @@ export const SignUp = (props: Props) => {
   })
 
   const handleFormSubmit = handleSubmit(({ email, password }) => {
-    props.onSubmit({ email, password })
+    props
+      .onSubmit({ email, password })
+      .unwrap()
+      .then(() => navigate('/sign-in'))
   })
 
   return (
