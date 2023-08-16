@@ -25,6 +25,7 @@ export const DecksTable: FC<DecksTableProps> = ({ data }) => {
   const navigate = useNavigate()
 
   const setOrderBy = (value: string) => dispatch(decksSlice.actions.setOrderBy(value))
+  const setAuthorId = (value: string) => dispatch(decksSlice.actions.setAuthorId(value))
   const authorId = useAppSelector(decksSelectors.selectAuthorId)
   const dispatch = useDispatch()
 
@@ -32,11 +33,12 @@ export const DecksTable: FC<DecksTableProps> = ({ data }) => {
   const [deleteDeck] = useDeleteDeckMutation()
   const [getLearn] = useLazyGetLearnQuery()
 
-  const handleGetCards = (id: string) => {
+  const handleGetCards = (id: string, userId: string) => {
     getCards({ id })
       .unwrap()
       .then(() => {
         navigate(`/cards/${id}`)
+        setAuthorId(userId)
       })
       .catch(error => console.error(error))
   }
@@ -97,7 +99,7 @@ export const DecksTable: FC<DecksTableProps> = ({ data }) => {
             <TableCell
               className={s.tableCell}
               onClick={() => {
-                handleGetCards(deck.id)
+                handleGetCards(deck.id, deck.userId)
               }}
             >
               <div className={s.s}>

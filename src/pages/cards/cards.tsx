@@ -10,9 +10,11 @@ import s from './cards.module.scss'
 
 import { useDebounce } from '@/common/hooks/use-debounse.ts'
 import { useAppSelector } from '@/services'
+import { useMeQuery } from '@/services/auth/auth.api.ts'
 import { useCreateCardMutation, useGetCardsQuery } from '@/services/cards'
 import { cardsSelectors } from '@/services/cards/cards-selectors.ts'
 import { cardsSlice } from '@/services/cards/cards.slice.ts'
+import { decksSelectors } from '@/services/decks/decks-selectors.ts'
 import {
   ArrowBackOutline,
   EditOutline,
@@ -35,6 +37,7 @@ export const Cards = () => {
   const itemsPerPage = useAppSelector(cardsSelectors.selectItemsPerPage)
   const searchByQuestion = useAppSelector(cardsSelectors.selectSearchByQuestion)
   const orderBy = useAppSelector(cardsSelectors.selectOrderBy)
+  const authorId = useAppSelector(decksSelectors.selectAuthorId)
   const dispatch = useDispatch()
 
   const setCurrentPage = (page: number) => dispatch(cardsSlice.actions.setCurrentPage(page))
@@ -56,6 +59,7 @@ export const Cards = () => {
       },
     }
   )
+  const { data: data2 } = useMeQuery()
 
   const newCardSchema = z.object({
     question: z.string().min(3).max(30),
@@ -110,13 +114,28 @@ export const Cards = () => {
       <div className={s.titleBlock}>
         <div className={s.deckName}>
           <Typography variant="large">My deck</Typography>
-          <Dropdown trigger={<MoreVerticalOutline />}>
-            <>
+          {cards?.length !== 0 && data2.id === authorId && (
+            <Dropdown trigger={<MoreVerticalOutline />}>
+              <>
+                <DropdownItemWithIcon icon={<PlayCircleOutline />} text={'Learn'} />
+                <DropdownItemWithIcon icon={<EditOutline />} text={'Edit'} />
+                <DropdownItemWithIcon icon={<TrashOutline />} text={'Delete'} />
+              </>
+            </Dropdown>
+          )}
+          {cards?.length === 0 && data2.id === authorId && (
+            <Dropdown trigger={<MoreVerticalOutline />}>
+              <>
+                <DropdownItemWithIcon icon={<EditOutline />} text={'Edit'} />
+                <DropdownItemWithIcon icon={<TrashOutline />} text={'Delete'} />
+              </>
+            </Dropdown>
+          )}
+          {cards?.length !== 0 && data2.id !== authorId && (
+            <Dropdown trigger={<MoreVerticalOutline />}>
               <DropdownItemWithIcon icon={<PlayCircleOutline />} text={'Learn'} />
-              <DropdownItemWithIcon icon={<EditOutline />} text={'Edit'} />
-              <DropdownItemWithIcon icon={<TrashOutline />} text={'Delete'} />
-            </>
-          </Dropdown>
+            </Dropdown>
+          )}
         </div>
         {cards?.length !== 0 && (
           <Modal
@@ -141,25 +160,34 @@ export const Cards = () => {
       </div>
       {cards?.length === 0 ? (
         <div className={s.empty}>
-          <Typography>This deck is empty. Click add new card to fill this deck</Typography>
-          <Modal
-            trigger={<Button>Add new card</Button>}
-            title={'Add New Card'}
-            footerBtn={<Button onClick={handleSubmit(handleCreateCard)}>Add New Card</Button>}
-          >
-            <Select
-              label="Choose a question format"
-              defaultValue="Text"
-              options={[
-                { label: 'Text', value: 'Text' },
-                { label: 'Image', value: 'Image' },
-              ]}
-            />
-            <form onSubmit={handleSubmit(handleCreateCard)}>
-              <ControlledTextField label="Question" name="question" control={control} />
-              <ControlledTextField label="Answer" name="answer" control={control} />
-            </form>
-          </Modal>
+          {data2.id === authorId && (
+            <>
+              <Typography>This deck is empty. Click add new card to fill this deck</Typography>
+              <Modal
+                trigger={<Button>Add new card</Button>}
+                title={'Add New Card'}
+                footerBtn={<Button onClick={handleSubmit(handleCreateCard)}>Add New Card</Button>}
+              >
+                <Select
+                  label="Choose a question format"
+                  defaultValue="Text"
+                  options={[
+                    { label: 'Text', value: 'Text' },
+                    { label: 'Image', value: 'Image' },
+                  ]}
+                />
+                <form onSubmit={handleSubmit(handleCreateCard)}>
+                  <ControlledTextField label="Question" name="question" control={control} />
+                  <ControlledTextField label="Answer" name="answer" control={control} />
+                </form>
+              </Modal>
+            </>
+          )}
+          {data2.id !== authorId && (
+            <Typography>
+              This deck is empty. The creator of this deck has not added cards yet
+            </Typography>
+          )}
         </div>
       ) : (
         <>
