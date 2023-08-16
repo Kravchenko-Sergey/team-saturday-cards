@@ -26,6 +26,8 @@ export const DecksTable: FC<DecksTableProps> = ({ data }) => {
 
   const setOrderBy = (value: string) => dispatch(decksSlice.actions.setOrderBy(value))
   const setAuthorId = (value: string) => dispatch(decksSlice.actions.setAuthorId(value))
+  const setDeckName = (value: string) => dispatch(decksSlice.actions.setDeckName(value))
+  const setDeckCover = (value: string) => dispatch(decksSlice.actions.setDeckCover(value))
   const authorId = useAppSelector(decksSelectors.selectAuthorId)
   const dispatch = useDispatch()
 
@@ -33,12 +35,14 @@ export const DecksTable: FC<DecksTableProps> = ({ data }) => {
   const [deleteDeck] = useDeleteDeckMutation()
   const [getLearn] = useLazyGetLearnQuery()
 
-  const handleGetCards = (id: string, userId: string) => {
+  const handleGetCards = (id: string, userId: string, deckName: string, deckCover: string) => {
     getCards({ id })
       .unwrap()
       .then(() => {
         navigate(`/cards/${id}`)
         setAuthorId(userId)
+        setDeckName(deckName)
+        setDeckCover(deckCover)
       })
       .catch(error => console.error(error))
   }
@@ -99,10 +103,10 @@ export const DecksTable: FC<DecksTableProps> = ({ data }) => {
             <TableCell
               className={s.tableCell}
               onClick={() => {
-                handleGetCards(deck.id, deck.userId)
+                handleGetCards(deck.id, deck.userId, deck.name, deck.cover)
               }}
             >
-              <div className={s.s}>
+              <div className={s.nameCell}>
                 {deck.cover ? (
                   <img src={deck.cover} alt={'cover'} className={s.cover} />
                 ) : (

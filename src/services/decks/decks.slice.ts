@@ -10,6 +10,8 @@ export const decksSlice = createSlice({
     orderBy: 'created-desc',
     currentPage: 1,
     itemsPerPage: 10,
+    deckName: '',
+    deckCover: '',
   },
   reducers: {
     setMinCardsCount: (state, action: PayloadAction<number>) => {
@@ -32,6 +34,12 @@ export const decksSlice = createSlice({
     },
     setItemsPerPage: (state, action: PayloadAction<number>) => {
       state.itemsPerPage = action.payload
+    },
+    setDeckName: (state, action: PayloadAction<string>) => {
+      state.deckName = action.payload
+    },
+    setDeckCover: (state, action: PayloadAction<string>) => {
+      state.deckCover = action.payload
     },
   },
 })

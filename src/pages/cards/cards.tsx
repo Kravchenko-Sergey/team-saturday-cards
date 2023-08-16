@@ -17,6 +17,7 @@ import { cardsSlice } from '@/services/cards/cards.slice.ts'
 import { decksSelectors } from '@/services/decks/decks-selectors.ts'
 import {
   ArrowBackOutline,
+  BlankDeckCover,
   EditOutline,
   MoreVerticalOutline,
   PlayCircleOutline,
@@ -38,6 +39,8 @@ export const Cards = () => {
   const searchByQuestion = useAppSelector(cardsSelectors.selectSearchByQuestion)
   const orderBy = useAppSelector(cardsSelectors.selectOrderBy)
   const authorId = useAppSelector(decksSelectors.selectAuthorId)
+  const deckName = useAppSelector(decksSelectors.selectDeckName)
+  const deckCover = useAppSelector(decksSelectors.selectDeckCover)
   const dispatch = useDispatch()
 
   const setCurrentPage = (page: number) => dispatch(cardsSlice.actions.setCurrentPage(page))
@@ -113,7 +116,7 @@ export const Cards = () => {
       </Button>
       <div className={s.titleBlock}>
         <div className={s.deckName}>
-          <Typography variant="large">My deck</Typography>
+          <Typography variant="large">{deckName}</Typography>
           {cards?.length !== 0 && data2.id === authorId && (
             <Dropdown trigger={<MoreVerticalOutline />}>
               <>
@@ -137,7 +140,7 @@ export const Cards = () => {
             </Dropdown>
           )}
         </div>
-        {cards?.length !== 0 && (
+        {cards?.length !== 0 && data2.id === authorId && (
           <Modal
             trigger={<Button>Add new card</Button>}
             title={'Add New Card'}
@@ -156,6 +159,13 @@ export const Cards = () => {
               <ControlledTextField label="Answer" name="answer" control={control} />
             </form>
           </Modal>
+        )}
+      </div>
+      <div style={{ marginBottom: '25px' }}>
+        {deckCover ? (
+          <img src={deckCover} alt="cover" className={s.cover} />
+        ) : (
+          <BlankDeckCover style={{ backgroundColor: 'gray' }} />
         )}
       </div>
       {cards?.length === 0 ? (
