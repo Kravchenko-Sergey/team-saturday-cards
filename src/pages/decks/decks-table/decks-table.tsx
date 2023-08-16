@@ -9,7 +9,7 @@ import { useDeleteDeckMutation, useLazyGetLearnQuery } from '@/services/decks'
 import { decksSelectors } from '@/services/decks/decks-selectors.ts'
 import { decksSlice } from '@/services/decks/decks.slice.ts'
 import { Deck } from '@/services/types.ts'
-import { EditOutline, PlayCircleOutline, TrashOutline } from 'assets/icons'
+import { BlankDeckCover, EditOutline, PlayCircleOutline, TrashOutline } from 'assets/icons'
 import Button from 'components/ui/button/button.tsx'
 import { Modal } from 'components/ui/modal'
 import { Table, TableBody, TableCell, TableRow } from 'components/ui/table'
@@ -100,7 +100,14 @@ export const DecksTable: FC<DecksTableProps> = ({ data }) => {
                 handleGetCards(deck.id)
               }}
             >
-              {deck.name}
+              <div className={s.s}>
+                {deck.cover ? (
+                  <img src={deck.cover} alt={'cover'} className={s.cover} />
+                ) : (
+                  <BlankDeckCover style={{ backgroundColor: 'gray' }} />
+                )}
+                {deck.name}
+              </div>
             </TableCell>
             <TableCell className={s.tableCell}>{deck.cardsCount}</TableCell>
             <TableCell className={s.tableCell}>
