@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import type { Meta } from '@storybook/react'
 import { BrowserRouter } from 'react-router-dom'
 
@@ -24,7 +22,6 @@ export const Default = () => {
   const img =
     'https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper-thumbnail.png'
 
-  const [showTextField, setShowTextField] = useState(false)
   const handleChangeAvatar = (event: any) => {
     const file = event.target.files && event.target.files[0]
 
@@ -42,10 +39,6 @@ export const Default = () => {
     console.log('handleLogout')
   }
 
-  const handleChangeName = () => {
-    setShowTextField(true)
-  }
-
   return (
     <ProfileInfo
       name={'Sergey'}
@@ -53,11 +46,8 @@ export const Default = () => {
       src={img}
       handleChangeAvatar={handleChangeAvatar}
       handleLogout={handleLogout}
-      showTextField={showTextField}
-      handleChangeName={handleChangeName}
       onSubmit={data => {
         console.log(data)
-        setShowTextField(false)
       }}
     />
   )
