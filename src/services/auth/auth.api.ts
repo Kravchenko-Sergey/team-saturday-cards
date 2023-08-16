@@ -70,6 +70,25 @@ export const authApi = baseApi.injectEndpoints({
           }
         },
       }),
+      signUp: builder.mutation<SignUpResponse, any>({
+        query: params => {
+          return {
+            url: `v1/auth/sign-up`,
+            method: 'POST',
+            body: params,
+          }
+        },
+      }),
+      changeProfile: builder.mutation<any, any>({
+        query: params => {
+          return {
+            url: `v1/auth/me`,
+            method: 'PATCH',
+            body: params,
+          }
+        },
+        invalidatesTags: ['Me'],
+      }),
     }
   },
 })
@@ -80,4 +99,21 @@ export const {
   useLogoutMutation,
   useSendEmailMutation,
   useResetPasswordMutation,
+  useSignUpMutation,
+  useChangeProfileMutation,
 } = authApi
+
+export type ArgSignUp = {
+  html: string
+  name: string
+  password: string
+  email: string
+  subject: string
+  sendConfirmationEmail: boolean
+}
+
+export type SignUpResponse = {
+  id: string
+  name: string
+  email: string
+}

@@ -17,6 +17,7 @@ import { Learn } from 'pages/learn/learn.tsx'
 import { Profile } from 'pages/profile/profile.tsx'
 import { RecoverPasswordPage } from 'pages/recover-password-page/recover-password-page.tsx'
 import { SignInPage } from 'pages/sign-in-page/sign-in-page.tsx'
+import { SignUpPage } from 'pages/sign-up-page'
 
 const publicRoutes: RouteObject[] = [
   {
@@ -25,7 +26,7 @@ const publicRoutes: RouteObject[] = [
   },
   {
     path: '/sign-up',
-    element: <div>register</div>,
+    element: <SignUpPage />,
   },
   {
     path: '/recover-password',
