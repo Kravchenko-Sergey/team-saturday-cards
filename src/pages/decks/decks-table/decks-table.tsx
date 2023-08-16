@@ -9,7 +9,7 @@ import { useDeleteDeckMutation, useLazyGetLearnQuery } from '@/services/decks'
 import { decksSelectors } from '@/services/decks/decks-selectors.ts'
 import { decksSlice } from '@/services/decks/decks.slice.ts'
 import { Deck } from '@/services/types.ts'
-import { EditOutline, PlayCircleOutline, TrashOutline } from 'assets/icons'
+import { BlankDeckCover, EditOutline, PlayCircleOutline, TrashOutline } from 'assets/icons'
 import Button from 'components/ui/button/button.tsx'
 import { Modal } from 'components/ui/modal'
 import { Table, TableBody, TableCell, TableRow } from 'components/ui/table'
@@ -25,6 +25,9 @@ export const DecksTable: FC<DecksTableProps> = ({ data }) => {
   const navigate = useNavigate()
 
   const setOrderBy = (value: string) => dispatch(decksSlice.actions.setOrderBy(value))
+  const setAuthorId = (value: string) => dispatch(decksSlice.actions.setAuthorId(value))
+  const setDeckName = (value: string) => dispatch(decksSlice.actions.setDeckName(value))
+  const setDeckCover = (value: string) => dispatch(decksSlice.actions.setDeckCover(value))
   const authorId = useAppSelector(decksSelectors.selectAuthorId)
   const dispatch = useDispatch()
 
@@ -32,11 +35,14 @@ export const DecksTable: FC<DecksTableProps> = ({ data }) => {
   const [deleteDeck] = useDeleteDeckMutation()
   const [getLearn] = useLazyGetLearnQuery()
 
-  const handleGetCards = (id: string) => {
+  const handleGetCards = (id: string, userId: string, deckName: string, deckCover: string) => {
     getCards({ id })
       .unwrap()
       .then(() => {
         navigate(`/cards/${id}`)
+        setAuthorId(userId)
+        setDeckName(deckName)
+        setDeckCover(deckCover)
       })
       .catch(error => console.error(error))
   }
@@ -97,10 +103,17 @@ export const DecksTable: FC<DecksTableProps> = ({ data }) => {
             <TableCell
               className={s.tableCell}
               onClick={() => {
-                handleGetCards(deck.id)
+                handleGetCards(deck.id, deck.userId, deck.name, deck.cover)
               }}
             >
-              {deck.name}
+              <div className={s.nameCell}>
+                {deck.cover ? (
+                  <img src={deck.cover} alt={'cover'} className={s.cover} />
+                ) : (
+                  <BlankDeckCover style={{ backgroundColor: 'gray' }} />
+                )}
+                {deck.name}
+              </div>
             </TableCell>
             <TableCell className={s.tableCell}>{deck.cardsCount}</TableCell>
             <TableCell className={s.tableCell}>
