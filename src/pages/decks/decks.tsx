@@ -1,3 +1,5 @@
+import { ChangeEvent, useState } from 'react'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
@@ -9,6 +11,7 @@ import { useAppSelector } from '@/services'
 import { useCreateDeckMutation, useGetDecksQuery } from '@/services/decks'
 import { decksSelectors } from '@/services/decks/decks-selectors.ts'
 import { decksSlice } from '@/services/decks/decks.slice.ts'
+import { BlankDeckCover, ImageOutline } from 'assets/icons'
 import Button from 'components/ui/button/button.tsx'
 import { ControlledCheckbox, ControlledTextField } from 'components/ui/controlled'
 import { Modal } from 'components/ui/modal'
@@ -18,6 +21,7 @@ import { DecksFilters } from 'pages/decks/decks-filters/decks-filters.tsx'
 import { DecksTable } from 'pages/decks/decks-table/decks-table.tsx'
 
 export const Decks = () => {
+  const [cover, setCover] = useState<File | null>(null)
   const currentPage = useAppSelector(decksSelectors.selectCurrentPage)
   const itemsPerPage = useAppSelector(decksSelectors.selectItemsPerPage)
   const searchByName = useAppSelector(decksSelectors.selectSearchByName)
@@ -54,14 +58,13 @@ export const Decks = () => {
   )
   //
   const newDeckSchema = z.object({
-    cover: z.instanceof(File).optional(),
     name: z.string().min(3).max(30),
     isPrivate: z.boolean(),
   })
 
   type NewDeck = z.infer<typeof newDeckSchema>
 
-  const { control, handleSubmit, getValues } = useForm<NewDeck>({
+  const { control, handleSubmit } = useForm<NewDeck>({
     resolver: zodResolver(newDeckSchema),
     defaultValues: {
       name: '',
@@ -73,18 +76,24 @@ export const Decks = () => {
 
   if (isLoading) return <div>Loading...</div>
 
-  const handleCreateDeck = () => {
-    const newDeck = {
-      cover: String(getValues().cover),
-      name: getValues().name,
-      isPrivate: getValues().isPrivate,
-    }
+  const handleCreateDeck = (data: { name: string; isPrivate: any }) => {
+    const form = new FormData()
 
-    createDeck(newDeck)
+    form.append('name', data.name)
+    form.append('isPrivate', data.isPrivate)
+    cover && form.append('cover', cover)
+
+    createDeck(form)
   }
   //pagination
   const handleCurrentPage = (e: number) => setCurrentPage(e)
   const handleItemsPerPage = (e: string) => setItemsPerPage(e)
+  //cover
+  const handleChangeCover = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files![0]
+
+    setCover(file)
+  }
 
   return (
     <div className={s.container}>
@@ -95,7 +104,29 @@ export const Decks = () => {
           title="Add new deck "
           footerBtn={<Button onClick={handleSubmit(handleCreateDeck)}>Add new deck</Button>}
         >
-          <form onSubmit={handleSubmit(handleCreateDeck)}>
+          <div className={s.coverModal}>
+            {cover ? (
+              <img className={s.img} src={URL.createObjectURL(cover)} alt="cover" />
+            ) : (
+              <BlankDeckCover />
+            )}
+          </div>
+          <label htmlFor="change-cover" className={s.fileLabel}>
+            <Button as={'a'} variant="secondary" fullWidth>
+              <ImageOutline />
+              <Typography as="span" variant="subtitle2">
+                Change Cover
+              </Typography>
+            </Button>
+            <input
+              id="change-cover"
+              type="file"
+              accept="image/*"
+              onChange={handleChangeCover}
+              style={{ display: 'none' }}
+            />
+          </label>
+          <form onSubmit={handleSubmit(handleCreateDeck)} className={s.form}>
             <ControlledTextField name="name" control={control} label="Name deck" />
             <ControlledCheckbox name="isPrivate" control={control} label="Private deck" />
           </form>
