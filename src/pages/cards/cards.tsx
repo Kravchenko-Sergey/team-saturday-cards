@@ -207,7 +207,7 @@ export const Cards = () => {
             search
             placeholder="Input search"
           />
-          <CardsTable data={cards} />
+          <CardsTable data={cards} data2={data2} />
           <Pagination
             count={totalPages ? totalPages : 100}
             page={currentPage}

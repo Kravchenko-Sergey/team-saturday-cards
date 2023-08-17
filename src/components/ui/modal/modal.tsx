@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react'
+import { FC, ReactNode, useState } from 'react'
 
 import * as Dialog from '@radix-ui/react-dialog'
 
@@ -23,30 +23,48 @@ export const Modal: FC<ModalProps> = ({
   showCloseBtn = true,
   footerBtn,
 }) => {
+  const [open, setOpen] = useState(false)
+
   return (
     <Dialog.Root>
-      <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
-      <Dialog.Portal>
-        <Dialog.Content className={s.DialogContent}>
-          <header className={showCloseBtn ? s.header : s.headerWithoutCLose}>
-            <Dialog.Title>{title}</Dialog.Title>
-            {showCloseBtn && (
-              <Dialog.Close asChild>
-                <Close />
+      <Dialog.Trigger
+        asChild
+        onClick={() => {
+          setOpen(true)
+        }}
+      >
+        {trigger}
+      </Dialog.Trigger>
+      {open && (
+        <Dialog.Portal>
+          <Dialog.Content className={s.DialogContent}>
+            <header className={showCloseBtn ? s.header : s.headerWithoutCLose}>
+              <Dialog.Title>{title}</Dialog.Title>
+              {showCloseBtn && (
+                <Dialog.Close asChild>
+                  <Close />
+                </Dialog.Close>
+              )}
+            </header>
+            <main className={s.main}>{children}</main>
+            <footer className={showCloseBtn ? s.footer : s.footerWithoutClose}>
+              {showCloseBtn && (
+                <Dialog.Close asChild>
+                  <Button variant="secondary">Cancel</Button>
+                </Dialog.Close>
+              )}
+              <Dialog.Close
+                asChild
+                onClick={() => {
+                  setOpen(false)
+                }}
+              >
+                {footerBtn}
               </Dialog.Close>
-            )}
-          </header>
-          <main className={s.main}>{children}</main>
-          <footer className={showCloseBtn ? s.footer : s.footerWithoutClose}>
-            {showCloseBtn && (
-              <Dialog.Close asChild>
-                <Button variant="secondary">Cancel</Button>
-              </Dialog.Close>
-            )}
-            <Dialog.Close asChild>{footerBtn}</Dialog.Close>
-          </footer>
-        </Dialog.Content>
-      </Dialog.Portal>
+            </footer>
+          </Dialog.Content>
+        </Dialog.Portal>
+      )}
     </Dialog.Root>
   )
 }
