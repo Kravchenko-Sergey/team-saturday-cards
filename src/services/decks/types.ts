@@ -21,12 +21,6 @@ export type CreateDeckResponse = {
   author: Author
 }
 
-export type ArgCreateDeck = {
-  cover: string
-  name: string
-  isPrivate: boolean
-}
-
 export type DeleteDeckResponse = Omit<CreateDeckResponse, 'author'>
 
 export type ArgGetDecks = {
