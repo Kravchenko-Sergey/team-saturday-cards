@@ -67,6 +67,16 @@ export const decksApi = baseApi.injectEndpoints({
         },
         invalidatesTags: ['Deck'],
       }),
+      updateDeck: builder.mutation<DeleteDeckResponse, any>({
+        query: ({ id, form }) => {
+          return {
+            method: 'PATCH',
+            url: `v1/decks/${id}`,
+            body: form,
+          }
+        },
+        invalidatesTags: ['Deck'],
+      }),
       deleteDeck: builder.mutation<DeleteDeckResponse, string>({
         query: id => {
           return {
@@ -147,4 +157,5 @@ export const {
   useGetLearnQuery,
   useLazyGetLearnQuery,
   useSaveGradeMutation,
+  useUpdateDeckMutation,
 } = decksApi

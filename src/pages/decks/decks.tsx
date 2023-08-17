@@ -139,7 +139,7 @@ export const Decks = () => {
         </Typography>
       ) : (
         <>
-          <DecksTable data={decks} />
+          <DecksTable data={decks} cover={cover} setCover={setCover} />
           <Pagination
             count={totalPages ? totalPages : 100}
             page={currentPage}
