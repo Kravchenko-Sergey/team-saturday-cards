@@ -1,11 +1,6 @@
 import { baseApi, RootState } from '@/services'
 import { ArgGetLearn, ArgSaveGrade, GetLearnResponse, SaveGradeResponse } from '@/services/cards'
-import {
-  ArgCreateDeck,
-  ArgGetDecks,
-  CreateDeckResponse,
-  DeleteDeckResponse,
-} from '@/services/decks/types.ts'
+import { ArgGetDecks, CreateDeckResponse, DeleteDeckResponse } from '@/services/decks/types.ts'
 import { GetDecksResponse } from '@/services/types.ts'
 
 export const decksApi = baseApi.injectEndpoints({
@@ -20,12 +15,12 @@ export const decksApi = baseApi.injectEndpoints({
         },
         providesTags: ['Deck'],
       }),
-      createDeck: builder.mutation<CreateDeckResponse, ArgCreateDeck>({
-        query: ({ cover, name, isPrivate }) => {
+      createDeck: builder.mutation<CreateDeckResponse, FormData>({
+        query: formData => {
           return {
             method: 'POST',
             url: 'v1/decks',
-            body: { cover, name, isPrivate },
+            body: formData,
           }
         },
         async onQueryStarted(_, { dispatch, getState, queryFulfilled }) {
