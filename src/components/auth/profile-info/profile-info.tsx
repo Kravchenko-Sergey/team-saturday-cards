@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useState } from 'react'
+import { ChangeEvent, FC } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -22,6 +22,8 @@ type ProfileInfoProps = {
   handleChangeAvatar: (event: ChangeEvent<HTMLInputElement>) => void
   handleLogout: () => void
   onSubmit: (data: ProfileSchemaType) => void
+  showTextField: boolean
+  setShowTextField: (showTextField: boolean) => void
 }
 
 export const ProfileInfo: FC<ProfileInfoProps> = ({
@@ -31,9 +33,9 @@ export const ProfileInfo: FC<ProfileInfoProps> = ({
   handleChangeAvatar,
   handleLogout,
   onSubmit,
+  showTextField,
+  setShowTextField,
 }) => {
-  const [showTextField, setShowTextField] = useState(false)
-
   const handleChangeName = () => {
     setShowTextField(true)
   }
@@ -42,13 +44,9 @@ export const ProfileInfo: FC<ProfileInfoProps> = ({
     mode: 'onSubmit',
     resolver: zodResolver(profileSchema),
     defaultValues: {
+      email: '',
       name: '',
     },
-  })
-
-  const handleFormSubmit = handleSubmit(({ name }) => {
-    onSubmit({ name })
-    setShowTextField(false)
   })
 
   return (
@@ -83,7 +81,7 @@ export const ProfileInfo: FC<ProfileInfoProps> = ({
           </Button>
         </>
       ) : (
-        <form onSubmit={handleFormSubmit} className={s.form}>
+        <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
           <ControlledTextField label="Nickname" name="name" control={control} defaultValue="" />
           <Button className={s.submitBtn} fullWidth>
             Save Changes

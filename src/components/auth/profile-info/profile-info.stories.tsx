@@ -22,33 +22,16 @@ export const Default = () => {
   const img =
     'https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper-thumbnail.png'
 
-  const handleChangeAvatar = (event: any) => {
-    const file = event.target.files && event.target.files[0]
-
-    if (file) {
-      const reader = new FileReader()
-
-      reader.onloadend = () => {
-        console.log('reader.onloadend')
-      }
-      reader.readAsDataURL(file)
-    }
-  }
-
-  const handleLogout = () => {
-    console.log('handleLogout')
-  }
-
   return (
     <ProfileInfo
-      name={'Sergey'}
-      email={'sergey.ose.pyatigorsk@gmail.com'}
+      name={'Elon Musk'}
+      email={'teslaModelX@gmail.com'}
       src={img}
-      handleChangeAvatar={handleChangeAvatar}
-      handleLogout={handleLogout}
-      onSubmit={data => {
-        console.log(data)
-      }}
+      handleChangeAvatar={() => {}}
+      onSubmit={() => {}}
+      handleLogout={() => {}}
+      showTextField={false}
+      setShowTextField={() => {}}
     />
   )
 }
