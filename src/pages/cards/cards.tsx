@@ -19,6 +19,7 @@ import {
   ArrowBackOutline,
   BlankDeckCover,
   EditOutline,
+  ImageOutline,
   MoreVerticalOutline,
   PlayCircleOutline,
   TrashOutline,
@@ -28,7 +29,6 @@ import { ControlledTextField } from 'components/ui/controlled'
 import { Dropdown, DropdownItemWithIcon } from 'components/ui/dropdown'
 import { Modal } from 'components/ui/modal'
 import { Pagination } from 'components/ui/pagination'
-import { Select } from 'components/ui/select'
 import { TextField } from 'components/ui/text-field'
 import { Typography } from 'components/ui/typography'
 import { CardsTable } from 'pages/cards/cards-table/cards-table.tsx'
@@ -42,7 +42,21 @@ export const Cards = () => {
   const deckName = useAppSelector(decksSelectors.selectDeckName)
   const deckCover = useAppSelector(decksSelectors.selectDeckCover)
   const dispatch = useDispatch()
+  // addCard
+  const [questionCover, setQuestionCover] = useState<File | null>(null)
+  const [answerCover, setAnswerCover] = useState<File | null>(null)
 
+  const handleQuestionCover = (e: ChangeEvent<HTMLInputElement>) => {
+    const questionFile = e.target.files![0]
+
+    setQuestionCover(questionFile)
+  }
+  const handleAnswerCover = (e: ChangeEvent<HTMLInputElement>) => {
+    const answerFile = e.target.files![0]
+
+    setAnswerCover(answerFile)
+  }
+  //
   const setCurrentPage = (page: number) => dispatch(cardsSlice.actions.setCurrentPage(page))
   const setItemsPerPage = (perPage: string) =>
     dispatch(cardsSlice.actions.setItemsPerPage(Number(perPage)))
@@ -67,6 +81,8 @@ export const Cards = () => {
   const newCardSchema = z.object({
     question: z.string().min(3).max(30),
     answer: z.string().min(3).max(30),
+    questionImg: z.any(),
+    answerImg: z.any(),
   })
 
   type NewCard = z.infer<typeof newCardSchema>
@@ -76,18 +92,22 @@ export const Cards = () => {
     defaultValues: {
       question: '',
       answer: '',
+      questionImg: '',
+      answerImg: '',
     },
   })
 
   const [createCard] = useCreateCardMutation()
 
   const handleCreateCard = () => {
-    const newCard = {
-      question: getValues().question,
-      answer: getValues().answer,
-    }
+    const form = new FormData()
 
-    createCard({ id, question: newCard.question, answer: newCard.answer })
+    form.append('question', getValues().question)
+    form.append('answer', getValues().answer)
+    questionCover && form.append('questionImg', questionCover)
+    answerCover && form.append('answerImg', answerCover)
+
+    createCard({ id, form })
   }
 
   //searchByQuestion
@@ -146,16 +166,52 @@ export const Cards = () => {
             title={'Add New Card'}
             footerBtn={<Button onClick={handleSubmit(handleCreateCard)}>Add New Card</Button>}
           >
-            <Select
-              label="Choose a question format"
-              defaultValue="Text"
-              options={[
-                { label: 'Text', value: 'Text' },
-                { label: 'Image', value: 'Image' },
-              ]}
-            />
-            <form onSubmit={handleSubmit(handleCreateCard)}>
+            <form onSubmit={handleSubmit(handleCreateCard)} className={s.form}>
+              <div className={s.coverModal}>
+                {questionCover ? (
+                  <img className={s.img} src={URL.createObjectURL(questionCover)} alt="cover" />
+                ) : (
+                  <BlankDeckCover />
+                )}
+              </div>
+              <label htmlFor="change-question" className={s.fileLabel}>
+                <Button as={'a'} variant="secondary" fullWidth>
+                  <ImageOutline />
+                  <Typography as="span" variant="subtitle2">
+                    Change Cover
+                  </Typography>
+                </Button>
+                <input
+                  id="change-question"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleQuestionCover}
+                  style={{ display: 'none' }}
+                />
+              </label>
               <ControlledTextField label="Question" name="question" control={control} />
+              <div className={s.coverModal}>
+                {answerCover ? (
+                  <img className={s.img} src={URL.createObjectURL(answerCover)} alt="cover" />
+                ) : (
+                  <BlankDeckCover />
+                )}
+              </div>
+              <label htmlFor="change-answer" className={s.fileLabel}>
+                <Button as={'a'} variant="secondary" fullWidth>
+                  <ImageOutline />
+                  <Typography as="span" variant="subtitle2">
+                    Change Cover
+                  </Typography>
+                </Button>
+                <input
+                  id="change-answer"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleAnswerCover}
+                  style={{ display: 'none' }}
+                />
+              </label>
               <ControlledTextField label="Answer" name="answer" control={control} />
             </form>
           </Modal>
@@ -178,16 +234,52 @@ export const Cards = () => {
                 title={'Add New Card'}
                 footerBtn={<Button onClick={handleSubmit(handleCreateCard)}>Add New Card</Button>}
               >
-                <Select
-                  label="Choose a question format"
-                  defaultValue="Text"
-                  options={[
-                    { label: 'Text', value: 'Text' },
-                    { label: 'Image', value: 'Image' },
-                  ]}
-                />
-                <form onSubmit={handleSubmit(handleCreateCard)}>
+                <form onSubmit={handleSubmit(handleCreateCard)} className={s.form}>
+                  <div className={s.coverModal}>
+                    {questionCover ? (
+                      <img className={s.img} src={URL.createObjectURL(questionCover)} alt="cover" />
+                    ) : (
+                      <BlankDeckCover />
+                    )}
+                  </div>
+                  <label htmlFor="change-question" className={s.fileLabel}>
+                    <Button as={'a'} variant="secondary" fullWidth>
+                      <ImageOutline />
+                      <Typography as="span" variant="subtitle2">
+                        Change Cover
+                      </Typography>
+                    </Button>
+                    <input
+                      id="change-question"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleQuestionCover}
+                      style={{ display: 'none' }}
+                    />
+                  </label>
                   <ControlledTextField label="Question" name="question" control={control} />
+                  <div className={s.coverModal}>
+                    {answerCover ? (
+                      <img className={s.img} src={URL.createObjectURL(answerCover)} alt="cover" />
+                    ) : (
+                      <BlankDeckCover />
+                    )}
+                  </div>
+                  <label htmlFor="change-answer" className={s.fileLabel}>
+                    <Button as={'a'} variant="secondary" fullWidth>
+                      <ImageOutline />
+                      <Typography as="span" variant="subtitle2">
+                        Change Cover
+                      </Typography>
+                    </Button>
+                    <input
+                      id="change-answer"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleAnswerCover}
+                      style={{ display: 'none' }}
+                    />
+                  </label>
                   <ControlledTextField label="Answer" name="answer" control={control} />
                 </form>
               </Modal>
