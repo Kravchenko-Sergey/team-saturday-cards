@@ -6,7 +6,7 @@ import { useAppSelector } from '@/services'
 import { Card, useDeleteCardMutation } from '@/services/cards'
 import { cardsSlice } from '@/services/cards/cards.slice.ts'
 import { decksSelectors } from '@/services/decks/decks-selectors.ts'
-import { EditOutline, TrashOutline } from 'assets/icons'
+import { BlankDeckCover, EditOutline, TrashOutline } from 'assets/icons'
 import Button from 'components/ui/button/button.tsx'
 import { Grade } from 'components/ui/grade'
 import { Modal } from 'components/ui/modal'
@@ -67,8 +67,26 @@ export const CardsTable: FC<CardsTableProps> = ({ data, data2 }) => {
       <TableBody>
         {data?.map((card: Card) => (
           <TableRow key={card.id}>
-            <TableCell className={s.tableCell}>{card.question}</TableCell>
-            <TableCell className={s.tableCell}>{card.answer}</TableCell>
+            <TableCell className={s.tableCell}>
+              <div className={s.coverCell}>
+                {card.questionImg ? (
+                  <img src={card.questionImg} alt={'cover'} className={s.cover} />
+                ) : (
+                  <BlankDeckCover style={{ backgroundColor: 'gray' }} />
+                )}
+                {card.question}
+              </div>
+            </TableCell>
+            <TableCell className={s.tableCell}>
+              <div className={s.coverCell}>
+                {card.answerImg ? (
+                  <img src={card.answerImg} alt={'cover'} className={s.cover} />
+                ) : (
+                  <BlankDeckCover style={{ backgroundColor: 'gray' }} />
+                )}
+                {card.question}
+              </div>
+            </TableCell>
             <TableCell className={s.tableCell}>
               {new Date(card.updated).toLocaleString('en-GB')}
             </TableCell>

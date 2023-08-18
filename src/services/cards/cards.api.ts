@@ -13,15 +13,12 @@ export const cardsApi = baseApi.injectEndpoints({
         },
         providesTags: ['Card'],
       }),
-      createCard: builder.mutation<CreateCardResponse, ArgCreateCard>({
-        query: ({ id, question, answer }) => {
+      createCard: builder.mutation<CreateCardResponse, any>({
+        query: ({ id, form }) => {
           return {
             method: 'POST',
             url: `v1/decks/${id}/cards`,
-            body: {
-              question,
-              answer,
-            },
+            body: form,
           }
         },
         invalidatesTags: ['Card'],
