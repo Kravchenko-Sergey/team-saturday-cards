@@ -1,8 +1,10 @@
+import { useDispatch } from 'react-redux'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 
 import s from './layout.module.scss'
 
 import { useLogoutMutation, useMeQuery } from '@/services/auth/auth.api.ts'
+import { decksSlice } from '@/services/decks/decks.slice.ts'
 import { Logo, LogOutOutline, PersonOutline } from 'assets/icons'
 import { Avatar } from 'components/ui/avatar'
 import { Dropdown, DropdownItem, DropdownItemWithIcon } from 'components/ui/dropdown'
@@ -10,16 +12,24 @@ import { Header } from 'components/ui/layout/header'
 import { Typography } from 'components/ui/typography'
 
 export const Layout = () => {
+  const dispatch = useDispatch()
+
+  const setAuthorId = (authorId: string) => dispatch(decksSlice.actions.setAuthorId(authorId))
+
   const navigate = useNavigate()
 
   const { data } = useMeQuery()
   const [logout] = useLogoutMutation()
 
+  const handleLogo = () => {
+    setAuthorId('')
+  }
+
   return (
     <div className={s.container}>
       <Header>
         <div className={s.content}>
-          <Link to={'/'}>
+          <Link to={'/'} onClick={handleLogo}>
             <Logo />
           </Link>
           <Dropdown

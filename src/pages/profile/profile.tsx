@@ -6,6 +6,7 @@ import {
   useMeQuery,
 } from '@/services/auth/auth.api.ts'
 import { ProfileInfo } from 'components/auth/profile-info'
+import s from 'pages/cards/cards.module.scss'
 
 export const Profile = () => {
   const [showTextField, setShowTextField] = useState(false)
@@ -13,7 +14,7 @@ export const Profile = () => {
 
   const { currentData } = useMeQuery()
   const [logout] = useLogoutMutation()
-  const [changeProfile] = useChangeProfileMutation()
+  const [changeProfile, { isLoading }] = useChangeProfileMutation()
 
   const handleFormSubmit = (data: { email: string; name: string }) => {
     setShowTextField(false)
@@ -33,6 +34,8 @@ export const Profile = () => {
 
     setAva(file)
   }
+
+  if (isLoading) return <span className={s.loader}></span>
 
   return (
     <ProfileInfo

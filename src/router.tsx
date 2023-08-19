@@ -6,6 +6,8 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 
+import s from '../src/pages/decks/decks.module.scss'
+
 import { useMeQuery } from '@/services/auth/auth.api.ts'
 import { Layout } from 'components/ui/layout'
 import { Cards } from 'pages/cards'
@@ -83,7 +85,7 @@ export const Router = () => {
 function PrivateRoutes() {
   const { data, isLoading } = useMeQuery()
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return <span className={s.loader}></span>
 
   const isAuthenticated = !!data
 

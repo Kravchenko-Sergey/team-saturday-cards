@@ -3,7 +3,7 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { z } from 'zod'
 
 import s from './cards.module.scss'
@@ -15,6 +15,7 @@ import { useCreateCardMutation, useGetCardsQuery } from '@/services/cards'
 import { cardsSelectors } from '@/services/cards/cards-selectors.ts'
 import { cardsSlice } from '@/services/cards/cards.slice.ts'
 import { decksSelectors } from '@/services/decks/decks-selectors.ts'
+import { decksSlice } from '@/services/decks/decks.slice.ts'
 import {
   ArrowBackOutline,
   BlankDeckCover,
@@ -42,6 +43,8 @@ export const Cards = () => {
   const deckName = useAppSelector(decksSelectors.selectDeckName)
   const deckCover = useAppSelector(decksSelectors.selectDeckCover)
   const dispatch = useDispatch()
+
+  const navigate = useNavigate()
   // addCard
   const [questionCover, setQuestionCover] = useState<File | null>(null)
   const [answerCover, setAnswerCover] = useState<File | null>(null)
@@ -61,17 +64,19 @@ export const Cards = () => {
   const setItemsPerPage = (perPage: string) =>
     dispatch(cardsSlice.actions.setItemsPerPage(Number(perPage)))
   const setSearch = (search: string) => dispatch(cardsSlice.actions.setSearchByQuestion(search))
+  const setAuthorId = (authorId: string) => dispatch(decksSlice.actions.setAuthorId(authorId))
 
   const { id } = useParams()
 
-  const { cards, totalPages } = useGetCardsQuery(
+  const { cards, totalPages, isLoading, isFetching } = useGetCardsQuery(
     { id, question: searchByQuestion, currentPage, itemsPerPage, orderBy },
     {
-      selectFromResult: ({ data, isLoading }) => {
+      selectFromResult: ({ data, isLoading, isFetching }) => {
         return {
           cards: data?.items,
           totalPages: data?.pagination.totalPages,
           isLoading,
+          isFetching,
         }
       },
     }
@@ -110,6 +115,10 @@ export const Cards = () => {
     createCard({ id, form })
   }
 
+  const handleBackToDecksList = () => {
+    setAuthorId('')
+  }
+
   //searchByQuestion
   const [searchValue, setSearchValue] = useState('')
   const debouncedValue = useDebounce(searchValue, 500)
@@ -125,10 +134,13 @@ export const Cards = () => {
   //pagination
   const handleCurrentPage = (e: number) => setCurrentPage(e)
   const handleItemsPerPage = (e: string) => setItemsPerPage(e)
+  //
+
+  if (isLoading || isFetching) return <span className={s.loader}></span>
 
   return (
     <div className={s.container}>
-      <Button variant={'link'} as={Link} to={'/'}>
+      <Button variant={'link'} as={Link} to={'/'} onClick={handleBackToDecksList}>
         <>
           <ArrowBackOutline />
           Back to Decks List
@@ -140,7 +152,13 @@ export const Cards = () => {
           {cards?.length !== 0 && data2.id === authorId && (
             <Dropdown trigger={<MoreVerticalOutline />}>
               <>
-                <DropdownItemWithIcon icon={<PlayCircleOutline />} text={'Learn'} />
+                <DropdownItemWithIcon
+                  icon={<PlayCircleOutline />}
+                  text={'Learn'}
+                  onSelect={() => {
+                    navigate(`/learn/${cards![0].deckId}`)
+                  }}
+                />
                 <DropdownItemWithIcon icon={<EditOutline />} text={'Edit'} />
                 <DropdownItemWithIcon icon={<TrashOutline />} text={'Delete'} />
               </>
@@ -156,7 +174,13 @@ export const Cards = () => {
           )}
           {cards?.length !== 0 && data2.id !== authorId && (
             <Dropdown trigger={<MoreVerticalOutline />}>
-              <DropdownItemWithIcon icon={<PlayCircleOutline />} text={'Learn'} />
+              <DropdownItemWithIcon
+                icon={<PlayCircleOutline />}
+                text={'Learn'}
+                onSelect={() => {
+                  navigate(`/learn/${cards![0].deckId}`)
+                }}
+              />
             </Dropdown>
           )}
         </div>
@@ -313,7 +337,7 @@ export const Cards = () => {
             onChange={e => handleCurrentPage(e)}
             perPage={String(itemsPerPage)}
             onPerPageChange={e => handleItemsPerPage(e)}
-            perPageOptions={[10, 20, 30]}
+            perPageOptions={[4, 8, 16]}
           />
         </>
       )}
