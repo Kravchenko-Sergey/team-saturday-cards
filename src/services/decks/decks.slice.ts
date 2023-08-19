@@ -4,14 +4,15 @@ export const decksSlice = createSlice({
   name: 'decks',
   initialState: {
     minCardsCount: 0,
-    maxCardsCount: 11,
+    maxCardsCount: 14,
     searchByName: '',
     authorId: '',
     orderBy: 'created-desc',
     currentPage: 1,
-    itemsPerPage: 10,
+    itemsPerPage: 4,
     deckName: '',
     deckCover: '',
+    authorName: '',
   },
   reducers: {
     setMinCardsCount: (state, action: PayloadAction<number>) => {
@@ -40,6 +41,9 @@ export const decksSlice = createSlice({
     },
     setDeckCover: (state, action: PayloadAction<string>) => {
       state.deckCover = action.payload
+    },
+    setAuthorName: (state, action: PayloadAction<string>) => {
+      state.authorName = action.payload
     },
   },
 })
