@@ -8,6 +8,7 @@ import { z } from 'zod'
 import s from './decks.module.scss'
 
 import { useAppSelector } from '@/services'
+import { useMeQuery } from '@/services/auth/auth.api.ts'
 import { useCreateDeckMutation, useGetDecksQuery } from '@/services/decks'
 import { decksSelectors } from '@/services/decks/decks-selectors.ts'
 import { decksSlice } from '@/services/decks/decks.slice.ts'
@@ -35,7 +36,7 @@ export const Decks = () => {
   const setItemsPerPage = (perPage: string) =>
     dispatch(decksSlice.actions.setItemsPerPage(Number(perPage)))
 
-  const { decks, totalPages, isLoading } = useGetDecksQuery(
+  const { decks, totalPages, isLoading, isFetching } = useGetDecksQuery(
     {
       name: searchByName,
       maxCardsCount,
@@ -46,16 +47,19 @@ export const Decks = () => {
       authorId,
     },
     {
-      selectFromResult: ({ currentData: data, isLoading }) => {
+      selectFromResult: ({ currentData: data, isLoading, isFetching }) => {
         return {
           decks: data?.items,
           totalPages: data?.pagination.totalPages,
           max: data?.maxCardsCount,
           isLoading,
+          isFetching,
         }
       },
     }
   )
+
+  const { data } = useMeQuery()
   //
   const newDeckSchema = z.object({
     name: z.string().min(3).max(30),
@@ -73,8 +77,6 @@ export const Decks = () => {
   })
 
   const [createDeck] = useCreateDeckMutation()
-
-  if (isLoading) return <div>Loading...</div>
 
   const handleCreateDeck = (data: { name: string; isPrivate: any }) => {
     const form = new FormData()
@@ -95,12 +97,16 @@ export const Decks = () => {
     setCover(file)
   }
 
+  if (isLoading || isFetching) return <span className={s.loader}></span>
+
   return (
     <div className={s.container}>
       <div className={s.titleBlock}>
         <Typography variant="large">Decks list</Typography>
         <Modal
-          trigger={<Button>Add New Deck</Button>}
+          trigger={
+            authorId !== '' && authorId !== data.id ? <div></div> : <Button>Add New Deck</Button>
+          }
           title="Add new deck "
           footerBtn={<Button onClick={handleSubmit(handleCreateDeck)}>Add new deck</Button>}
         >
@@ -146,7 +152,7 @@ export const Decks = () => {
             onChange={e => handleCurrentPage(e)}
             perPage={String(itemsPerPage)}
             onPerPageChange={e => handleItemsPerPage(e)}
-            perPageOptions={[10, 20, 30]}
+            perPageOptions={[4, 8, 16]}
           />
         </>
       )}

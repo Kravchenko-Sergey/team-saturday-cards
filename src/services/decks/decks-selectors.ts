@@ -10,4 +10,5 @@ export const decksSelectors = {
   selectAuthorId: (state: RootState) => state.decks.authorId,
   selectDeckName: (state: RootState) => state.decks.deckName,
   selectDeckCover: (state: RootState) => state.decks.deckCover,
+  selectAuthorName: (state: RootState) => state.decks.authorName,
 }

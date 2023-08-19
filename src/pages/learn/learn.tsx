@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom'
 import s from './learn.module.scss'
 
 import { useGetLearnQuery, useLazyGetLearnQuery, useSaveGradeMutation } from '@/services/decks'
+import { BlankDeckCover } from 'assets/icons'
 import Button from 'components/ui/button/button.tsx'
 import { Card } from 'components/ui/card'
 import { RadioGroup } from 'components/ui/radio-group'
@@ -12,12 +13,12 @@ import { Typography } from 'components/ui/typography'
 
 export const Learn = () => {
   const [isShowAnswer, setIsShowAnswer] = useState(false)
-  const [radioValue, setRadioValue] = useState(1)
+  const [radioValue, setRadioValue] = useState(0)
 
   const { id } = useParams()
 
   const { data } = useGetLearnQuery({ id })
-  const [getLearn] = useLazyGetLearnQuery()
+  const [getLearn, { isLoading, isFetching }] = useLazyGetLearnQuery()
   const [saveGrade] = useSaveGradeMutation()
 
   const handleShowAnswer = () => {
@@ -57,6 +58,8 @@ export const Learn = () => {
     },
   ]
 
+  if (isLoading || isFetching) return <span className={s.loader}></span>
+
   return (
     <Card className={s.card}>
       <Typography variant="large" className={s.title}>
@@ -65,8 +68,15 @@ export const Learn = () => {
       <Typography variant="h3" className={s.question}>
         Question: {data?.question}
       </Typography>
+      <div className={s.questionImg}>
+        {data?.questionImg ? (
+          <img className={s.img} src={data?.questionImg} alt="cover" />
+        ) : (
+          <BlankDeckCover />
+        )}
+      </div>
       <Typography variant="subtitle2" className={s.attempts}>
-        Количество попыток ответов на вопрос: {data?.shots}
+        Number of answers to the question: {data?.shots}
       </Typography>
       {!isShowAnswer ? (
         <Button fullWidth onClick={handleShowAnswer}>
@@ -77,6 +87,13 @@ export const Learn = () => {
           <Typography variant="h3" className={s.answer}>
             Answer: {data?.answer}
           </Typography>
+          <div className={s.answerImg}>
+            {data?.answerImg ? (
+              <img className={s.img} src={data?.answerImg} alt="cover" />
+            ) : (
+              <BlankDeckCover />
+            )}
+          </div>
           <RadioGroup
             options={options}
             value={radioValue}

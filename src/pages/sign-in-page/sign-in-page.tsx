@@ -1,4 +1,5 @@
 import { Navigate, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 import s from './sign-in.module.scss'
 
@@ -18,6 +19,9 @@ export const SignInPage = () => {
       .unwrap()
       .then(() => {
         navigate('/')
+      })
+      .catch((error: any) => {
+        toast.error(error.data.message)
       })
   }
 
