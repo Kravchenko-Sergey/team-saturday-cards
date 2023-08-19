@@ -16,6 +16,8 @@ import s from 'pages/decks/decks.module.scss'
 export const DecksFilters = () => {
   const maxCardsCount = useAppSelector(decksSelectors.selectMaxCardsCount)
   const minCardsCount = useAppSelector(decksSelectors.selectMinCardsCount)
+  const authorId = useAppSelector(decksSelectors.selectAuthorId)
+  const authorName = useAppSelector(decksSelectors.selectAuthorName)
   const dispatch = useAppDispatch()
 
   const setCurrentPage = (page: number) => dispatch(decksSlice.actions.setCurrentPage(page))
@@ -60,8 +62,8 @@ export const DecksFilters = () => {
   const handleClearFilter = () => {
     setSearchValue('')
     setSearch('')
-    setValues([0, 11])
-    setMaxCardsCount(11)
+    setValues([0, 14])
+    setMaxCardsCount(14)
     setMinCardsCount(0)
     setCurrentPage(1)
   }
@@ -79,7 +81,11 @@ export const DecksFilters = () => {
           <Typography variant="body1">My Decks</Typography>
         </TabSwitcherItem>
         <TabSwitcherItem value={'tab2'} onClick={getAllDecks} className={s.tabsTrigger}>
-          <Typography variant="body1">All Decks</Typography>
+          <Typography variant="body1">
+            {authorId !== '' && authorId !== data.id
+              ? `${authorName.split(/[ _-]/)[0]}`
+              : 'All Decks'}
+          </Typography>
         </TabSwitcherItem>
       </TabSwitcher>
       <Slider
@@ -89,7 +95,7 @@ export const DecksFilters = () => {
         onValueCommit={handleSliderValueCommitChange}
         multiple
         min={0}
-        max={11}
+        max={14}
         step={1}
       />
       <Button variant="secondary" onClick={handleClearFilter}>

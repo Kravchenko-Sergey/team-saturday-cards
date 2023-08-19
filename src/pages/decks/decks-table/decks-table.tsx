@@ -6,14 +6,13 @@ import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
-import { useAppSelector } from '@/services'
+import { useMeQuery } from '@/services/auth/auth.api.ts'
 import { useLazyGetCardsQuery } from '@/services/cards'
 import {
   useDeleteDeckMutation,
   useLazyGetLearnQuery,
   useUpdateDeckMutation,
 } from '@/services/decks'
-import { decksSelectors } from '@/services/decks/decks-selectors.ts'
 import { decksSlice } from '@/services/decks/decks.slice.ts'
 import { Deck } from '@/services/types.ts'
 import {
@@ -44,12 +43,13 @@ export const DecksTable: FC<DecksTableProps> = ({ data, cover, setCover }) => {
   const setAuthorId = (value: string) => dispatch(decksSlice.actions.setAuthorId(value))
   const setDeckName = (value: string) => dispatch(decksSlice.actions.setDeckName(value))
   const setDeckCover = (value: string) => dispatch(decksSlice.actions.setDeckCover(value))
-  const authorId = useAppSelector(decksSelectors.selectAuthorId)
+  const setAuthorName = (name: string) => dispatch(decksSlice.actions.setAuthorName(name))
   const dispatch = useDispatch()
 
   const [getCards] = useLazyGetCardsQuery()
   const [deleteDeck] = useDeleteDeckMutation()
   const [getLearn] = useLazyGetLearnQuery()
+  const { currentData } = useMeQuery()
 
   const handleGetCards = (id: string, userId: string, deckName: string, deckCover: string) => {
     getCards({ id })
@@ -142,6 +142,11 @@ export const DecksTable: FC<DecksTableProps> = ({ data, cover, setCover }) => {
     updateDeck({ id, form })
   }
 
+  const handleAuthorName = (userId: string, authorName: string) => {
+    setAuthorId(userId)
+    setAuthorName(authorName)
+  }
+
   return (
     <Table className={s.table}>
       <TableHeader columns={columns} onSort={setSort} sort={sort} />
@@ -167,7 +172,12 @@ export const DecksTable: FC<DecksTableProps> = ({ data, cover, setCover }) => {
             <TableCell className={s.tableCell}>
               {new Date(deck.updated).toLocaleString('en-GB')}
             </TableCell>
-            <TableCell className={s.tableCell}>{deck.author.name}</TableCell>
+            <TableCell
+              className={s.tableCell}
+              onClick={() => handleAuthorName(deck.userId, deck.author.name)}
+            >
+              <div className={s.createdCell}>{deck.author.name}</div>
+            </TableCell>
             <TableCell className={s.tableCell}>
               <div className={s.iconsBlock}>
                 {deck.cardsCount > 0 && (
@@ -180,7 +190,7 @@ export const DecksTable: FC<DecksTableProps> = ({ data, cover, setCover }) => {
                     <PlayCircleOutline />
                   </Link>
                 )}
-                {deck.author.id === authorId && (
+                {deck.author.id === currentData.id && (
                   <>
                     <Modal
                       trigger={<EditOutline />}
