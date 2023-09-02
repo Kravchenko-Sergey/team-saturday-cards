@@ -1,7 +1,9 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 
+import { useSelector } from 'react-redux'
+
 import { useDebounce } from '@/common/hooks/use-debounse.ts'
-import { useAppDispatch, useAppSelector } from '@/services'
+import { useAppDispatch } from '@/services'
 import { useMeQuery } from '@/services/auth/auth.api.ts'
 import { decksSelectors } from '@/services/decks/decks-selectors.ts'
 import { decksSlice } from '@/services/decks/decks.slice.ts'
@@ -14,10 +16,10 @@ import { Typography } from 'components/ui/typography'
 import s from 'pages/decks/decks.module.scss'
 
 export const DecksFilters = () => {
-  const maxCardsCount = useAppSelector(decksSelectors.selectMaxCardsCount)
-  const minCardsCount = useAppSelector(decksSelectors.selectMinCardsCount)
-  const authorId = useAppSelector(decksSelectors.selectAuthorId)
-  const authorName = useAppSelector(decksSelectors.selectAuthorName)
+  const maxCardsCount = useSelector(decksSelectors.selectMaxCardsCount)
+  const minCardsCount = useSelector(decksSelectors.selectMinCardsCount)
+  const authorId = useSelector(decksSelectors.selectAuthorId)
+  const authorName = useSelector(decksSelectors.selectAuthorName)
   const dispatch = useAppDispatch()
 
   const setCurrentPage = (page: number) => dispatch(decksSlice.actions.setCurrentPage(page))
@@ -25,40 +27,36 @@ export const DecksFilters = () => {
   const setMinCardsCount = (value: number) => dispatch(decksSlice.actions.setMinCardsCount(value))
   const setSearch = (search: string) => dispatch(decksSlice.actions.setSearchByName(search))
   const setAuthorId = (id: string) => dispatch(decksSlice.actions.setAuthorId(id))
-  //searchByName
+
+  const [values, setValues] = useState<number[]>([minCardsCount, maxCardsCount])
   const [searchValue, setSearchValue] = useState('')
   const debouncedValue = useDebounce(searchValue, 500)
-
-  useEffect(() => {
-    setSearch(debouncedValue)
-    setCurrentPage(1)
-  }, [debouncedValue])
 
   const handleSearchValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setSearchValue(e.currentTarget.value)
   }
-  //switchMyAll
+
   const { data } = useMeQuery()
+
   const getMyDecks = () => {
     setAuthorId(data.id)
   }
+
   const getAllDecks = () => {
     setAuthorId('')
   }
-  //slider
-  const [values, setValues] = useState<number[]>([minCardsCount, maxCardsCount])
 
-  const handleSliderValueChange = (e: any) => {
+  const handleSliderValueChange = (e: number[]) => {
     setValues(e)
   }
 
-  const handleSliderValueCommitChange = (e: any) => {
+  const handleSliderValueCommitChange = (e: number[]) => {
     setValues(e)
     setMaxCardsCount(e[1])
     setMinCardsCount(e[0])
     setCurrentPage(1)
   }
-  //clear filter
+
   const handleClearFilter = () => {
     setSearchValue('')
     setSearch('')
@@ -67,6 +65,11 @@ export const DecksFilters = () => {
     setMinCardsCount(0)
     setCurrentPage(1)
   }
+
+  useEffect(() => {
+    setSearch(debouncedValue)
+    setCurrentPage(1)
+  }, [debouncedValue])
 
   return (
     <div className={s.filtersBlock}>

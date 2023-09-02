@@ -1,39 +1,24 @@
-import { ChangeEvent, FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import { z } from 'zod'
 
 import { useMeQuery } from '@/services/auth/auth.api.ts'
 import { useLazyGetCardsQuery } from '@/services/cards'
-import {
-  useDeleteDeckMutation,
-  useLazyGetLearnQuery,
-  useUpdateDeckMutation,
-} from '@/services/decks'
+import { useLazyGetLearnQuery } from '@/services/decks'
 import { decksSlice } from '@/services/decks/decks.slice.ts'
 import { Deck } from '@/services/types.ts'
-import {
-  BlankDeckCover,
-  EditOutline,
-  ImageOutline,
-  PlayCircleOutline,
-  TrashOutline,
-} from 'assets/icons'
-import Button from 'components/ui/button/button.tsx'
-import { ControlledCheckbox, ControlledTextField } from 'components/ui/controlled'
-import { Modal } from 'components/ui/modal'
+import { BlankDeckCover, PlayCircleOutline } from 'assets/icons'
 import { Table, TableBody, TableCell, TableRow } from 'components/ui/table'
 import { Column, Sort, TableHeader } from 'components/ui/table/table-header'
-import { Typography } from 'components/ui/typography'
+import { DeleteDeckModal } from 'pages/decks/decks-table/delete-deck-modal'
+import { UpdateDeckModal } from 'pages/decks/decks-table/update-deck-modal'
 import s from 'pages/decks/decks.module.scss'
 
 type DecksTableProps = {
   data: Deck[] | undefined
-  cover: any
-  setCover: any
+  cover: File | null
+  setCover: (cover: File | null) => void
 }
 
 export const DecksTable: FC<DecksTableProps> = ({ data, cover, setCover }) => {
@@ -47,7 +32,6 @@ export const DecksTable: FC<DecksTableProps> = ({ data, cover, setCover }) => {
   const dispatch = useDispatch()
 
   const [getCards] = useLazyGetCardsQuery()
-  const [deleteDeck] = useDeleteDeckMutation()
   const [getLearn] = useLazyGetLearnQuery()
   const { currentData } = useMeQuery()
 
@@ -70,10 +54,6 @@ export const DecksTable: FC<DecksTableProps> = ({ data, cover, setCover }) => {
         navigate(`/learn/${id}`)
       })
       .catch(error => console.error(error))
-  }
-
-  const handleDeleteDeck = (id: string) => {
-    deleteDeck(id)
   }
 
   const [sort, setSort] = useState<Sort>(null)
@@ -105,47 +85,15 @@ export const DecksTable: FC<DecksTableProps> = ({ data, cover, setCover }) => {
     },
   ]
 
-  useEffect(() => {
-    if (!sort) return
-    setOrderBy(`${sort?.key}-${sort?.direction}`)
-  })
-  //changeDeck
-  const [updateDeck] = useUpdateDeckMutation()
-  const handleChangeCover = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files![0]
-
-    setCover(file)
-  }
-
-  const updateDeckSchema = z.object({
-    name: z.string().min(3).max(30),
-    isPrivate: z.any(),
-  })
-
-  type UpdateDeck = z.infer<typeof updateDeckSchema>
-
-  const { control, handleSubmit, getValues } = useForm<UpdateDeck>({
-    resolver: zodResolver(updateDeckSchema),
-    defaultValues: {
-      name: '',
-      isPrivate: false,
-    },
-  })
-
-  const handleUpdate = (id: string) => {
-    const form = new FormData()
-
-    form.append('name', getValues().name)
-    form.append('isPrivate', getValues().isPrivate)
-    cover && form.append('cover', cover)
-
-    updateDeck({ id, form })
-  }
-
   const handleAuthorName = (userId: string, authorName: string) => {
     setAuthorId(userId)
     setAuthorName(authorName)
   }
+
+  useEffect(() => {
+    if (!sort) return
+    setOrderBy(`${sort?.key}-${sort?.direction}`)
+  })
 
   return (
     <Table className={s.table}>
@@ -160,11 +108,8 @@ export const DecksTable: FC<DecksTableProps> = ({ data, cover, setCover }) => {
               }}
             >
               <div className={s.nameCell}>
-                {deck.cover ? (
-                  <img src={deck.cover} alt={'cover'} className={s.cover} />
-                ) : (
-                  <BlankDeckCover style={{ backgroundColor: 'gray' }} />
-                )}
+                {deck.cover && <img src={deck.cover} alt={'cover'} className={s.cover} />}
+                {!deck.cover && <BlankDeckCover style={{ backgroundColor: 'gray' }} />}
                 {deck.name}
               </div>
             </TableCell>
@@ -192,65 +137,8 @@ export const DecksTable: FC<DecksTableProps> = ({ data, cover, setCover }) => {
                 )}
                 {deck.author.id === currentData.id && (
                   <>
-                    <Modal
-                      trigger={<EditOutline />}
-                      title="Update deck"
-                      footerBtn={
-                        <Button onClick={handleSubmit(() => handleUpdate(deck.id))}>
-                          Save changes
-                        </Button>
-                      }
-                    >
-                      <div className={s.coverModal}>
-                        {cover ? (
-                          <img className={s.img} src={URL.createObjectURL(cover)} alt="cover" />
-                        ) : (
-                          <BlankDeckCover />
-                        )}
-                      </div>
-                      <label htmlFor="change-cover" className={s.fileLabel}>
-                        <Button as={'a'} variant="secondary" fullWidth>
-                          <ImageOutline />
-                          <Typography as="span" variant="subtitle2">
-                            Change Cover
-                          </Typography>
-                        </Button>
-                        <input
-                          id="change-cover"
-                          type="file"
-                          accept="image/*"
-                          onChange={handleChangeCover}
-                          style={{ display: 'none' }}
-                        />
-                      </label>
-                      <form onSubmit={handleSubmit(() => handleUpdate(deck.id))} className={s.form}>
-                        <ControlledTextField name="name" control={control} label="Name deck" />
-                        <ControlledCheckbox
-                          name="isPrivate"
-                          control={control}
-                          label="Private deck"
-                        />
-                      </form>
-                    </Modal>
-                    <Modal
-                      trigger={<TrashOutline />}
-                      title="Delete deck"
-                      footerBtn={
-                        <Button
-                          onClick={() => {
-                            handleDeleteDeck(deck.id)
-                          }}
-                        >
-                          Delete deck
-                        </Button>
-                      }
-                    >
-                      <>
-                        <Typography>
-                          Do you really want to remove Pack Name? All cards will be deleted.
-                        </Typography>
-                      </>
-                    </Modal>
+                    <UpdateDeckModal deckId={deck.id} cover={cover} setCover={setCover} />
+                    <DeleteDeckModal deckId={deck.id} />
                   </>
                 )}
               </div>
