@@ -62,6 +62,7 @@ export const Cards = () => {
 
     setAnswerCover(answerFile)
   }
+  //
 
   const { cards, totalPages, isLoading, isFetching } = useGetCardsQuery(
     { id, question: searchByQuestion, currentPage, itemsPerPage, orderBy },
@@ -194,9 +195,9 @@ export const Cards = () => {
             data={cards}
             data2={data2}
             questionCover={questionCover}
-            setQuestionCover={setQuestionCover}
+            handleQuestionCover={handleQuestionCover}
             answerCover={answerCover}
-            setAnswerCover={setAnswerCover}
+            handleAnswerCover={handleAnswerCover}
           />
           <Pagination
             count={totalPages ? totalPages : 100}
