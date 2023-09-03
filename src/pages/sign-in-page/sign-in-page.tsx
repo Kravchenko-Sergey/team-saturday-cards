@@ -22,7 +22,9 @@ export const SignInPage = () => {
         navigate('/')
       })
       .catch(e => {
-        e.status === 'FETCH_ERROR' ? toast.error('No internet connection') : toast.error(e.error)
+        e.status === 'FETCH_ERROR'
+          ? toast.error('No internet connection')
+          : toast.error(e.data.message)
       })
   }
 
