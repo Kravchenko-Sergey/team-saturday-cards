@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css'
 export const SignUpPage = () => {
   const [signUp] = useSignUpMutation()
 
-  const handleSignUp = data => {
+  const handleSignUp = (data: { email: string; password: string }) => {
     signUp(data)
       .unwrap()
       .then()
