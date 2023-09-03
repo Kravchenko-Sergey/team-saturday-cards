@@ -3,13 +3,13 @@ import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { z } from 'zod'
 
+import s from './sign-in.module.scss'
+
 import Button from 'components/ui/button/button.tsx'
 import { Card } from 'components/ui/card'
-import { ControlledTextField, ControlledCheckbox } from 'components/ui/controlled'
+import { ControlledCheckbox } from 'components/ui/controlled/controlled-checkbox'
+import { ControlledTextField } from 'components/ui/controlled/controlled-text-field'
 import { Typography } from 'components/ui/typography'
-
-// eslint-disable-next-line
-import s from './sign-in.module.scss'
 
 const signInSchema = z.object({
   email: z.string().nonempty('Enter email').email('Invalid email address'),
@@ -17,15 +17,15 @@ const signInSchema = z.object({
   rememberMe: z.boolean().optional(),
 })
 
-type FormValues = z.infer<typeof signInSchema>
+export type signInFormValues = z.infer<typeof signInSchema>
 
 type Props = {
-  onSubmit: (data: FormValues) => void
+  onSubmit: (data: signInFormValues) => void
   isSubmitting?: boolean
 }
 
 export const SignIn = (props: Props) => {
-  const { handleSubmit, control } = useForm<FormValues>({
+  const { handleSubmit, control } = useForm<signInFormValues>({
     mode: 'onSubmit',
     resolver: zodResolver(signInSchema),
     defaultValues: {

@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from 'react'
 
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 import { useMeQuery } from '@/services/auth/auth.api.ts'
 import { useLazyGetCardsQuery } from '@/services/cards'
@@ -44,7 +45,7 @@ export const DecksTable: FC<DecksTableProps> = ({ data, cover, setCover }) => {
         setDeckName(deckName)
         setDeckCover(deckCover)
       })
-      .catch(error => console.error(error))
+      .catch(err => toast.error(err.message))
   }
 
   const handleGetLearn = (id: string) => {
@@ -53,7 +54,7 @@ export const DecksTable: FC<DecksTableProps> = ({ data, cover, setCover }) => {
       .then(() => {
         navigate(`/learn/${id}`)
       })
-      .catch(error => console.error(error))
+      .catch(err => toast.error(err.message))
   }
 
   const [sort, setSort] = useState<Sort>(null)
