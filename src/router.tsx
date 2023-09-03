@@ -5,6 +5,7 @@ import {
   RouteObject,
   RouterProvider,
 } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
 
 import s from '../src/pages/decks/decks.module.scss'
 
@@ -20,6 +21,7 @@ import { Profile } from 'pages/profile/profile.tsx'
 import { RecoverPasswordPage } from 'pages/recover-password-page/recover-password-page.tsx'
 import { SignInPage } from 'pages/sign-in-page/sign-in-page.tsx'
 import { SignUpPage } from 'pages/sign-up-page'
+import 'react-toastify/dist/ReactToastify.css'
 
 const publicRoutes: RouteObject[] = [
   {
@@ -66,7 +68,23 @@ const privateRoutes: RouteObject[] = [
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Layout />,
+    element: (
+      <>
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
+        <Layout />
+      </>
+    ),
     errorElement: <ErrorPage />,
     children: [
       {
