@@ -26,7 +26,7 @@ export const Layout = () => {
   }
 
   return (
-    <div className={s.container}>
+    <div>
       <Header>
         <div className={s.content}>
           <Link to={'/'} onClick={handleLogo}>
@@ -50,7 +50,7 @@ export const Layout = () => {
           >
             {
               <>
-                <DropdownItem disabled className={s.item}>
+                <DropdownItem disabled>
                   <>
                     <Avatar
                       src={
