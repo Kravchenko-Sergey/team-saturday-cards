@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate, useParams } from 'react-router-dom'
@@ -48,7 +48,6 @@ export const Cards = () => {
 
   const { id } = useParams()
 
-  // addCard
   const [questionCover, setQuestionCover] = useState<File | null>(null)
   const [answerCover, setAnswerCover] = useState<File | null>(null)
 
@@ -62,10 +61,19 @@ export const Cards = () => {
 
     setAnswerCover(answerFile)
   }
-  //
+
+  const [searchValue, setSearchValue] = useState('')
+
+  const debouncedValue = useDebounce(searchValue, 500)
+
+  const handleSearchValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setSearchValue(e.currentTarget.value)
+    setSearch(e.currentTarget.value)
+    setCurrentPage(1)
+  }
 
   const { cards, totalPages, isLoading, isFetching } = useGetCardsQuery(
-    { id, question: searchByQuestion, currentPage, itemsPerPage, orderBy },
+    { id, question: debouncedValue, currentPage, itemsPerPage, orderBy },
     {
       selectFromResult: ({ data, isLoading, isFetching }) => {
         return {
@@ -83,22 +91,8 @@ export const Cards = () => {
     setAuthorId('')
   }
 
-  //searchByQuestion
-  const [searchValue, setSearchValue] = useState('')
-  const debouncedValue = useDebounce(searchValue, 500)
-
-  const handleSearchValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setSearchValue(e.currentTarget.value)
-  }
-  //pagination
   const handleCurrentPage = (e: number) => setCurrentPage(e)
   const handleItemsPerPage = (e: string) => setItemsPerPage(e)
-  //
-
-  useEffect(() => {
-    setSearch(debouncedValue)
-    setCurrentPage(1)
-  }, [debouncedValue])
 
   if (isLoading || isFetching) return <span className={s.loader}></span>
 
