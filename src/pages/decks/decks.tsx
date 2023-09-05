@@ -1,4 +1,4 @@
-import { ChangeEvent, useMemo, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -19,7 +19,6 @@ export const Decks = () => {
   const [cover, setCover] = useState<File | null>(null)
   const currentPage = useSelector(decksSelectors.selectCurrentPage)
   const itemsPerPage = useSelector(decksSelectors.selectItemsPerPage)
-  const searchByName = useSelector(decksSelectors.selectSearchByName)
   const maxCardsCount = useSelector(decksSelectors.selectMaxCardsCount)
   const minCardsCount = useSelector(decksSelectors.selectMinCardsCount)
   const orderBy = useSelector(decksSelectors.selectOrderBy)

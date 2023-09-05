@@ -31,7 +31,6 @@ import { CreateCardModal } from 'pages/cards/create-card-modal'
 export const Cards = () => {
   const currentPage = useSelector(cardsSelectors.selectCurrentPage)
   const itemsPerPage = useSelector(cardsSelectors.selectItemsPerPage)
-  const searchByQuestion = useSelector(cardsSelectors.selectSearchByQuestion)
   const orderBy = useSelector(cardsSelectors.selectOrderBy)
   const authorId = useSelector(decksSelectors.selectAuthorId)
   const deckName = useSelector(decksSelectors.selectDeckName)
