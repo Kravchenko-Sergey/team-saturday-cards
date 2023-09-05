@@ -1,8 +1,7 @@
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, FC, useState } from 'react'
 
 import { useSelector } from 'react-redux'
 
-import { useDebounce } from '@/common/hooks/use-debounse.ts'
 import { useAppDispatch } from '@/services'
 import { useMeQuery } from '@/services/auth/auth.api.ts'
 import { decksSelectors } from '@/services/decks/decks-selectors.ts'
@@ -15,7 +14,17 @@ import { TextField } from 'components/ui/text-field'
 import { Typography } from 'components/ui/typography'
 import s from 'pages/decks/decks.module.scss'
 
-export const DecksFilters = () => {
+type DecksFiltersProps = {
+  searchValue: string
+  setSearchValue: (searchValue: string) => void
+  handleSearchValue: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
+}
+
+export const DecksFilters: FC<DecksFiltersProps> = ({
+  searchValue,
+  setSearchValue,
+  handleSearchValue,
+}) => {
   const maxCardsCount = useSelector(decksSelectors.selectMaxCardsCount)
   const minCardsCount = useSelector(decksSelectors.selectMinCardsCount)
   const authorId = useSelector(decksSelectors.selectAuthorId)
@@ -25,16 +34,10 @@ export const DecksFilters = () => {
   const setCurrentPage = (page: number) => dispatch(decksSlice.actions.setCurrentPage(page))
   const setMaxCardsCount = (value: number) => dispatch(decksSlice.actions.setMaxCardsCount(value))
   const setMinCardsCount = (value: number) => dispatch(decksSlice.actions.setMinCardsCount(value))
-  const setSearch = (search: string) => dispatch(decksSlice.actions.setSearchByName(search))
   const setAuthorId = (id: string) => dispatch(decksSlice.actions.setAuthorId(id))
+  const setSearch = (search: string) => dispatch(decksSlice.actions.setSearchByName(search))
 
   const [values, setValues] = useState<number[]>([minCardsCount, maxCardsCount])
-  const [searchValue, setSearchValue] = useState('')
-  const debouncedValue = useDebounce(searchValue, 500)
-
-  const handleSearchValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setSearchValue(e.currentTarget.value)
-  }
 
   const { data } = useMeQuery()
 
@@ -65,11 +68,6 @@ export const DecksFilters = () => {
     setMinCardsCount(0)
     setCurrentPage(1)
   }
-
-  useEffect(() => {
-    setSearch(debouncedValue)
-    setCurrentPage(1)
-  }, [debouncedValue])
 
   return (
     <div className={s.filtersBlock}>

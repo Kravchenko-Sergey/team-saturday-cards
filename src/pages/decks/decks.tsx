@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { ChangeEvent, useMemo, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 
 import s from './decks.module.scss'
 
+import { useDebounce } from '@/common/hooks/use-debounse'
 import { useMeQuery } from '@/services/auth/auth.api'
 import { useGetDecksQuery } from '@/services/decks'
 import { decksSelectors } from '@/services/decks/decks-selectors.ts'
@@ -25,14 +26,24 @@ export const Decks = () => {
   const authorId = useSelector(decksSelectors.selectAuthorId)
   const dispatch = useDispatch()
 
+  const [searchValue, setSearchValue] = useState('')
+  const debouncedValue = useDebounce(searchValue, 500)
+
+  const handleSearchValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setSearchValue(e.currentTarget.value)
+    setSearch(e.currentTarget.value)
+    setCurrentPage(1)
+  }
+
   const setCurrentPage = (page: number) => dispatch(decksSlice.actions.setCurrentPage(page))
   const setItemsPerPage = (perPage: string) =>
     dispatch(decksSlice.actions.setItemsPerPage(Number(perPage)))
+  const setSearch = (search: string) => dispatch(decksSlice.actions.setSearchByName(search))
 
   const { currentData } = useMeQuery()
   const { decks, totalPages, isLoading, isFetching } = useGetDecksQuery(
     {
-      name: searchByName,
+      name: debouncedValue,
       maxCardsCount,
       minCardsCount,
       currentPage,
@@ -64,7 +75,11 @@ export const Decks = () => {
         <Typography variant="large">Decks list</Typography>
         <CreateDeckModal cover={cover} setCover={setCover} />
       </div>
-      <DecksFilters />
+      <DecksFilters
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
+        handleSearchValue={handleSearchValue}
+      />
       {decks?.length !== 0 && (
         <>
           <DecksTable data={decks} cover={cover} setCover={setCover} />
