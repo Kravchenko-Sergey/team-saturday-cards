@@ -42,7 +42,7 @@ export const Cards = () => {
   const dispatch = useDispatch()
 
   const changeCurrentPage = (page: number) => dispatch(setCurrentPage({ page }))
-  const changeItemsPerPage = (perPage: number) => dispatch(setItemsPerPage({ perPage }))
+  const changeItemsPerPage = (perPage: string) => dispatch(setItemsPerPage({ perPage }))
   const changeSearch = (question: string) => dispatch(setSearchByQuestion({ question }))
   const changeAuthorId = (id: string) => dispatch(setAuthorId({ id }))
 
@@ -94,7 +94,7 @@ export const Cards = () => {
   }
 
   const handleCurrentPage = (e: number) => changeCurrentPage(e)
-  const handleItemsPerPage = (e: number) => changeItemsPerPage(e)
+  const handleItemsPerPage = (e: string) => changeItemsPerPage(e)
 
   if (isLoading || isFetching) return <span className={s.loader}></span>
 
@@ -200,7 +200,7 @@ export const Cards = () => {
             page={currentPage}
             onChange={e => handleCurrentPage(e)}
             perPage={itemsPerPage}
-            onPerPageChange={e => handleItemsPerPage(Number(e))}
+            onPerPageChange={e => handleItemsPerPage(e)}
             perPageOptions={[4, 8, 16]}
           />
         </>
