@@ -63,7 +63,7 @@ export const Decks = () => {
   )
 
   const handleCurrentPage = (e: number) => changeCurrentPage(e)
-  const handleItemsPerPage = (e: string) => changeItemsPerPage(e)
+  const handleItemsPerPage = (e: string) => changeItemsPerPage(Number(e))
 
   if (isLoading || isFetching) return <span className={s.loader}></span>
 
