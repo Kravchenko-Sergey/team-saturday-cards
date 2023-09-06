@@ -42,7 +42,7 @@ export const Cards = () => {
   const dispatch = useDispatch()
 
   const changeCurrentPage = (page: number) => dispatch(setCurrentPage({ page }))
-  const changeItemsPerPage = (perPage: string) => dispatch(setItemsPerPage({ perPage }))
+  const changeItemsPerPage = (perPage: number) => dispatch(setItemsPerPage({ perPage }))
   const changeSearch = (question: string) => dispatch(setSearchByQuestion({ question }))
   const changeAuthorId = (id: string) => dispatch(setAuthorId({ id }))
 
