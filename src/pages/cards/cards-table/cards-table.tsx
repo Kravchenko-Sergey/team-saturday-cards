@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Card } from '@/services/cards'
-import { cardsSlice, setOrderBy } from '@/services/cards/cards.slice.ts'
+import { setOrderBy } from '@/services/cards/cards.slice.ts'
 import { decksSelectors } from '@/services/decks/decks-selectors.ts'
 import { BlankDeckCover } from 'assets/icons'
 import { Grade } from 'components/ui/grade'
@@ -33,7 +33,7 @@ export const CardsTable: FC<CardsTableProps> = ({
   const [sort, setSort] = useState<Sort>(null)
 
   const authorId = useSelector(decksSelectors.selectAuthorId)
-  const changeOrderBy = (value: string) => dispatch(setOrderBy({ value }))
+  const changeOrderBy = (orderBy: string) => dispatch(setOrderBy({ orderBy }))
   const dispatch = useDispatch()
 
   const columns: Column[] = [

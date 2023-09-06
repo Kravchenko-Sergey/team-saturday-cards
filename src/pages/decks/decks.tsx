@@ -85,8 +85,8 @@ export const Decks = () => {
             count={totalPages ? totalPages : 100}
             page={currentPage}
             onChange={e => handleCurrentPage(e)}
-            perPage={String(itemsPerPage)}
-            onPerPageChange={e => handleItemsPerPage(e)}
+            perPage={itemsPerPage}
+            onPerPageChange={e => handleItemsPerPage(Number(e))}
             perPageOptions={[4, 8, 16]}
           />
         </>
