@@ -7,7 +7,13 @@ import { toast } from 'react-toastify'
 import { useMeQuery } from '@/services/auth/auth.api.ts'
 import { useLazyGetCardsQuery } from '@/services/cards'
 import { useLazyGetLearnQuery } from '@/services/decks'
-import { decksSlice } from '@/services/decks/decks.slice.ts'
+import {
+  setAuthorId,
+  setAuthorName,
+  setDeckCover,
+  setDeckName,
+  setOrderBy,
+} from '@/services/decks/decks.slice.ts'
 import { Deck } from '@/services/types.ts'
 import { BlankDeckCover, PlayCircleOutline } from 'assets/icons'
 import { Table, TableBody, TableCell, TableRow } from 'components/ui/table'
@@ -25,11 +31,11 @@ type DecksTableProps = {
 export const DecksTable: FC<DecksTableProps> = ({ data, cover, setCover }) => {
   const navigate = useNavigate()
 
-  const setOrderBy = (value: string) => dispatch(decksSlice.actions.setOrderBy(value))
-  const setAuthorId = (value: string) => dispatch(decksSlice.actions.setAuthorId(value))
-  const setDeckName = (value: string) => dispatch(decksSlice.actions.setDeckName(value))
-  const setDeckCover = (value: string) => dispatch(decksSlice.actions.setDeckCover(value))
-  const setAuthorName = (name: string) => dispatch(decksSlice.actions.setAuthorName(name))
+  const changeOrderBy = (orderBy: string) => dispatch(setOrderBy({ orderBy }))
+  const changeAuthorId = (id: string) => dispatch(setAuthorId({ id }))
+  const changeDeckName = (name: string) => dispatch(setDeckName({ name }))
+  const changeDeckCover = (cover: string) => dispatch(setDeckCover({ cover }))
+  const changeAuthorName = (name: string) => dispatch(setAuthorName({ name }))
   const dispatch = useDispatch()
 
   const [getCards] = useLazyGetCardsQuery()
@@ -41,9 +47,9 @@ export const DecksTable: FC<DecksTableProps> = ({ data, cover, setCover }) => {
       .unwrap()
       .then(() => {
         navigate(`/cards/${id}`)
-        setAuthorId(userId)
-        setDeckName(deckName)
-        setDeckCover(deckCover)
+        changeAuthorId(userId)
+        changeDeckName(deckName)
+        changeDeckCover(deckCover)
       })
       .catch(err => toast.error(err.message))
   }
@@ -87,13 +93,13 @@ export const DecksTable: FC<DecksTableProps> = ({ data, cover, setCover }) => {
   ]
 
   const handleAuthorName = (userId: string, authorName: string) => {
-    setAuthorId(userId)
-    setAuthorName(authorName)
+    changeAuthorId(userId)
+    changeAuthorName(authorName)
   }
 
   useEffect(() => {
     if (!sort) return
-    setOrderBy(`${sort?.key}-${sort?.direction}`)
+    changeOrderBy(`${sort?.key}-${sort?.direction}`)
   })
 
   return (

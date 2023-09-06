@@ -9,17 +9,20 @@ export const cardsSlice = createSlice({
     orderBy: 'created-desc',
   },
   reducers: {
-    setSearchByQuestion: (state, action: PayloadAction<string>) => {
-      state.searchByQuestion = action.payload
+    setSearchByQuestion: (state, action: PayloadAction<{ question: string }>) => {
+      state.searchByQuestion = action.payload.question
     },
-    setCurrentPage: (state, action: PayloadAction<number>) => {
-      state.currentPage = action.payload
+    setCurrentPage: (state, action: PayloadAction<{ page: number }>) => {
+      state.currentPage = action.payload.page
     },
-    setItemsPerPage: (state, action: PayloadAction<number>) => {
-      state.itemsPerPage = action.payload
+    setItemsPerPage: (state, action: PayloadAction<{ perPage: number }>) => {
+      state.itemsPerPage = action.payload.perPage
     },
-    setOrderBy: (state, action: PayloadAction<string>) => {
-      state.orderBy = action.payload
+    setOrderBy: (state, action: PayloadAction<{ orderBy: string }>) => {
+      state.orderBy = action.payload.orderBy
     },
   },
 })
+
+export const { setSearchByQuestion, setCurrentPage, setItemsPerPage, setOrderBy } =
+  cardsSlice.actions
