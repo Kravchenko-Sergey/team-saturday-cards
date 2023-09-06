@@ -4,7 +4,7 @@ import { Link, Outlet, useNavigate } from 'react-router-dom'
 import s from './layout.module.scss'
 
 import { useLogoutMutation, useMeQuery } from '@/services/auth/auth.api.ts'
-import { decksSlice } from '@/services/decks/decks.slice.ts'
+import { setAuthorId } from '@/services/decks/decks.slice.ts'
 import { Logo, LogOutOutline, PersonOutline } from 'assets/icons'
 import { Avatar } from 'components/ui/avatar'
 import { Dropdown, DropdownItem, DropdownItemWithIcon } from 'components/ui/dropdown'
@@ -14,7 +14,7 @@ import { Typography } from 'components/ui/typography'
 export const Layout = () => {
   const dispatch = useDispatch()
 
-  const setAuthorId = (authorId: string) => dispatch(decksSlice.actions.setAuthorId(authorId))
+  const changeAuthorId = (id: string) => dispatch(setAuthorId({ id }))
 
   const navigate = useNavigate()
 
@@ -22,7 +22,7 @@ export const Layout = () => {
   const [logout] = useLogoutMutation()
 
   const handleLogo = () => {
-    setAuthorId('')
+    changeAuthorId('')
   }
 
   return (
