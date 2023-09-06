@@ -8,7 +8,7 @@ import { useDebounce } from '@/common/hooks/use-debounse'
 import { useMeQuery } from '@/services/auth/auth.api'
 import { useGetDecksQuery } from '@/services/decks'
 import { decksSelectors } from '@/services/decks/decks-selectors.ts'
-import { decksSlice } from '@/services/decks/decks.slice.ts'
+import { setCurrentPage, setItemsPerPage, setSearchByName } from '@/services/decks/decks.slice.ts'
 import { Pagination } from 'components/ui/pagination'
 import { Typography } from 'components/ui/typography'
 import { CreateDeckModal } from 'pages/decks/create-deck-modal'
@@ -28,16 +28,15 @@ export const Decks = () => {
   const [searchValue, setSearchValue] = useState('')
   const debouncedValue = useDebounce(searchValue, 500)
 
+  const changeCurrentPage = (page: number) => dispatch(setCurrentPage({ page }))
+  const changeItemsPerPage = (perPage: string) => dispatch(setItemsPerPage({ perPage }))
+  const changeSearch = (search: string) => dispatch(setSearchByName({ search }))
+
   const handleSearchValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setSearchValue(e.currentTarget.value)
-    setSearch(e.currentTarget.value)
-    setCurrentPage(1)
+    changeSearch(e.currentTarget.value)
+    changeCurrentPage(1)
   }
-
-  const setCurrentPage = (page: number) => dispatch(decksSlice.actions.setCurrentPage(page))
-  const setItemsPerPage = (perPage: string) =>
-    dispatch(decksSlice.actions.setItemsPerPage(Number(perPage)))
-  const setSearch = (search: string) => dispatch(decksSlice.actions.setSearchByName(search))
 
   const { currentData } = useMeQuery()
   const { decks, totalPages, isLoading, isFetching } = useGetDecksQuery(
@@ -63,8 +62,8 @@ export const Decks = () => {
     }
   )
 
-  const handleCurrentPage = (e: number) => setCurrentPage(e)
-  const handleItemsPerPage = (e: string) => setItemsPerPage(e)
+  const handleCurrentPage = (e: number) => changeCurrentPage(e)
+  const handleItemsPerPage = (e: string) => changeItemsPerPage(e)
 
   if (isLoading || isFetching) return <span className={s.loader}></span>
 

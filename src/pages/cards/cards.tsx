@@ -9,9 +9,13 @@ import { useDebounce } from '@/common/hooks/use-debounse.ts'
 import { useMeQuery } from '@/services/auth/auth.api.ts'
 import { useGetCardsQuery } from '@/services/cards'
 import { cardsSelectors } from '@/services/cards/cards-selectors.ts'
-import { cardsSlice } from '@/services/cards/cards.slice.ts'
+import {
+  setCurrentPage,
+  setItemsPerPage,
+  setSearchByQuestion,
+} from '@/services/cards/cards.slice.ts'
 import { decksSelectors } from '@/services/decks/decks-selectors.ts'
-import { decksSlice } from '@/services/decks/decks.slice.ts'
+import { setAuthorId } from '@/services/decks/decks.slice.ts'
 import {
   ArrowBackOutline,
   BlankDeckCover,
@@ -37,11 +41,10 @@ export const Cards = () => {
   const deckCover = useSelector(decksSelectors.selectDeckCover)
   const dispatch = useDispatch()
 
-  const setCurrentPage = (page: number) => dispatch(cardsSlice.actions.setCurrentPage(page))
-  const setItemsPerPage = (perPage: string) =>
-    dispatch(cardsSlice.actions.setItemsPerPage(Number(perPage)))
-  const setSearch = (search: string) => dispatch(cardsSlice.actions.setSearchByQuestion(search))
-  const setAuthorId = (authorId: string) => dispatch(decksSlice.actions.setAuthorId(authorId))
+  const changeCurrentPage = (page: number) => dispatch(setCurrentPage({ page }))
+  const changeItemsPerPage = (perPage: string) => dispatch(setItemsPerPage({ perPage }))
+  const changeSearch = (question: string) => dispatch(setSearchByQuestion({ question }))
+  const changeAuthorId = (id: string) => dispatch(setAuthorId({ id }))
 
   const navigate = useNavigate()
 
@@ -67,8 +70,8 @@ export const Cards = () => {
 
   const handleSearchValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setSearchValue(e.currentTarget.value)
-    setSearch(e.currentTarget.value)
-    setCurrentPage(1)
+    changeSearch(e.currentTarget.value)
+    changeCurrentPage(1)
   }
 
   const { cards, totalPages, isLoading, isFetching } = useGetCardsQuery(
@@ -87,11 +90,11 @@ export const Cards = () => {
   const { data: data2 } = useMeQuery()
 
   const handleBackToDecksList = () => {
-    setAuthorId('')
+    changeAuthorId('')
   }
 
-  const handleCurrentPage = (e: number) => setCurrentPage(e)
-  const handleItemsPerPage = (e: string) => setItemsPerPage(e)
+  const handleCurrentPage = (e: number) => changeCurrentPage(e)
+  const handleItemsPerPage = (e: string) => changeItemsPerPage(e)
 
   if (isLoading || isFetching) return <span className={s.loader}></span>
 

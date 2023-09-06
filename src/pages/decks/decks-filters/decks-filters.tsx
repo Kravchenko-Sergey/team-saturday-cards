@@ -5,7 +5,13 @@ import { useSelector } from 'react-redux'
 import { useAppDispatch } from '@/services'
 import { useMeQuery } from '@/services/auth/auth.api.ts'
 import { decksSelectors } from '@/services/decks/decks-selectors.ts'
-import { decksSlice } from '@/services/decks/decks.slice.ts'
+import {
+  setAuthorId,
+  setCurrentPage,
+  setMaxCardsCount,
+  setMinCardsCount,
+  setSearchByName,
+} from '@/services/decks/decks.slice.ts'
 import { TrashOutline } from 'assets/icons'
 import Button from 'components/ui/button/button.tsx'
 import { Slider } from 'components/ui/slider'
@@ -31,22 +37,22 @@ export const DecksFilters: FC<DecksFiltersProps> = ({
   const authorName = useSelector(decksSelectors.selectAuthorName)
   const dispatch = useAppDispatch()
 
-  const setCurrentPage = (page: number) => dispatch(decksSlice.actions.setCurrentPage(page))
-  const setMaxCardsCount = (value: number) => dispatch(decksSlice.actions.setMaxCardsCount(value))
-  const setMinCardsCount = (value: number) => dispatch(decksSlice.actions.setMinCardsCount(value))
-  const setAuthorId = (id: string) => dispatch(decksSlice.actions.setAuthorId(id))
-  const setSearch = (search: string) => dispatch(decksSlice.actions.setSearchByName(search))
+  const changeCurrentPage = (page: number) => dispatch(setCurrentPage({ page }))
+  const changeMaxCardsCount = (maxCount: number) => dispatch(setMaxCardsCount({ maxCount }))
+  const changeMinCardsCount = (minCount: number) => dispatch(setMinCardsCount({ minCount }))
+  const changeAuthorId = (id: string) => dispatch(setAuthorId({ id }))
+  const changeSearchByName = (search: string) => dispatch(setSearchByName({ search }))
 
   const [values, setValues] = useState<number[]>([minCardsCount, maxCardsCount])
 
   const { data } = useMeQuery()
 
   const getMyDecks = () => {
-    setAuthorId(data.id)
+    changeAuthorId(data.id)
   }
 
   const getAllDecks = () => {
-    setAuthorId('')
+    changeAuthorId('')
   }
 
   const handleSliderValueChange = (e: number[]) => {
@@ -55,18 +61,18 @@ export const DecksFilters: FC<DecksFiltersProps> = ({
 
   const handleSliderValueCommitChange = (e: number[]) => {
     setValues(e)
-    setMaxCardsCount(e[1])
-    setMinCardsCount(e[0])
-    setCurrentPage(1)
+    changeMaxCardsCount(e[1])
+    changeMinCardsCount(e[0])
+    changeCurrentPage(1)
   }
 
   const handleClearFilter = () => {
     setSearchValue('')
-    setSearch('')
+    changeSearchByName('')
+    changeMaxCardsCount(14)
+    changeMinCardsCount(0)
+    changeCurrentPage(1)
     setValues([0, 14])
-    setMaxCardsCount(14)
-    setMinCardsCount(0)
-    setCurrentPage(1)
   }
 
   return (

@@ -15,35 +15,48 @@ export const decksSlice = createSlice({
     authorName: '',
   },
   reducers: {
-    setMinCardsCount: (state, action: PayloadAction<number>) => {
-      state.minCardsCount = action.payload
+    setMinCardsCount: (state, action: PayloadAction<{ minCount: number }>) => {
+      state.minCardsCount = action.payload.minCount
     },
-    setMaxCardsCount: (state, action: PayloadAction<number>) => {
-      state.maxCardsCount = action.payload
+    setMaxCardsCount: (state, action: PayloadAction<{ maxCount: number }>) => {
+      state.maxCardsCount = action.payload.maxCount
     },
-    setSearchByName: (state, action: PayloadAction<string>) => {
-      state.searchByName = action.payload
+    setSearchByName: (state, action: PayloadAction<{ search: string }>) => {
+      state.searchByName = action.payload.search
     },
-    setAuthorId: (state, action: PayloadAction<string>) => {
-      state.authorId = action.payload
+    setAuthorId: (state, action: PayloadAction<{ id: string }>) => {
+      state.authorId = action.payload.id
     },
-    setOrderBy: (state, action: PayloadAction<string>) => {
-      state.orderBy = action.payload
+    setOrderBy: (state, action: PayloadAction<{ orderBy: string }>) => {
+      state.orderBy = action.payload.orderBy
     },
-    setCurrentPage: (state, action: PayloadAction<number>) => {
-      state.currentPage = action.payload
+    setCurrentPage: (state, action: PayloadAction<{ page: number }>) => {
+      state.currentPage = action.payload.page
     },
-    setItemsPerPage: (state, action: PayloadAction<number>) => {
-      state.itemsPerPage = action.payload
+    setItemsPerPage: (state, action: PayloadAction<{ perPage: number }>) => {
+      state.itemsPerPage = action.payload.perPage
     },
-    setDeckName: (state, action: PayloadAction<string>) => {
-      state.deckName = action.payload
+    setDeckName: (state, action: PayloadAction<{ name: string }>) => {
+      state.deckName = action.payload.name
     },
-    setDeckCover: (state, action: PayloadAction<string>) => {
-      state.deckCover = action.payload
+    setDeckCover: (state, action: PayloadAction<{ cover: string }>) => {
+      state.deckCover = action.payload.cover
     },
-    setAuthorName: (state, action: PayloadAction<string>) => {
-      state.authorName = action.payload
+    setAuthorName: (state, action: PayloadAction<{ name: string }>) => {
+      state.authorName = action.payload.name
     },
   },
 })
+
+export const {
+  setMinCardsCount,
+  setMaxCardsCount,
+  setSearchByName,
+  setAuthorId,
+  setOrderBy,
+  setCurrentPage,
+  setItemsPerPage,
+  setDeckName,
+  setDeckCover,
+  setAuthorName,
+} = decksSlice.actions
