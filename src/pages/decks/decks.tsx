@@ -29,7 +29,7 @@ export const Decks = () => {
   const debouncedValue = useDebounce(searchValue, 500)
 
   const changeCurrentPage = (page: number) => dispatch(setCurrentPage({ page }))
-  const changeItemsPerPage = (perPage: number) => dispatch(setItemsPerPage({ perPage }))
+  const changeItemsPerPage = (perPage: string) => dispatch(setItemsPerPage({ perPage }))
   const changeSearch = (search: string) => dispatch(setSearchByName({ search }))
 
   const handleSearchValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -63,7 +63,7 @@ export const Decks = () => {
   )
 
   const handleCurrentPage = (e: number) => changeCurrentPage(e)
-  const handleItemsPerPage = (e: number) => changeItemsPerPage(e)
+  const handleItemsPerPage = (e: string) => changeItemsPerPage(e)
 
   if (isLoading || isFetching) return <span className={s.loader}></span>
 
@@ -86,7 +86,7 @@ export const Decks = () => {
             page={currentPage}
             onChange={e => handleCurrentPage(e)}
             perPage={itemsPerPage}
-            onPerPageChange={e => handleItemsPerPage(Number(e))}
+            onPerPageChange={e => handleItemsPerPage(e)}
             perPageOptions={[4, 8, 16]}
           />
         </>
